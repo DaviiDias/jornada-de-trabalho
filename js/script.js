@@ -17,9 +17,18 @@ document.addEventListener('DOMContentLoaded', () => {
     const navToggle = document.querySelector('.nav-toggle');
     const navigation = document.querySelector('.navigation');
 
+    // Inicializar menu fechado APENAS em mobile
+    if (window.innerWidth <= 768) {
+        navigation.classList.add('collapsed');
+    } else {
+        // Desktop: remover collapsed se estiver lá
+        navigation.classList.remove('collapsed');
+    }
+
     if (navToggle && navigation) {
         navToggle.addEventListener('click', function(e) {
             e.preventDefault();
+            e.stopPropagation();
             // Se tem a classe, remove; senão, adiciona
             if (navigation.classList.contains('collapsed')) {
                 navigation.classList.remove('collapsed');
@@ -28,6 +37,15 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
+
+    // Fechar menu ao clicar fora em mobile
+    document.addEventListener('click', function(e) {
+        if (window.innerWidth <= 768) {
+            if (!navigation.contains(e.target) && !navToggle.contains(e.target)) {
+                navigation.classList.add('collapsed');
+            }
+        }
+    });
 
     // Navegação entre páginas
     const navLinks = document.querySelectorAll('.nav-link');
@@ -52,6 +70,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Gerar calendário quando entra na página de férias
                 if (targetPage === 'ferias') {
                     generateCalendar();
+                }
+                
+                // Fechar menu em mobile ao clicar em um link
+                if (window.innerWidth <= 768) {
+                    navigation.classList.add('collapsed');
                 }
             }
         });

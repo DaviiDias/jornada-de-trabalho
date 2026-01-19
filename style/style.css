@@ -101,12 +101,18 @@ body {
     cursor: pointer;
     border-radius: 4px;
     color: white;
-    font-size: 16px;
-    transition: background-color 0.2s ease;
+    font-size: 24px;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
 }
 
 .nav-toggle:hover {
-    background-color: rgba(255, 255, 255, 0.1);
+    background-color: #217cc6;
+    transform: scale(1.1);
 }
 
 .nav-content {
@@ -908,20 +914,67 @@ body {
 }
 
 @media (max-width: 768px) {
-    .navigation {
-        position: absolute;
-        left: -280px;
-        height: 100%;
-        z-index: 999;
-        transition: left 0.3s ease;
+    .app-container {
+        flex-direction: column;
     }
 
-    .navigation.open {
+    .navigation {
+        position: fixed;
+        left: -280px;
+        height: 100vh;
+        z-index: 999;
+        transition: left 0.3s ease;
+        width: 280px;
+        top: 0;
+        overflow-y: auto;
+        margin-left: 0 !important;
+    }
+
+    .navigation.collapsed {
+        left: -280px;
+    }
+
+    .navigation:not(.collapsed) {
         left: 0;
+    }
+
+    /* Mostrar toggle button em mobile */
+    .nav-toggle {
+        display: flex !important;
+        background-color: var(--alpargatas-blue);
+        position: fixed;
+        top: 7px;
+        left: 16px;
+        z-index: 1000;
     }
 
     .main-content {
         width: 100%;
+        flex: 1;
+        margin-left: 0;
+        padding-top: 60px;
+    }
+
+    .header {
+        flex-wrap: wrap;
+        margin-top: 0;
+    }
+
+    .page-title {
+        flex: 1 1 100%;
+        margin-bottom: 8px;
+    }
+
+    .profile-info {
+        justify-self: flex-end;
+    }
+
+    .adherence-grid {
+        grid-template-columns: 1fr !important;
+    }
+
+    .conformidade-bars {
+        flex-direction: column;
     }
 
     .team-table {
@@ -937,5 +990,80 @@ body {
         padding: 4px 8px;
         margin-right: 4px;
         font-size: 10px;
+    }
+
+    .nav-content {
+        max-height: calc(100vh - 60px);
+        overflow-y: auto;
+    }
+
+    .content-area {
+        padding: 12px;
+    }
+
+    .section-title {
+        font-size: 18px;
+        margin-bottom: 16px;
+    }
+
+    .adherence-card {
+        padding: 16px;
+    }
+
+    /* Fechar menu ao clicar em um link */
+    .nav-link {
+        cursor: pointer;
+    }
+
+    .nav-section-title {
+        padding: 12px 16px;
+        font-size: 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    .header {
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .profile-info {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .adherence-grid {
+        grid-template-columns: 1fr !important;
+        gap: 12px;
+    }
+
+    .adherence-card {
+        padding: 12px;
+    }
+
+    .conformidade-section {
+        padding: 16px;
+        margin-bottom: 16px;
+    }
+
+    .nav-text {
+        font-size: 13px;
+    }
+
+    .page-view {
+        padding: 12px;
+    }
+
+    .calendar-historico {
+        grid-template-columns: repeat(4, 1fr);
+    }
+
+    .team-table {
+        font-size: 10px;
+    }
+
+    .team-table th,
+    .team-table td {
+        padding: 6px 8px;
     }
 }
