@@ -299,6 +299,7 @@ body {
     font-weight: 600;
     color: #333;
     margin-bottom: 12px;
+    margin-top: 5px;
     background: none;
 }
 
@@ -540,6 +541,18 @@ body {
     font-family: inherit;
 }
 
+.form-control {
+  padding: 8px 12px;
+  border: 1px solid var(--neutral-stroke-rest);
+  border-radius: 4px;
+  background: var(--neutral-fill-rest);
+}
+
+.textarea{
+    width: 779px; 
+    height: 97px;
+}
+
 .calendar {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
@@ -628,6 +641,16 @@ body {
     color: #323130;
 }
 
+.detalhes-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.detalhes-wrapper .btn-solicitar {
+    align-self: flex-start;
+}
+
 .btn-solicitar {
     padding: 10px 24px;
     background-color: var(--alpargatas-blue);
@@ -663,6 +686,32 @@ body {
     margin-bottom: 24px;
     gap: 16px;
 }
+
+.badge-justificativa {
+    background-color: #6f42c1;
+}
+
+.badge-atestado {
+    background-color: #0d6efd;
+}
+
+.badge-trabalho-externo {
+    background-color: #20c997;
+}
+
+.badge-aprovado {
+    background-color: #198754;
+}
+
+.badge-pendente {
+    background-color: #ffc107;
+    color: #000;
+}
+
+.badge-reprovado {
+    background-color: #dc3545;
+}
+
 
 .btn-mes {
     padding: 8px 16px;
@@ -951,6 +1000,15 @@ body {
 }
 
 @media (max-width: 768px) {
+
+    .header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 900;
+        padding-left: 56px; /* espaço pro botão */
+    }
     .app-container {
         flex-direction: column;
     }
@@ -993,8 +1051,7 @@ body {
     }
 
     .page-title {
-        flex: 1 1 100%;
-        margin-bottom: 8px;
+        display: none;
     }
 
     .profile-info {
@@ -1059,8 +1116,9 @@ body {
     }
 
     .profile-info {
-        width: 100%;
-        justify-content: space-between;
+        width: auto;
+        justify-content: flex-end;
+        flex-shrink: 0;
     }
 
     .profile-name {
@@ -1073,6 +1131,10 @@ body {
         height: 32px;
         font-size: 13px;
         flex-shrink: 0;
+    }
+
+    .page-title {
+        display: none;
     }
 
     .adherence-grid {

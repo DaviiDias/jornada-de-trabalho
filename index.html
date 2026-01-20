@@ -1,16 +1,18 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style/style.css">
     <title>Jornada de trabalho híbrida - Dashboard</title>
 </head>
+
 <body>
     <div class="app-container">
         <!-- MENU LATERAL -->
         <nav class="navigation">
-            <div class="nav-header"> 
+            <div class="nav-header">
                 <button class="nav-toggle">☰</button>
             </div>
 
@@ -20,7 +22,8 @@
                     <div class="nav-section-title">Colaborador</div>
                     <div class="nav-item">
                         <a class="nav-link active" data-page="dashboard">
-                            <span class="nav-icon"><img src="assets/painel.png" alt="Dashboard" class="nav-icon-img"></span>
+                            <span class="nav-icon"><img src="assets/painel.png" alt="Dashboard"
+                                    class="nav-icon-img"></span>
                             <span class="nav-text">Dashboard</span>
                         </a>
                     </div>
@@ -32,28 +35,40 @@
                     </div>
                     <div class="nav-item">
                         <a class="nav-link" data-page="historico-presenca">
-                            <span class="nav-icon"><img src="assets/historico.png" alt="Dashboard" class="nav-icon-img"></span>
-                            <span class="nav-text">Histórico</span>
+                            <span class="nav-icon"><img src="assets/historico.png" alt="Dashboard"
+                                    class="nav-icon-img"></span>
+                            <span class="nav-text">Histórico de presença</span>
                         </a>
                     </div>
                     <div class="nav-item">
                         <a class="nav-link" data-page="justificativas">
-                            <span class="nav-icon">📝</span>
+                            <span class="nav-icon"><img src="assets/justificar.png" alt="Dashboard"
+                                    class="nav-icon-img"></span>
                             <span class="nav-text">Justificativas</span>
                         </a>
                     </div>
                     <div class="nav-item">
+                        <a class="nav-link" data-page="historico-justificativa">
+                            <span class="nav-icon"><img src="assets/historico-presenca.png" alt="Dashboard"
+                                    class="nav-icon-img"></span>
+                            <span class="nav-text">Histórico de justificativas</span>
+                        </a>
+                    </div>
+                    <div class="nav-item">
                         <a class="nav-link" data-page="falta-justificada">
-                            <span class="nav-icon"><img src="assets/falta.png" alt="Dashboard" class="nav-icon-img"></span>
+                            <span class="nav-icon"><img src="assets/falta.png" alt="Dashboard"
+                                    class="nav-icon-img"></span>
                             <span class="nav-text">Espelho de falta</span>
                         </a>
                     </div>
                     <div class="nav-item">
                         <a class="nav-link" data-page="ferias">
-                            <span class="nav-icon"><img src="assets/ferias.png" alt="Dashboard" class="nav-icon-img"></span>
+                            <span class="nav-icon"><img src="assets/ferias.png" alt="Dashboard"
+                                    class="nav-icon-img"></span>
                             <span class="nav-text">Solicitação de férias</span>
                         </a>
                     </div>
+
                 </div>
 
                 <!-- Menu Gestor -->
@@ -62,7 +77,8 @@
 
                     <div class="nav-item">
                         <a class="nav-link" data-page="dashboard-gestor">
-                            <span class="nav-icon"><img src="assets/painel.png" alt="Dashboard" class="nav-icon-img"></span>
+                            <span class="nav-icon"><img src="assets/painel.png" alt="Dashboard"
+                                    class="nav-icon-img"></span>
                             <span class="nav-text">Dashboard</span>
                         </a>
                     </div>
@@ -73,7 +89,7 @@
         <!-- CONTEÚDO PRINCIPAL -->
         <main class="main-content">
             <header class="header">
-                <span class="page-title" id="currentPage">Dashboard</span>
+                <!-- <span class="page-title" id="currentPage">Dashboard</span> -->
                 <div class="profile-info">
                     <span class="profile-name" id="profileName">Luiz Silva</span>
                     <div class="profile-avatar" id="profileAvatar">LS</div>
@@ -84,28 +100,28 @@
                 <!-- Dashboard Page -->
                 <div id="dashboard" class="page-view active">
                     <div class="section-title">Dashboard Principal</div>
-                    
+
                     <div class="adherence-card">
                         <h2>Aderência Semanal</h2>
                         <div class="status-badge status-conformidade" id="statusBadge">Em conformidade</div>
-                        
+
                         <div class="adherence-grid">
                             <div class="adherence-item">
                                 <div class="adherence-label">Presença Semanal</div>
                                 <div class="adherence-value" id="presencaValue">4 dias</div>
                                 <div class="adherence-note" id="presencaNote"></div>
                             </div>
-                            
+
                             <div class="adherence-item">
                                 <div class="adherence-label">Dias na Sede</div>
                                 <div class="adherence-value" id="sedeValue">2 dias</div>
                             </div>
-                            
+
                             <div class="adherence-item">
                                 <div class="adherence-label">Dias em Home Office</div>
                                 <div class="adherence-value" id="homeofficeValue">2 dias</div>
                             </div>
-                            
+
                             <div class="adherence-item">
                                 <div class="adherence-label">Dias restantes na semana</div>
                                 <div class="adherence-value" id="diasRestantesValue">1 dia</div>
@@ -127,25 +143,16 @@
                                         <span class="conformidade-counter" id="presenciaisCount">2/3</span>
                                     </div>
                                 </div>
-                                <div class="conformidade-item">
-                                    <div class="conformidade-label">
-                                        <span class="conformidade-text">Dias Remotos</span>
-                                    </div>
-                                    <div class="conformidade-progress">
-                                        <div class="progress-bar">
-                                            <div class="progress-fill remotos-fill" style="width: 100%;"></div>
-                                        </div>
-                                        <span class="conformidade-counter" id="remotosCount">2/2</span>
-                                    </div>
-                                </div>
+
                             </div>
                         </div>
-                        
+
                         <div class="status-section">
                             <div class="status-container" id="statusContainer">
                                 <div class="status-message" id="statusMessage">
                                     <span class="status-icon">💡</span>
-                                    <span id="statusText">Você tem opção de escolha dos dias para garantir a conformidade</span>
+                                    <span id="statusText">Você tem opção de escolha dos dias para garantir a
+                                        conformidade</span>
                                 </div>
                             </div>
                         </div>
@@ -165,7 +172,7 @@
                         <div class="historico-header">
                             <span class="mes-ano" id="mesAnoDisplay">Janeiro 2026</span>
                         </div>
-                        
+
                         <div class="calendar-historico" id="calendarHistorico"></div>
 
                         <!-- Legenda -->
@@ -193,41 +200,103 @@
                 <!-- Justificativas Page -->
                 <div id="justificativas" class="page-view">
                     <div class="section-title">Minhas Justificativas</div>
-                    <div id="justificativasContainer"></div>
+                    <div class="adherence-card">
+                        <h2>Tipo</h2>
+                        <select class="form-control">
+                            <option>Férias</option>
+                            <option>Atestado Médico</option>
+                            <option>Trabalho externo</option>
+                            <option>Ausente</option>
+                        </select>
+                        <div id="justificativasContainer"></div>
+
+                        <h2>Detalhes</h2>
+                        <div class="detalhes-wrapper">
+                            <textarea class="form-control textarea" rows="3"
+                                placeholder="Escreva os detalhes da justificativa ..."></textarea>
+
+                            <button class="btn-solicitar">Enviar Justificativa</button>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Histórico de Justificativa -->
+                <div id="historico-justificativa" class="page-view">
+                    <div class="section-title">Histórico de justificativas</div>
+                    <div class="adherence-card">
+                        <div class="section-title">Justificativas Recentes</div>
+
+                        <div class="team-table-container">
+                            <table class="team-table">
+                                <thead>
+                                    <tr>
+                                        <th>Data</th>
+                                        <th>Tipo</th>
+                                        <th>Detalhes</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="justificationsTableBody">
+                                    <tr>
+                                        <td>13/01/2026</td>
+                                        <td><span class="badge badge-justificativa">FÉRIAS</span></td>
+                                        <td>Período de descanso programado</td>
+                                        <td><span class="badge badge-aprovado">APROVADO</span></td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>06/01/2026</td>
+                                        <td><span class="badge badge-atestado">ATESTADO MÉDICO</span></td>
+                                        <td>Consulta médica com comprovante</td>
+                                        <td><span class="badge badge-pendente">PENDENTE</span></td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>22/12/2025</td>
+                                        <td><span class="badge badge-trabalho-externo">TRABALHO EXTERNO</span></td>
+                                        <td>Visita técnica ao cliente</td>
+                                        <td><span class="badge badge-reprovado">REPROVADO</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
                 </div>
 
                 <!-- Dashboard Gestor -->
                 <div id="dashboard-gestor" class="page-view">
                     <div class="dashboard-gestor-container">
                         <!-- Seção Pessoal -->
- 
+
                         <div class="adherence-card">
                             <h2>Aderência Semanal</h2>
                             <div class="status-badge status-conformidade" id="statusBadgeGestor">Em conformidade</div>
-                            
+
                             <div class="adherence-grid">
                                 <div class="adherence-item">
                                     <div class="adherence-label">Presença Semanal</div>
                                     <div class="adherence-value" id="presencaValueGestor">4 dias</div>
                                     <div class="adherence-note" id="presencaNoteGestor"></div>
                                 </div>
-                                
+
                                 <div class="adherence-item">
                                     <div class="adherence-label">Dias na Sede</div>
                                     <div class="adherence-value" id="sedeValueGestor">2 dias</div>
                                 </div>
-                                
+
                                 <div class="adherence-item">
                                     <div class="adherence-label">Dias em Home Office</div>
                                     <div class="adherence-value" id="homeofficeValueGestor">2 dias</div>
                                 </div>
-                                
+
                                 <div class="adherence-item">
                                     <div class="adherence-label">Dias restantes na semana</div>
                                     <div class="adherence-value" id="diasRestantesValueGestor">1 dia</div>
                                 </div>
                             </div>
-                            
+
                             <!-- Conformidade 3x2 -->
                             <div class="conformidade-section">
                                 <div class="conformidade-title">Conformidade 3x2 (3 Presenciais + 2 Remotos)</div>
@@ -243,35 +312,26 @@
                                             <span class="conformidade-counter" id="presenciaisCountGestor">2/3</span>
                                         </div>
                                     </div>
-                                    <div class="conformidade-item">
-                                        <div class="conformidade-label">
-                                            <span class="conformidade-text">Dias Remotos</span>
-                                        </div>
-                                        <div class="conformidade-progress">
-                                            <div class="progress-bar">
-                                                <div class="progress-fill remotos-fill" style="width: 100%;"></div>
-                                            </div>
-                                            <span class="conformidade-counter" id="remotosCountGestor">2/2</span>
-                                        </div>
-                                    </div>
+
                                 </div>
                             </div>
-                            
+
                             <div class="status-section">
                                 <div class="status-container" id="statusContainerGestor">
                                     <div class="status-message" id="statusMessageGestor">
                                         <span class="status-icon">💡</span>
-                                        <span id="statusTextGestor">Você tem opção de escolha dos dias para garantir a conformidade</span>
+                                        <span id="statusTextGestor">Você tem opção de escolha dos dias para garantir a
+                                            conformidade</span>
                                     </div>
                                 </div>
                             </div>
                         </div>
-        
+
 
                         <!-- Seção Equipe -->
                         <div class="gestor-section">
                             <div class="section-title">Ocorrências e não Conformidades da Equipe</div>
-                            
+
                             <div class="team-table-container">
                                 <table class="team-table">
                                     <thead>
@@ -341,15 +401,19 @@
                     </div>
                 </div>
 
-                <!-- Falta Justificada -->
-                <div id="falta-justificada" class="page-view">
-                    <div class="section-title">Solicitar Falta Justificada</div>
-                    <div id="faltaContainer"></div>
-                </div>
+
             </div>
-        </main>
+
+            <!-- Falta Justificada -->
+            <div id="falta-justificada" class="page-view">
+                <div class="section-title">Solicitar Falta Justificada</div>
+                <div id="faltaContainer"></div>
+            </div>
+    </div>
+    </main>
     </div>
 
     <script src="js/script.js"></script>
 </body>
+
 </html>
