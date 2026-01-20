@@ -318,6 +318,53 @@ function hidePopover() {
     }
 }
 
+const profileSelect = document.getElementById('profileSelect');
+const topDashboardLink = document.getElementById('topDashboardLink');
+
+function applyProfileMenu() {
+    if (!profileSelect) return;
+
+    const role = profileSelect.value;
+
+    // Esconde todas as seções do menu
+    document.querySelectorAll('.nav-section').forEach(section => {
+        section.style.display = 'none';
+    });
+
+    // Mostra apenas as seções do perfil selecionado
+    document.querySelectorAll('.role-' + role).forEach(section => {
+        section.style.display = 'block';
+    });
+
+    // Ajusta o dashboard do topo (se existir)
+    if (topDashboardLink) {
+        if (role === 'employee') {
+            topDashboardLink.dataset.page = 'dashboard';
+        } else {
+            topDashboardLink.dataset.page = 'dashboard-gestor';
+        }
+    }
+}
+
+// Quando o usuário trocar o perfil
+profileSelect.addEventListener('change', applyProfileMenu);
+
+// Quando a página carregar
+document.addEventListener('DOMContentLoaded', () => {
+    // mantém o que você já tinha
+    if (typeof initHistoricoPresenca === 'function') {
+        initHistoricoPresenca();
+    }
+
+    if (typeof renderHistoricoCalendar === 'function') {
+        renderHistoricoCalendar();
+    }
+
+    // aplica o perfil corretamente ao abrir a página
+    applyProfileMenu();
+});
+
+
 // Inicializar ao carregar a página
 document.addEventListener('DOMContentLoaded', () => {
     initHistoricoPresenca();

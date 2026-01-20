@@ -17,8 +17,8 @@
             </div>
 
             <div class="nav-content">
-                <!-- Menu Principal -->
-                <div class="nav-section">
+                <!-- Menu Colaborador-->
+                <div class="nav-section role-employee">
                     <div class="nav-section-title">Colaborador</div>
                     <div class="nav-item">
                         <a class="nav-link active" data-page="dashboard">
@@ -27,10 +27,94 @@
                             <span class="nav-text">Dashboard</span>
                         </a>
                     </div>
-                    <div class="nav-item">
+                    <div class="nav-item" style="display: none;">
                         <a class="nav-link" data-page="presenca">
                             <span class="nav-icon">📍</span>
                             <span class="nav-text">Presença</span>
+                        </a>
+                    </div>
+                    <div class="nav-item" style="display: none;">
+                        <a class="nav-link" data-page="historico-presenca">
+                            <span class="nav-icon"><img src="assets/historico.png" alt="Dashboard"
+                                    class="nav-icon-img"></span>
+                            <span class="nav-text">Histórico de presença</span>
+                        </a>
+                    </div>
+                    <div class="nav-item" style="display: none;">
+                        <a class="nav-link" data-page="justificativas">
+                            <span class="nav-icon"><img src="assets/justificar.png" alt="Dashboard"
+                                    class="nav-icon-img"></span>
+                            <span class="nav-text">Justificativas</span>
+                        </a>
+                    </div>
+                    <div class="nav-item" style="display: none;">
+                        <a class="nav-link" data-page="historico-justificativa">
+                            <span class="nav-icon"><img src="assets/historico-presenca.png" alt="Dashboard"
+                                    class="nav-icon-img"></span>
+                            <span class="nav-text">Histórico de justificativas</span>
+                        </a>
+                    </div>
+                    <div class="nav-item" style="display: none;">
+                        <a class="nav-link" data-page="falta-justificada">
+                            <span class="nav-icon"><img src="assets/falta.png" alt="Dashboard"
+                                    class="nav-icon-img"></span>
+                            <span class="nav-text">Espelho de falta</span>
+                        </a>
+                    </div>
+                    <div class="nav-item" style="display: none;">
+                        <a class="nav-link" data-page="ferias">
+                            <span class="nav-icon"><img src="assets/ferias.png" alt="Dashboard"
+                                    class="nav-icon-img"></span>
+                            <span class="nav-text">Solicitação de férias</span>
+                        </a>
+                    </div>
+
+                </div>
+
+                <!-- Menu Gestor -->
+                <div class="nav-section role-manager">
+                    <div class="nav-section-title">Gestor</div>
+
+                    <div class="nav-item">
+                        <a class="nav-link" data-page="dashboard-gestor">
+                            <span class="nav-icon"><img src="assets/painel.png" alt="Dashboard"
+                                    class="nav-icon-img"></span>
+                            <span class="nav-text">Dashboard</span>
+                        </a>
+                    </div>
+
+                    <div class="nav-item">
+                        <a class="nav-link" data-page="historico-presenca">
+                            <span class="nav-icon"><img src="assets/historico.png" alt="Dashboard"
+                                    class="nav-icon-img"></span>
+                            <span class="nav-text">Histórico de presença</span>
+                        </a>
+                    </div>
+                    <div class="nav-item">
+                        <a class="nav-link" data-page="justificativas">
+                            <span class="nav-icon"><img src="assets/justificar.png" alt="Dashboard"
+                                    class="nav-icon-img"></span>
+                            <span class="nav-text">Justificativas</span>
+                        </a>
+                    </div>
+                    <div class="nav-item">
+                        <a class="nav-link" data-page="historico-justificativa">
+                            <span class="nav-icon"><img src="assets/historico-presenca.png" alt="Dashboard"
+                                    class="nav-icon-img"></span>
+                            <span class="nav-text">Histórico de justificativas</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Menu RH -->
+                <div class="nav-section role-hr">
+                    <div class="nav-section-title">RH</div>
+
+                    <div class="nav-item">
+                        <a class="nav-link" data-page="dashboard-gestor">
+                            <span class="nav-icon"><img src="assets/painel.png" alt="Dashboard"
+                                    class="nav-icon-img"></span>
+                            <span class="nav-text">Dashboard</span>
                         </a>
                     </div>
                     <div class="nav-item">
@@ -54,34 +138,6 @@
                             <span class="nav-text">Histórico de justificativas</span>
                         </a>
                     </div>
-                    <div class="nav-item">
-                        <a class="nav-link" data-page="falta-justificada">
-                            <span class="nav-icon"><img src="assets/falta.png" alt="Dashboard"
-                                    class="nav-icon-img"></span>
-                            <span class="nav-text">Espelho de falta</span>
-                        </a>
-                    </div>
-                    <div class="nav-item">
-                        <a class="nav-link" data-page="ferias">
-                            <span class="nav-icon"><img src="assets/ferias.png" alt="Dashboard"
-                                    class="nav-icon-img"></span>
-                            <span class="nav-text">Solicitação de férias</span>
-                        </a>
-                    </div>
-
-                </div>
-
-                <!-- Menu Gestor -->
-                <div class="nav-section">
-                    <div class="nav-section-title">Gestor</div>
-
-                    <div class="nav-item">
-                        <a class="nav-link" data-page="dashboard-gestor">
-                            <span class="nav-icon"><img src="assets/painel.png" alt="Dashboard"
-                                    class="nav-icon-img"></span>
-                            <span class="nav-text">Dashboard</span>
-                        </a>
-                    </div>
                 </div>
             </div>
         </nav>
@@ -89,6 +145,14 @@
         <!-- CONTEÚDO PRINCIPAL -->
         <main class="main-content">
             <header class="header">
+
+                <label class="profile-label">Perfil:</label>
+                <select class="profile-select" id="profileSelect">
+                    <option value="employee">Colaborador</option>
+                    <option value="manager">Gestor</option>
+                    <option value="hr">RH</option>
+                </select>
+
                 <!-- <span class="page-title" id="currentPage">Dashboard</span> -->
                 <div class="profile-info">
                     <span class="profile-name" id="profileName">Luiz Silva</span>
@@ -160,7 +224,7 @@
                 </div>
 
                 <!-- Presença Page -->
-                <div id="presenca" class="page-view">
+                <div id="presenca" class="page-view" style="display: none;">
                     <div class="section-title">Controle de Presença</div>
                     <div id="presencaContainer"></div>
                 </div>
@@ -400,7 +464,6 @@
                         <button class="btn-solicitar">Solicitar Férias</button>
                     </div>
                 </div>
-
 
             </div>
 
