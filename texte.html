@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aderência Jornada 3x2 – Mockados</title>
+    <style>
+        body { font-family: system-ui, sans-serif; background: #f9fafb; padding: 40px 20px; color: #111827; }
+        h1 { text-align: center; color: #1e40af; margin-bottom: 8px; }
+        .subtitle { text-align: center; color: #4b5563; margin-bottom: 32px; font-size: 1.05rem; }
+        .table-container { max-width: 1600px; margin: 0 auto; overflow-x: auto; border-radius: 10px; box-shadow: 0 4px 16px rgba(0,0,0,0.07); }
+        table { border-collapse: separate; border-spacing: 0; width: 100%; background: white; }
+        th, td { padding: 16px 18px; text-align: center; font-size: 0.96rem; min-width: 130px; border: 1px solid #e5e7eb; position: relative; }
+        th { background: #1e40af; color: white; font-weight: 600; position: sticky; top: 0; z-index: 10; }
+        th.period { min-width: 180px; }
+        td.department { text-align: left; font-weight: 500; background: #f8fafc; position: sticky; left: 0; z-index: 5; min-width: 160px; }
+        .global-row td.department { font-weight: 700; background: #eff6ff; }
+
+        .excellent  { background: #e0f2fe; border: 2px solid #60a5fa; }
+        .good       { background: #d1fae5; border: 2px solid #34d399; }
+        .attention  { background: #fef9e6; border: 2px solid #fbbf24; }
+        .critical   { background: #fee2e2; border: 2px solid #ef4444; }
+
+        .percent { font-size: 1.45rem; font-weight: 700; color: #1e293b; line-height: 1; }
+        .diamond { position: absolute; right: 20px; top: 50%; transform: translateY(-50%); font-size: 1.55rem; color: #3b82f6; opacity: 0.92; }
+
+        .legend { max-width: 1200px; margin: 32px auto 0; display: flex; justify-content: center; gap: 32px; flex-wrap: wrap; font-size: 0.92rem; color: #4b5563; }
+        .legend-item { display: flex; align-items: center; gap: 12px; }
+        .color-box { width: 28px; height: 28px; border-radius: 6px; border: 1px solid #d1d5db; }
+    </style>
+</head>
+<body>
+
+<h1>Aderência à Jornada 3×2 Presencial por Departamento</h1>
+<div class="subtitle">Outubro/2025 a Janeiro/2026 (períodos da esquerda → direita = mais antigo para mais recente)</div>
+
+<div class="table-container">
+<table id="aderenciaTable">
+    <thead>
+        <tr>
+            <th class="department">Departamento</th>
+            <th class="period">06–12 out</th>
+            <th class="period">27 out–02 nov</th>
+            <th class="period">17–23 nov</th>
+            <th class="period">08–14 dez</th>
+            <th class="period">22–28 dez</th>
+            <th class="period">05–11 jan</th>
+            <th class="period">19–25 jan ← Atual</th>
+        </tr>
+    </thead>
+    <tbody id="tableBody"></tbody>
+</table>
+</div>
+
+<div class="legend">
+    <div class="legend-item"><div class="color-box" style="background:#e0f2fe; border:2px solid #60a5fa;"></div> Excelente / Ótimo (90–100%) 💎</div>
+    <div class="legend-item"><div class="color-box" style="background:#d1fae5; border:2px solid #34d399;"></div> Bom / Satisfatório (70–89%)</div>
+    <div class="legend-item"><div class="color-box" style="background:#fef9e6; border:2px solid #fbbf24;"></div> Atenção / Parcial (40–69%)</div>
+    <div class="legend-item"><div class="color-box" style="background:#fee2e2; border:2px solid #ef4444;"></div> Crítico / Baixo (<40%)</div>
+</div>
+
+<script>
+    // Dados mockados – simula resposta da API /api/hr/report com view=by-department
+    const mockData = {
+        success: true,
+        month: "2026-01",
+        by_department: [
+            { diretoria: "Visão Global Empresa", aderencia: 84, ausencias: 12 },
+            { diretoria: "Vendas", aderencia: 96, ausencias: 3 },
+            { diretoria: "Produção", aderencia: 55, ausencias: 28 },
+            { diretoria: "RH", aderencia: 95, ausencias: 5 },
+            { diretoria: "Financeiro", aderencia: 79, ausencias: 15 },
+            { diretoria: "Qualidade", aderencia: 88, ausencias: 9 },
+            { diretoria: "Logística", aderencia: 67, ausencias: 22 },
+            { diretoria: "TI", aderencia: 93, ausencias: 4 },
+            { diretoria: "Manutenção", aderencia: 36, ausencias: 35 }
+        ]
+    };
+
+    // Períodos (colunas) – valores fixos para exemplo
+    const periods = [
+        "06–12 out", "27 out–02 nov", "17–23 nov",
+        "08–14 dez", "22–28 dez", "05–11 jan", "19–25 jan ← Atual"
+    ];
+
+    // Função para determinar classe CSS pelo % de aderência
+    function getClass(aderencia) {
+        if (aderencia >= 90) return "excellent";
+        if (aderencia >= 70) return "good";
+        if (aderencia >= 40) return "attention";
+        return "critical";
+    }
+
+    // Preenche a tabela
+    function renderTable(data) {
+        const tbody = document.getElementById("tableBody");
+        tbody.innerHTML = "";
+
+        // Linha Visão Global (primeira)
+        const globalRow = document.createElement("tr");
+        globalRow.className = "global-row";
+        globalRow.innerHTML = <td class="department">Visão Global Empresa</td>;
+        periods.forEach(() => {
+            const aderencia = data.by_department[0].aderencia; // mesmo valor para todas colunas (exemplo)
+            const cellClass = getClass(aderencia);
+            const hasDiamond = aderencia >= 90 ? '<span class="diamond">💎</span>' : '';
+            globalRow.innerHTML += <td class="${cellClass}"><span class="percent">${aderencia}%</span>${hasDiamond}</td>;
+        });
+        tbody.appendChild(globalRow);
+
+        // Demais departamentos
+        data.by_department.slice(1).forEach(dept => {
+            const row = document.createElement("tr");
+            row.innerHTML = <td class="department">${dept.diretoria}</td>;
+            periods.forEach(() => {
+                const aderencia = dept.aderencia; // mesmo valor para exemplo (em produção varia por período)
+                const cellClass = getClass(aderencia);
+                const hasDiamond = aderencia >= 90 ? '<span class="diamond">💎</span>' : '';
+                row.innerHTML += <td class="${cellClass}"><span class="percent">${aderencia}%</span>${hasDiamond}</td>;
+            });
+            tbody.appendChild(row);
+        });
+    }
+
+    // Renderiza com dados mockados
+    renderTable(mockData);
+</script>
+
+</body>
+</html>

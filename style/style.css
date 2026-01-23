@@ -94,6 +94,10 @@ body {
     line-height: 1;
 }
 
+.subtitle{
+    margin-bottom: 5px;
+}
+
 .nav-toggle {
     background: none;
     border: none;
@@ -549,9 +553,85 @@ body {
 }
 
 .textarea{
-    width: 779px; 
+    width: 365px; 
     height: 97px;
+    margin-bottom: 10px;
 }
+
+.table-container {
+    overflow-x: auto;
+    border-radius: 10px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff;
+}
+
+th, td {
+    padding: 14px;
+    text-align: center;
+    border: 1px solid #e5e7eb;
+}
+
+th {
+    background: #1e40af;
+    color: #fff;
+    font-weight: 600;
+}
+
+td.department {
+    text-align: left;
+    font-weight: 600;
+    background: #f8fafc;
+}
+
+/* NOVA REGRA DE CORES */
+.excellent {
+    background: #bfdbfe;
+    border: 2px solid #60a5fa;
+}
+
+.good {
+    background: #d1fae5;
+    border: 2px solid #34d399;
+}
+
+.attention {
+    background: #fef9e6;
+    border: 2px solid #fbbf24;
+}
+
+.critical {
+    background: #fee2e2;
+    border: 2px solid #ef4444;
+}
+
+.percent {
+    font-size: 1.2rem;
+    font-weight: 700;
+}
+
+.legend {
+    display: flex;
+    gap: 20px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.color-box {
+    width: 22px;
+    height: 22px;
+    border-radius: 6px;
+}
+
 
 .calendar {
     display: grid;
@@ -867,6 +947,289 @@ body {
     border-radius: 2px;
     flex-shrink: 0;
 }
+
+/* Card */
+
+.filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    flex: 1;
+    position: relative; /* 🔥 ESSENCIAL */
+}
+
+
+.filter-group label {
+    font-size: 12px;
+    color: #605e5c;
+}
+
+.filter-select,
+.filter-input {
+    background: #ffffff;
+    border: 1px solid #c8c6c4;
+    border-radius: 4px;
+    padding: 8px;
+    color: #323130;
+    font-size: 13px;
+}
+
+.filter-select:focus,
+.filter-input:focus {
+    outline: none;
+    border-color: #0078d4;
+}
+
+/* Calendário */
+.week-calendar {
+    background: #faf9f8;
+    border-radius: 8px;
+    padding: 12px;
+    border: 1px solid #edebe9;
+}
+
+/* Header calendário */
+.calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.calendar-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: #323130;
+}
+
+.calendar-nav {
+    display: flex;
+    gap: 6px;
+}
+
+.nav-btn {
+    background: transparent;
+    border: none;
+    color: #605e5c;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.nav-btn:hover {
+    color: #0078d4;
+}
+
+/* Dias da semana */
+.calendar-weekdays {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    font-size: 11px;
+    text-align: center;
+    color: #605e5c;
+    margin-bottom: 8px;
+}
+
+/* Grid */
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 6px;
+}
+
+
+.calendar-grid span {
+    text-align: center;
+    padding: 8px 0;
+    border-radius: 8px;
+    font-size: 13px;
+    cursor: pointer;
+    background: #ffffff;
+    border: 1px solid #edebe9;
+}
+
+.calendar-grid span:hover {
+    background: #f1f5f9;
+}
+
+.calendar-grid span.day-alert {
+    background: #fde7e9;
+    color: #a4262c;
+    font-weight: 600;
+}
+
+.calendar-grid span.day-alert:hover {
+    background: #f4c7c9;
+}
+
+.calendar-grid span.day-disabled {
+    color: #9ca3af;
+    cursor: not-allowed;
+    pointer-events: none;
+    background: #fafafa;
+}
+
+
+/* Semana */
+/* .calendar-week {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    text-align: center;
+    padding: 6px 0;
+    border-radius: 6px;
+    cursor: pointer;
+    background: #ffffff;
+    border: 1px solid #edebe9;
+} */
+
+.calendar-week span {
+    font-size: 13px;
+    color: #323130;
+}
+
+/* Hover */
+/* .calendar-week:hover {
+    background: #f3f2f1;
+} */
+
+/* Semana com pendência */
+.week-alert {
+    background: #fde7e9;
+    border-color: #d13438;
+}
+
+
+.week-alert:hover {
+    background: #f4c7c9;
+}
+
+.datepicker {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 280px;
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0,0,0,.08);
+    padding: 12px;
+    display: none;
+    z-index: 10;
+}
+
+.datepicker-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+.datepicker-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 6px;
+}
+
+.datepicker-day {
+    text-align: center;
+    padding: 8px 0;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.datepicker-day:hover {
+    background: #f1f5f9;
+}
+
+.datepicker-day.active {
+    background: #2563eb;
+    color: #fff;
+}
+
+.calendar-week.week-alert {
+    background: #fde7e9;
+    border-color: #d13438;
+}
+
+.calendar-week.week-alert:hover {
+    background: #f4c7c9;
+}
+
+.calendar-week.week-alert span {
+    color: #a4262c;
+}
+
+.calendar-week span.day-alert {
+    background: #fde7e9;
+    color: #a4262c;
+    font-weight: 600;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.calendar-week span.day-alert:hover {
+    background: #f4c7c9;
+}
+
+.datepicker-day.day-alert {
+    background: #fde7e9;
+    color: #a4262c;
+    font-weight: 600;
+}
+
+.datepicker-day.day-alert:hover {
+    background: #f4c7c9;
+}
+
+.day-disabled {
+    color: #9ca3af;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.4);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+}
+
+.modal {
+    background: #fff;
+    width: 420px;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 20px 40px rgba(0,0,0,.15);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.modal-header h2 {
+    font-size: 16px;
+}
+
+.modal-close {
+    background: none;
+    border: none;
+    font-size: 22px;
+    cursor: pointer;
+}
+
+.modal-date {
+    font-size: 13px;
+    color: #605e5c;
+    margin-bottom: 12px;
+}
+
 
 /* ===== DASHBOARD GESTOR ===== */
 .dashboard-gestor-container {
