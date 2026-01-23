@@ -1600,18 +1600,22 @@ td.department {
     align-items: flex-end;
     gap: 14px;
     height: 220px;
-    padding: 0 6px;
+    padding: 0 6px 24px; /* 🔥 espaço para os labels */
+    border-bottom: 1px solid #e5e7eb;
 }
+
 
 .bar {
     flex: 1;
-    height: 100%; /* 🔥 ESSENCIAL */
+    height: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: flex-end;
     position: relative;
+    padding-bottom: 22px; /* espaço pro label */
 }
+
+
 
 
 
@@ -1633,11 +1637,16 @@ td.department {
     font-weight: 600;
     color: black;
     z-index: 2;
+    pointer-events: none;
 }
+
 
 
 .bar label {
-    margin-top: 8px;
-    font-size: 11px;
-    color: #374151;
+    position: absolute;
+    bottom: 0;
+    font-size: 20px;
+    color: black;
+    margin-top: 0;
 }
+
