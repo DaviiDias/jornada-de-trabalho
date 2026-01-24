@@ -575,11 +575,11 @@ document.getElementById('justificativaModal').addEventListener('click', (e) => {
 });
 
 function getAderenciaClass(percent) {
-    if (percent > 75) return 'excellent';
+    if (percent > 85) return 'excellent';
     if (percent >= 61) return 'good';
     if (percent >= 50) return 'attention';
     return 'critical';
-}
+}   
 
 //Render Tabela Relatório
 function renderRelatorioEmpresa(data) {
@@ -617,7 +617,7 @@ function renderRelatorioEmpresa(data) {
         area.valores.forEach(valor => {
             const cls = getAderenciaClass(valor);
 
-            const diamond = valor > 75
+            const diamond = valor > 85
                 ? '<span class="diamond">💎</span>'
                 : '';
 
