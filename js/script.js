@@ -388,65 +388,78 @@ const mockRelatorioEmpresa = {
         {
             area: "ALPA SEDE",
             hc: 542,
+            grupo: "",
             valores: [62, 55, 64, 57, 61, 54, 53, 48, 52, 59, 46]
         },
         {
             area: "LATAM",
             hc: 121,
+            grupo: "BU's",
             valores: [54, 52, 61, 55, 58, 46, 50, 34, 49, 57, 38]
         },
         {
             area: "IDM",
             hc: 11,
+            grupo: "BU's",
             valores: [5, 8, 14, 12, 10, 65, 36, 25, 6, 62, 15]
         },
         {
             area: "N&C",
             hc: 3,
+            grupo: "BU's",
             valores: [0, 0, 5, 0, 0, 48, 0, 0, 0, 0, 0]
         },
         {
             area: "EUROPE",
             hc: 2,
+            grupo: "BU's",
             valores: [100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100]
         },
         {
             area: "FINANÇAS",
             hc: 73,
+            grupo: "CORP",
             valores: [72, 78, 76, 66, 74, 77, 65, 62, 58, 61, 60]
         },
         {
             area: "TECNOLOGIA",
             hc: 68,
+            grupo: "CORP",
             valores: [22, 20, 24, 21, 23, 25, 15, 42, 18, 14, 19]
         },
         {
             area: "PEOPLE",
             hc: 59,
+            grupo: "CORP",
             valores: [78, 76, 79, 66, 72, 60, 55, 70, 66, 80, 56]
         },
         {
             area: "MARKETING",
             hc: 52,
+            grupo: "CORP",
             valores: [92, 68, 83, 85, 86, 61, 55, 75, 52, 76, 45]
         },
         {
             area: "JURÍDICO",
             hc: 31,
+            grupo: "CORP",
             valores: [84, 76, 78, 70, 73, 61, 55, 65, 88, 67, 28]
         },
         {
             area: "SUPPLY CHAIN",
             hc: 123,
+            grupo: "OP",
             valores: [70, 61, 69, 58, 66, 56, 63, 50, 57, 61, 65]
         },
         {
             area: "INDUSTRIAL",
             hc: 24,
+            grupo: "OP",
             valores: [28, 35, 45, 38, 46, 55, 50, 36, 44, 49, 22]
         }
     ]
 };
+
 
 
 
@@ -571,8 +584,6 @@ function getAderenciaClass(percent) {
 //Render Tabela Relatório
 function renderRelatorioEmpresa(data) {
     const table = document.getElementById('aderenciaTable');
-
-    // Cabeçalho
     const thead = table.querySelector('thead');
     thead.innerHTML = `
         <tr>
@@ -582,30 +593,36 @@ function renderRelatorioEmpresa(data) {
         </tr>
     `;
 
-    // Corpo
     const tbody = table.querySelector('tbody');
     tbody.innerHTML = '';
 
-    data.areas.forEach(area => {
-        const tr = document.createElement('tr');
+    let grupoAtual = null;
 
+    data.areas.forEach(area => {
+        // Pula separador se grupo estiver vazio
+        if (area.grupo && area.grupo !== grupoAtual) {
+            grupoAtual = area.grupo;
+            const separador = document.createElement('tr');
+            separador.innerHTML = `
+                <td colspan="${2 + data.periods.length}" class="grupo-header">${grupoAtual}</td>
+            `;
+            tbody.appendChild(separador);
+        }
+
+        const tr = document.createElement('tr');
         tr.innerHTML = `
             <td class="department">${area.area}</td>
             <td>${area.hc}</td>
         `;
-
         area.valores.forEach(valor => {
             const cls = getAderenciaClass(valor);
-            tr.innerHTML += `
-                <td class="${cls}">
-                    <span class="percent">${valor}%</span>
-                </td>
-            `;
+            tr.innerHTML += `<td class="${cls}"><span class="percent">${valor}%</span></td>`;
         });
-
         tbody.appendChild(tr);
     });
 }
+
+
 
 // chamada inicial
 renderRelatorioEmpresa(mockRelatorioEmpresa);
@@ -735,22 +752,22 @@ function renderDatepicker() {
         const weekStart = getWeekStart(dayDate);
         const weekKey = formatISO(weekStart);
 
-const dayNumber = d;
-const dayOfWeek = dayDate.getDay(); // 0 = domingo, 6 = sábado
+        const dayNumber = d;
+        const dayOfWeek = dayDate.getDay(); // 0 = domingo, 6 = sábado
 
-// 🔴 dia em inconformidade (mock)
-if (
-    mockAlertDays.includes(dayNumber) &&
-    dayOfWeek !== 0 &&
-    dayOfWeek !== 6
-) {
-    dayEl.classList.add('day-alert');
-}
+        // 🔴 dia em inconformidade (mock)
+        if (
+            mockAlertDays.includes(dayNumber) &&
+            dayOfWeek !== 0 &&
+            dayOfWeek !== 6
+        ) {
+            dayEl.classList.add('day-alert');
+        }
 
-// 🚫 sábado e domingo
-if (dayOfWeek === 0 || dayOfWeek === 6) {
-    dayEl.classList.add('day-disabled');
-}
+        // 🚫 sábado e domingo
+        if (dayOfWeek === 0 || dayOfWeek === 6) {
+            dayEl.classList.add('day-disabled');
+        }
 
 
 

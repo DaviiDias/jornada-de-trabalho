@@ -280,7 +280,9 @@ body {
 }
 
 .page-view.active {
-    display: block;
+     display: flex; 
+     flex-direction: column;
+    gap: 15px;
 }
 
 .section-title {
@@ -586,6 +588,37 @@ td.department {
     font-weight: 600;
     background: #f8fafc;
 }
+
+.grupo-header {
+    background: #e0e7ff;
+    font-weight: bold;
+    text-align: left;
+    padding: 10px;
+}
+
+.tabela-com-grupo {
+    display: flex;
+    align-items: flex-start;
+}
+
+.grupo-lateral {
+    display: flex;
+    flex-direction: column;
+    margin-right: 8px;
+}
+
+.grupo-label {
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    font-weight: bold;
+    background: #e0e7ff;
+    color: #1e40af;
+    text-align: center;
+    padding: 4px;
+    border: 1px solid #cbd5e1;
+}
+
+
 
 /* NOVA REGRA DE CORES */
 .excellent {
@@ -1460,7 +1493,10 @@ td.department {
 
     .adherence-card {
         padding: 16px;
+        margin-bottom: 15px;
     }
+
+ 
 
     /* Fechar menu ao clicar em um link */
     .nav-link {
@@ -1520,6 +1556,7 @@ td.department {
 
     .page-view {
         padding: 12px;
+        gap: 15px;
     }
 
     .calendar {
