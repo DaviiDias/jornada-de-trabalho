@@ -616,8 +616,20 @@ function renderRelatorioEmpresa(data) {
         `;
         area.valores.forEach(valor => {
             const cls = getAderenciaClass(valor);
-            tr.innerHTML += `<td class="${cls}"><span class="percent">${valor}%</span></td>`;
+
+            const diamond = valor > 75
+                ? '<span class="diamond">💎</span>'
+                : '';
+
+            tr.innerHTML += `
+        <td class="${cls}">
+            <span class="percent">
+                ${valor}%${diamond}
+            </span>
+        </td>
+    `;
         });
+
         tbody.appendChild(tr);
     });
 }
