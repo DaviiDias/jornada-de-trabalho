@@ -90,20 +90,6 @@
                             <span class="nav-text">Histórico</span>
                         </a>
                     </div>
-                    <!-- <div class="nav-item">
-                        <a class="nav-link" data-page="justificativas">
-                            <span class="nav-icon"><img src="assets/justificar.png" alt="Dashboard"
-                                    class="nav-icon-img"></span>
-                            <span class="nav-text">Justificativas</span>
-                        </a>
-                    </div> -->
-                    <!-- <div class="nav-item">
-                        <a class="nav-link" data-page="historico-justificativa">
-                            <span class="nav-icon"><img src="assets/historico-presenca.png" alt="Dashboard"
-                                    class="nav-icon-img"></span>
-                            <span class="nav-text">Histórico de justificativas</span>
-                        </a>
-                    </div> -->
                     <div class="nav-item">
                         <a class="nav-link" data-page="relatorios">
                             <span class="nav-icon"><img src="assets/historico-presenca.png" alt="Dashboard"
@@ -124,27 +110,6 @@
                             <span class="nav-text">Dashboard</span>
                         </a>
                     </div>
-                    <!-- <div class="nav-item">
-                        <a class="nav-link" data-page="historico-presenca">
-                            <span class="nav-icon"><img src="assets/historico.png" alt="Dashboard"
-                                    class="nav-icon-img"></span>
-                            <span class="nav-text">Histórico</span>
-                        </a>
-                    </div> -->
-                    <!-- <div class="nav-item">
-                        <a class="nav-link" data-page="justificativas">
-                            <span class="nav-icon"><img src="assets/justificar.png" alt="Dashboard"
-                                    class="nav-icon-img"></span>
-                            <span class="nav-text">Justificativas</span>
-                        </a>
-                    </div> -->
-                    <!-- <div class="nav-item">
-                        <a class="nav-link" data-page="historico-justificativa">
-                            <span class="nav-icon"><img src="assets/historico-presenca.png" alt="Dashboard"
-                                    class="nav-icon-img"></span>
-                            <span class="nav-text">Histórico de justificativas</span>
-                        </a>
-                    </div> -->
                     <div class="nav-item">
                         <a class="nav-link" data-page="relatorios">
                             <span class="nav-icon"><img src="assets/historico-presenca.png" alt="Dashboard"
@@ -246,56 +211,24 @@
                 <!-- Histórico -->
                 <div id="historico-presenca" class="page-view">
                     <div class="section-title">Histórico Semanal de Presença</div>
+                    <div class="filter-group">
+                        <label>Colaborador</label>
+                        <select class="filter-select" id="employeeFilter">
+                            <option value="">Selecione</option>
+                            <option value="luiz">Luiz Silva</option>
+                            <option value="ana">Ana Souza</option>
+                        </select>
+                    </div>
+                    <div id="historico-content" style="display:none ;">
 
-                    <div class="historico-container">
-                        <!-- Adherence Card -->
-                        <div class="adherence-card">
+                        <div class="resumo" id="resumo">
+                            Selecione um colaborador
+                        </div>
 
-                            <!-- Header / Filtros -->
-                            <div class="adherence-header">
-                                <div class="filter-group">
-                                    <label>Colaborador</label>
-                                    <select class="filter-select" id="employeeFilter">
-                                        <option value="">Selecione</option>
-                                        <option value="luiz">Luiz Silva</option>
-                                        <option value="ana">Ana Souza</option>
-                                    </select>
+                        <div class="overview" id="overview"></div>
 
-                                </div>
-
-                                <div class="filter-group">
-                                    <label>Período</label>
-                                    <input type="text" class="filter-input" id="dateFilter" readonly />
-                                    <div class="datepicker" id="datepicker"></div>
-                                </div>
-                            </div>
-
-                            <!-- Calendário (popover / container) -->
-                            <div class="week-calendar">
-
-                                <!-- Header calendário -->
-                                <div class="calendar-header">
-                                    <span class="calendar-title" id="calendarTitle"></span>
-                                    <div class="calendar-nav">
-                                        <!-- <button class="nav-btn">↑</button>
-                                        <button class="nav-btn">↓</button> -->
-                                    </div>
-                                </div>
-
-                                <!-- Dias da semana -->
-                                <div class="calendar-weekdays">
-                                    <span>d</span>
-                                    <span>s</span>
-                                    <span>t</span>
-                                    <span>q</span>
-                                    <span>q</span>
-                                    <span>s</span>
-                                    <span>s</span>
-                                </div>
-
-                                <!-- Grid de semanas -->
-                                <div class="calendar-grid" id="calendarGrid"></div>
-                            </div>
+                        <div id="detail-panel">
+                            <div class="detail-content" id="detail-content"></div>
                         </div>
 
                     </div>

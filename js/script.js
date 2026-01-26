@@ -1,3 +1,5 @@
+let colaboradorSelecionado = null;
+
 const pageNames = {
     dashboard: 'Dashboard Principal',
     presenca: 'Controle de Presença',
@@ -460,6 +462,62 @@ const mockRelatorioEmpresa = {
     ]
 };
 
+// JSON mockado simulando retorno da API
+const dadosApiMock = {
+    colaborador: "Luiz Silva",
+    semanas: [
+        {
+            num: 1,
+            periodo: "19/01/2026 → 23/01/2026",
+            justificada: false,
+            dias: [
+                { dia: "Seg", data: "19/01", status: "presencial" },
+                { dia: "Ter", data: "20/01", status: "presencial" },
+                { dia: "Qua", data: "21/01", status: "remoto" },
+                { dia: "Qui", data: "22/01", status: "presencial" },
+                { dia: "Sex", data: "23/01", status: "remoto" }
+            ]
+        },
+        {
+            num: 2,
+            periodo: "12/01/2026 → 16/01/2026",
+            justificada: true, // 👈 inconformidade já tratada
+            dias: [
+                { dia: "Seg", data: "12/01", status: "remoto" },
+                { dia: "Ter", data: "13/01", status: "presencial" },
+                { dia: "Qua", data: "14/01", status: "ausente", justificado: true },
+                { dia: "Qui", data: "15/01", status: "remoto" },
+                { dia: "Sex", data: "16/01", status: "presencial" }
+            ]
+        },
+        {
+            num: 3,
+            periodo: "05/01/2026 → 09/01/2026",
+            justificada: false,
+            dias: [
+                { dia: "Seg", data: "05/01", status: "ausente" },
+                { dia: "Ter", data: "06/01", status: "remoto" },
+                { dia: "Qua", data: "07/01", status: "ausente" },
+                { dia: "Qui", data: "08/01", status: "remoto" },
+                { dia: "Sex", data: "09/01", status: "ausente" }
+            ]
+        },
+        {
+            num: 4,
+            periodo: "29/12/2025 → 02/01/2026",
+            justificada: false,
+            dias: [
+                { dia: "Seg", data: "29/12", status: "presencial" },
+                { dia: "Ter", data: "30/12", status: "presencial" },
+                { dia: "Qua", data: "31/12", status: "remoto" },
+                { dia: "Qui", data: "01/01", status: "remoto" },
+                { dia: "Sex", data: "02/01", status: "remoto" }
+            ]
+        }
+    ]
+};
+
+
 
 
 
@@ -579,7 +637,7 @@ function getAderenciaClass(percent) {
     if (percent >= 61) return 'good';
     if (percent >= 50) return 'attention';
     return 'critical';
-}   
+}
 
 //Render Tabela Relatório
 function renderRelatorioEmpresa(data) {
@@ -639,7 +697,310 @@ function renderRelatorioEmpresa(data) {
 // chamada inicial
 renderRelatorioEmpresa(mockRelatorioEmpresa);
 
+// Teste integração luiz
 
+function calcularStatusSemana(semana) {
+    const presenciais = semana.dias.filter(d => d.status === 'presencial').length;
+    const remotos = semana.dias.filter(d => d.status === 'remoto').length;
+    const ausencias = semana.dias.filter(d => d.status === 'ausente').length;
+
+    // Se houve ausência, é inconformidade
+    if (ausencias > 0) {
+        return semana.justificada ? 'azul' : 'vermelho';
+    }
+
+    // Regra principal
+    if (presenciais >= 3 && remotos <= 2) {
+        return 'verde';
+    }
+
+    // Restante é inconformidade
+    return semana.justificada ? 'azul' : 'vermelho';
+}
+
+
+function getStatusSemana(presCount, justificada = false) {
+
+    if (justificada) {
+        return {
+            class: 'week-justificada',
+            label: 'Inconformidade justificada',
+            cor: 'var(--azul)'
+        };
+    }
+
+    if (presCount >= 3) {
+        return {
+            class: 'week-ok',
+            label: 'Em conformidade',
+            cor: 'var(--verde)'
+        };
+    }
+
+    return {
+        class: 'week-urgente',
+        label: 'Inconformidade',
+        cor: 'var(--vermelho)'
+    };
+}
+
+
+function showDetail(s, cardElement) {
+    const content = document.getElementById('detail-content');
+    const pres = s.dias.filter(d => d.status === 'presencial').length;
+    const isRequiredSemanal = pres < 3;
+    const st = getStatusSemana(pres);
+
+    content.innerHTML = `
+    <h3 style="margin:0 0 20px; text-align:center; color:${st.cor}">
+      Semana ${s.num} – ${s.periodo} (${pres} presenciais)
+    </h3>
+
+    <div class="days-grid">
+      ${s.dias.map(d => {
+        let cls = '', txt = '';
+
+        if (d.justificado) {
+            cls = 'status-justificado';
+            txt = 'Justificado';
+        } else if (d.status === 'presencial') {
+            cls = 'status-presencial';
+            txt = 'Presencial';
+        } else if (d.status === 'remoto') {
+            cls = 'status-remoto';
+            txt = 'Remoto';
+        } else {
+            cls = 'status-ausente';
+            txt = 'Ausente';
+        }
+
+        const podeJustificar = d.status === 'ausente' && !d.justificado;
+
+        return `
+          <div class="day-card">
+            <div class="day-header">${d.dia}</div>
+            <div class="day-date">${d.data}</div>
+            <div class="status ${cls}">${txt}</div>
+            ${podeJustificar ? `
+              <div class="just-icon" 
+                   data-dia="${d.dia}" 
+                   data-data="${d.data}" 
+                   data-tipo="${txt}">
+                J
+              </div>
+            ` : ''}
+          </div>`;
+      }).join('')}
+    </div>
+
+    ${isRequiredSemanal ? `
+      <div class="justifications-panel">
+        <strong>Justificativas</strong><br>
+        <small>Clique no ícone "J" nos dias para adicionar ou remover justificativa diária.</small>
+
+        <div id="daily-fields" style="margin:16px 0;"></div>
+
+        <div class="just-weekly">
+          <strong>Justificativa geral da semana (obrigatória)</strong>
+          <textarea id="weekly-textarea" placeholder="Explique o motivo da não conformidade semanal"></textarea>
+        </div>
+
+        <button id="submit-btn" class="submit-btn">
+          Salvar justificativas desta semana
+        </button>
+      </div>
+    ` : ''}
+  `;
+
+    content.classList.add('open');
+    content.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+    if (!isRequiredSemanal) return; // 🔥 não precisa seguir se não há justificativa
+
+    const submitBtn = document.getElementById('submit-btn');
+    const weeklyTextarea = document.getElementById('weekly-textarea');
+    const dailyFieldsContainer = document.getElementById('daily-fields');
+
+    document.querySelectorAll('.just-icon').forEach(icon => {
+        icon.addEventListener('click', function () {
+            const dia = this.dataset.dia;
+            const data = this.dataset.data;
+            const tipo = this.dataset.tipo;
+
+            const existing = dailyFieldsContainer.querySelector(`[data-dia="${dia}"]`);
+            if (existing) {
+                existing.remove();
+                this.classList.remove('active');
+            } else {
+                dailyFieldsContainer.insertAdjacentHTML('beforeend', `
+                    <div class="just-daily" data-dia="${dia}">
+                        <strong>${dia} (${data}) – ${tipo}</strong>
+                        <textarea class="daily-textarea" placeholder="Justificativa para este dia..."></textarea>
+                    </div>
+                `);
+                this.classList.add('active');
+            }
+        });
+    });
+
+    submitBtn.addEventListener('click', () => {
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Salvando...';
+
+        const justificativasDiarias = [];
+        dailyFieldsContainer.querySelectorAll('.just-daily').forEach(el => {
+            const textarea = el.querySelector('textarea');
+            if (textarea.value.trim()) {
+                justificativasDiarias.push({
+                    dia: el.dataset.dia,
+                    justificativa: textarea.value.trim()
+                });
+            }
+        });
+
+        const payload = {
+            colaborador: dadosApiMock.colaborador,
+            semana: s.num,
+            periodo: s.periodo,
+            justificativasDiarias,
+            justificativaSemanal: weeklyTextarea.value.trim()
+        };
+
+        console.log('Enviando para o servidor:', payload);
+
+        setTimeout(() => {
+            alert('Justificativas salvas com sucesso!');
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'Salvar justificativas desta semana';
+        }, 1500);
+    });
+}
+
+
+function renderOverview(dados) {
+    const overview = document.getElementById('overview');
+    overview.innerHTML = '';
+
+    dados.semanas.forEach(s => {
+
+        // ✅ CONTADOR REAL (nunca zera)
+        const presenciais = s.dias.filter(d => d.status === 'presencial').length;
+        const remotos = s.dias.filter(d => d.status === 'remoto').length;
+        const ausentes = s.dias.filter(d => d.status === 'ausente').length;
+
+        // ✅ REGRA DE CONFORMIDADE
+        let statusSemana;
+
+        if (s.justificada) {
+            statusSemana = {
+                class: 'week-justificada',
+                label: 'Inconformidade justificada',
+                cor: 'var(--azul)'
+            };
+        } else if (ausentes > 0 || remotos > 2 || presenciais < 3) {
+            statusSemana = {
+                class: 'week-urgente',
+                label: 'Inconformidade',
+                cor: 'var(--vermelho)'
+            };
+        } else {
+            statusSemana = {
+                class: 'week-ok',
+                label: 'Em conformidade',
+                cor: 'var(--verde)'
+            };
+        }
+
+        const card = document.createElement('div');
+        card.className = `week-card ${statusSemana.class}`;
+        card.dataset.semana = s.num;
+
+        card.innerHTML = `
+            <div class="week-header">
+                Semana ${s.num}<br>
+                <small>${s.periodo}</small>
+            </div>
+
+            <div class="week-count" style="color:${statusSemana.cor}">
+                ${presenciais}
+            </div>
+
+            <div style="text-align:center; padding:8px; font-size:0.9rem;">
+                ${statusSemana.label}
+            </div>
+
+            ${s.justificada ? `<div class="justificado-icon">✓</div>` : ``}
+        `;
+
+        card.addEventListener('click', () => {
+            document
+                .querySelectorAll('.week-card')
+                .forEach(c => c.classList.remove('active'));
+
+            card.classList.add('active');
+            showDetail(s, card);
+        });
+
+        overview.appendChild(card);
+    });
+}
+
+
+function updateJustificadoStatus(cardElement, s) {
+    const dailyFields = document.getElementById('daily-fields');
+    const weeklyField = document.querySelector('.just-weekly textarea');
+
+    const pres = s.dias.filter(d => d.status === 'presencial').length;
+    let justifiedDays = 0;
+
+    // Conta apenas dias com texto preenchido
+    if (dailyFields) {
+        dailyFields.querySelectorAll('.just-daily textarea').forEach(textarea => {
+            if (textarea.value.trim() !== '') justifiedDays++;
+        });
+    }
+
+    const hasWeeklyContent = weeklyField && weeklyField.value.trim() !== '';
+
+    // Regra: verde se
+    // 1. Campo semanal tem texto (critério suficiente sozinho)
+    // OU
+    // 2. Dias presenciais + dias com justificativa preenchida ≥ 3
+    const isJustificado = hasWeeklyContent || (pres + justifiedDays >= 3);
+
+    if (isJustificado) {
+        cardElement.classList.add('week-justificado');
+    } else {
+        cardElement.classList.remove('week-justificado');
+    }
+}
+
+function atualizarResumo() {
+    const dados = dadosApiMock;
+
+    const nc = dados.semanas.filter(
+        s => s.dias.filter(d => d.status === 'presencial').length < 3
+    ).length;
+
+    const total = dados.semanas.reduce(
+        (sum, s) => sum + s.dias.filter(d => d.status === 'presencial').length,
+        0
+    );
+
+    const nome = colaboradorSelecionado || 'Colaborador não identificado';
+
+    document.getElementById('resumo').innerHTML = `
+        <strong>Resumo (${nome}):</strong><br>
+        Semanas que exigem justificativa semanal:
+        <span class="${nc > 0 ? 'alert' : ''}">${nc}</span> de 4<br>
+        Total de dias presenciais (últimas 4 semanas):
+        <strong>${total}</strong>
+    `;
+}
+
+
+
+// Fim do teste de integração luiz
 
 // ===============================
 // RENDER CALENDÁRIO
@@ -813,37 +1174,56 @@ function renderDatepicker() {
 // ===============================
 // EVENTOS
 // ===============================
-employeeSelect.addEventListener('change', e => {
-    selectedEmployee = e.target.value || null;
-    tryOpenCalendar();
-});
 
-dateInput.addEventListener('click', () => {
-    datepicker.style.display = 'block';
-    renderDatepicker();
-});
+// Filtro colaborador
+if (employeeSelect) {
+    employeeSelect.addEventListener('change', e => {
+        const value = e.target.value;
 
+        const historicoContent = document.getElementById('historico-content');
+        const resumo = document.getElementById('resumo');
+
+        if (!value) {
+            colaboradorSelecionado = null;
+            historicoContent.style.display = 'none';
+            resumo.textContent = 'Selecione um colaborador';
+            return;
+        }
+
+        // nome visível (Luiz Silva / Ana Souza)
+        colaboradorSelecionado =
+            employeeSelect.options[employeeSelect.selectedIndex].text;
+
+        historicoContent.style.display = 'block';
+
+        renderOverview(dadosApiMock);
+        atualizarResumo();
+    });
+}
+
+
+// Input de data
+if (dateInput && datepicker) {
+    dateInput.addEventListener('click', e => {
+        e.stopPropagation();
+        datepicker.style.display = 'block';
+        renderDatepicker();
+    });
+}
+
+// Clique dentro do datepicker
+if (datepicker) {
+    datepicker.addEventListener('click', e => {
+        e.stopPropagation();
+    });
+}
+
+// Fechar calendários ao clicar fora
 document.addEventListener('click', e => {
-    if (!datepicker.contains(e.target) && e.target !== dateInput) {
-        datepicker.style.display = 'none';
-    }
-});
 
-// ===============================
-// INIT
-// ===============================
-dateInput.addEventListener('click', (e) => {
-    e.stopPropagation();
-    datepicker.style.display = 'block';
-    renderDatepicker();
-});
-
-datepicker.addEventListener('click', (e) => {
-    e.stopPropagation();
-});
-
-document.addEventListener('click', e => {
     if (
+        datepicker &&
+        dateInput &&
         !datepicker.contains(e.target) &&
         e.target !== dateInput
     ) {
@@ -851,11 +1231,29 @@ document.addEventListener('click', e => {
     }
 
     if (
+        calendar &&
         !calendar.contains(e.target) &&
-        !datepicker.contains(e.target)
+        (!datepicker || !datepicker.contains(e.target))
     ) {
         calendar.style.display = 'none';
     }
 });
+
+
+// ===============================
+// INIT
+// ===============================
+if (typeof renderOverview === 'function') {
+    renderOverview(dadosApiMock);
+}
+
+if (typeof atualizarResumo === 'function') {
+    atualizarResumo();
+}
+
+
+// Inicializa com o JSON mockado
+renderOverview(dadosApiMock);
+atualizarResumo();
 
 
