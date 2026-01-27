@@ -782,9 +782,9 @@ function showDetail(s, cardElement) {
             <div class="day-date">${d.data}</div>
             <div class="status ${cls}">${txt}</div>
             ${podeJustificar ? `
-              <div class="just-icon" 
-                   data-dia="${d.dia}" 
-                   data-data="${d.data}" 
+              <div class="just-icon"
+                   data-dia="${d.dia}"
+                   data-data="${d.data}"
                    data-tipo="${txt}">
                 J
               </div>
@@ -802,7 +802,8 @@ function showDetail(s, cardElement) {
 
         <div class="just-weekly">
           <strong>Justificativa geral da semana (obrigatória)</strong>
-          <textarea id="weekly-textarea" placeholder="Explique o motivo da não conformidade semanal"></textarea>
+          <textarea id="weekly-textarea"
+            placeholder="Explique o motivo da não conformidade semanal"></textarea>
         </div>
 
         <button id="submit-btn" class="submit-btn">
@@ -810,38 +811,89 @@ function showDetail(s, cardElement) {
         </button>
       </div>
     ` : ''}
-  `;
+    `;
 
     content.classList.add('open');
     content.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
-    if (!isRequiredSemanal) return; // 🔥 não precisa seguir se não há justificativa
+    // if (!isRequiredSemanal) return;
 
     const submitBtn = document.getElementById('submit-btn');
     const weeklyTextarea = document.getElementById('weekly-textarea');
     const dailyFieldsContainer = document.getElementById('daily-fields');
 
-    document.querySelectorAll('.just-icon').forEach(icon => {
-        icon.addEventListener('click', function () {
-            const dia = this.dataset.dia;
-            const data = this.dataset.data;
-            const tipo = this.dataset.tipo;
+document.querySelectorAll('.just-icon').forEach(icon => {
+    icon.addEventListener('click', function (e) {
+        e.stopPropagation();
 
-            const existing = dailyFieldsContainer.querySelector(`[data-dia="${dia}"]`);
-            if (existing) {
-                existing.remove();
-                this.classList.remove('active');
+        const dia = this.dataset.dia;
+        const data = this.dataset.data;
+        const tipo = this.dataset.tipo;
+
+        const existing = dailyFieldsContainer.querySelector(
+            `[data-dia="${dia}"]`
+        );
+
+        if (existing) {
+            existing.remove();
+            this.classList.remove('active');
+            return;
+        }
+
+        dailyFieldsContainer.insertAdjacentHTML('beforeend', `
+          <div class="just-daily" data-dia="${dia}">
+            <strong>${dia} (${data}) – ${tipo}</strong>
+
+            <strong>Tipo</strong>
+            <select class="form-control daily-type">
+              <option value="" selected disabled>Selecione o tipo</option>
+              <option value="trabalho">Trabalho externo</option>
+              <option value="nao">Não Justificado</option>
+              <option value="outro">Outros</option>
+            </select>
+
+            <textarea
+              class="daily-textarea"
+              style="display:none"
+            ></textarea>
+
+            <button
+              class="daily-submit submit-btn"
+              style="display:none; margin-top:8px;">
+              Enviar
+            </button>
+          </div>
+        `);
+
+        this.classList.add('active');
+
+        const block = dailyFieldsContainer.querySelector(
+            `[data-dia="${dia}"]`
+        );
+        const select = block.querySelector('.daily-type');
+        const textarea = block.querySelector('.daily-textarea');
+        const sendBtn = block.querySelector('.daily-submit');
+
+        select.addEventListener('change', () => {
+            textarea.style.display = 'block';
+            sendBtn.style.display = 'inline-block';
+
+            if (select.value === 'trabalho') {
+                textarea.placeholder = 'Digite a Justificativa ...';
+            } else if (select.value === 'nao') {
+                textarea.placeholder = 'Digite a Medida Aplicada ...';
             } else {
-                dailyFieldsContainer.insertAdjacentHTML('beforeend', `
-                    <div class="just-daily" data-dia="${dia}">
-                        <strong>${dia} (${data}) – ${tipo}</strong>
-                        <textarea class="daily-textarea" placeholder="Justificativa para este dia..."></textarea>
-                    </div>
-                `);
-                this.classList.add('active');
+                textarea.placeholder = 'Digite os Detalhes ...';
             }
         });
+
+        sendBtn.addEventListener('click', (ev) => {
+            ev.stopPropagation();
+            alert('Justificativa enviada com sucesso!');
+        });
     });
+});
+
 
     submitBtn.addEventListener('click', () => {
         submitBtn.disabled = true;
@@ -849,8 +901,8 @@ function showDetail(s, cardElement) {
 
         const justificativasDiarias = [];
         dailyFieldsContainer.querySelectorAll('.just-daily').forEach(el => {
-            const textarea = el.querySelector('textarea');
-            if (textarea.value.trim()) {
+            const textarea = el.querySelector('.daily-textarea');
+            if (textarea && textarea.value.trim()) {
                 justificativasDiarias.push({
                     dia: el.dataset.dia,
                     justificativa: textarea.value.trim()
@@ -875,6 +927,8 @@ function showDetail(s, cardElement) {
         }, 1500);
     });
 }
+
+
 
 
 function renderOverview(dados) {

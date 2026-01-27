@@ -552,6 +552,7 @@ body {
     border: 1px solid var(--neutral-stroke-rest);
     border-radius: 4px;
     background: var(--neutral-fill-rest);
+    margin-bottom: 5px;
 }
 
 .textarea {
