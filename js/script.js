@@ -774,7 +774,7 @@ function showDetail(s, cardElement) {
             txt = 'Ausente';
         }
 
-        const podeJustificar = d.status === 'ausente' && !d.justificado;
+        const podeJustificar = (d.status === 'ausente' || d.status === 'remoto') && !d.justificado;
 
         return `
           <div class="day-card">
@@ -790,7 +790,7 @@ function showDetail(s, cardElement) {
               </div>
             ` : ''}
           </div>`;
-      }).join('')}
+    }).join('')}
     </div>
 
     ${isRequiredSemanal ? `
