@@ -264,7 +264,7 @@
                                 <div class="color-box critical"></div>
                                 < 50% </div>
                             </div>
-                        </div>
+                    </div>
 
 
                         <div class="adherence-card">
@@ -288,15 +288,10 @@
                             </div>
 
                         </div>
-                    </div>
+                </div>
 
-
-
-
-
-
-                    <!-- Dashboard Gestor -->
-                    <div id="dashboard-gestor" class="page-view">
+                <!-- Dashboard Gestor -->
+                <div id="dashboard-gestor" class="page-view">
                         <div class="dashboard-gestor-container">
                             <!-- Seção Pessoal -->
 
@@ -416,6 +411,114 @@
                                 </div>
                             </div>
                         </div>
+                </div>
+
+                    <!-- Minhas Justificativas -->
+                    <div id="justificativas" class="page-view">
+                        <div class="section-title">Minhas Justificativas</div>
+
+                        <div class="adherence-card">
+                            <h2>Enviar Justificativa</h2>
+
+                            <!-- Seletor de Justificativas Predefinidas -->
+                            <div class="predefined-justifications">
+                                <h3>Justificativas Rápidas</h3>
+                                <p class="subtitle">Selecione um tipo predefinido ou descreva sua justificativa</p>
+
+                                <div class="justification-grid" id="justificationGrid"></div>
+                            </div>
+
+                            <hr style="margin: 24px 0; border: none; border-top: 1px solid #e0e0e0;">
+
+                            <!-- Formulário de Justificativa -->
+                            <div class="justification-form">
+                                <div class="form-group">
+                                    <label for="justType">Tipo de Justificativa</label>
+                                    <select class="form-control" id="justType">
+                                        <option value="">Selecione...</option>
+                                        <option value="ferias">Férias</option>
+                                        <option value="atestado">Atestado Médico</option>
+                                        <option value="maternidade">Licença Maternidade/Paternidade</option>
+                                        <option value="luto">Licença por Luto</option>
+                                        <option value="comparecimento">Mandado de Comparecimento</option>
+                                        <option value="trabalho_ext">Trabalho Externo</option>
+                                        <option value="outro">Outro</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="justDate">Data</label>
+                                    <input type="date" class="form-control" id="justDate">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="justDetails">Detalhes/Observações</label>
+                                    <textarea class="form-control textarea" id="justDetails" rows="4"
+                                        placeholder="Descreva os detalhes da sua justificativa..."></textarea>
+                                </div>
+
+                                <button class="btn-solicitar" id="submitJustification">Enviar Justificativa</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Solicitar Falta Justificada -->
+                    <div id="falta-justificada" class="page-view">
+                        <div class="section-title">Solicitar Falta Justificada</div>
+
+                        <div class="adherence-card">
+                            <h2>Justificar Ausência</h2>
+
+                            <!-- Seletor de Justificativas Predefinidas -->
+                            <div class="predefined-justifications">
+                                <h3>Motivos Comuns</h3>
+                                <p class="subtitle">Escolha um dos motivos pré-aprovados ou descreva seu caso</p>
+
+                                <div class="absence-reasons" id="absenceReasons"></div>
+                            </div>
+
+                            <hr style="margin: 24px 0; border: none; border-top: 1px solid #e0e0e0;">
+
+                            <!-- Formulário de Falta -->
+                            <div class="absence-form">
+                                <div class="form-group">
+                                    <label for="absenceDate">Data da Ausência</label>
+                                    <input type="date" class="form-control" id="absenceDate">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="absenceType">Tipo de Ausência</label>
+                                    <select class="form-control" id="absenceType">
+                                        <option value="">Selecione...</option>
+                                        <option value="medica">Consulta/Atestado Médico</option>
+                                        <option value="odontologica">Consulta Odontológica</option>
+                                        <option value="procedimento">Procedimento Médico</option>
+                                        <option value="luto">Falecimento de Familiar</option>
+                                        <option value="juridico">Comparecimento Judicial</option>
+                                        <option value="outra">Outra</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="absenceDocument">Documentação</label>
+                                    <p class="form-hint">Para ausências médicas, anexe comprovante (atestado, recibo,
+                                        etc)</p>
+                                    <div class="file-upload">
+                                        <input type="file" id="absenceDocument" class="form-control">
+                                        <span class="upload-text">Clique ou arraste um arquivo</span>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="absenceObservations">Observações</label>
+                                    <textarea class="form-control textarea" id="absenceObservations" rows="4"
+                                        placeholder="Adicione detalhes sobre a sua ausência..."></textarea>
+                                </div>
+
+                                <button class="btn-solicitar" id="submitAbsence">Enviar Justificativa de
+                                    Ausência</button>
+                            </div>
+                        </div>
                     </div>
 
                     <!-- Férias -->
@@ -436,7 +539,7 @@
                     </div>
                 </div>
 
-                
+
             </div>
         </main>
     </div>

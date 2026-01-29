@@ -462,6 +462,54 @@ const mockRelatorioEmpresa = {
     ]
 };
 
+// Mock de dados de gestores por departamento (estrutura para API futura)
+const mockGestoresPorDepartamento = {
+    "ALPA SEDE": [
+        { nome: "Carlos Silva", hc: 180, contribuicao: [65, 58, 67, 60, 64, 57, 56, 51, 55, 62, 49] },
+        { nome: "Marina Costa", hc: 182, contribuicao: [60, 52, 61, 54, 58, 51, 50, 45, 49, 56, 43] },
+        { nome: "Ricardo Santos", hc: 180, contribuicao: [62, 55, 64, 57, 61, 54, 53, 48, 52, 59, 46] }
+    ],
+    "LATAM": [
+        { nome: "João Pereira", hc: 60, contribuicao: [55, 53, 62, 56, 59, 47, 51, 35, 50, 58, 39] },
+        { nome: "Ana Oliveira", hc: 61, contribuicao: [54, 52, 61, 55, 58, 46, 50, 34, 49, 57, 38] }
+    ],
+    "IDM": [
+        { nome: "Pedro Alves", hc: 11, contribuicao: [5, 8, 14, 12, 10, 65, 36, 25, 6, 62, 15] }
+    ],
+    "N&C": [
+        { nome: "Lucia Ferreira", hc: 3, contribuicao: [0, 0, 5, 0, 0, 48, 0, 0, 0, 0, 0] }
+    ],
+    "EUROPE": [
+        { nome: "Franz Mueller", hc: 2, contribuicao: [100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100] }
+    ],
+    "FINANÇAS": [
+        { nome: "Roberto Costa", hc: 35, contribuicao: [74, 80, 78, 68, 76, 79, 67, 64, 60, 63, 62] },
+        { nome: "Patricia Gomes", hc: 38, contribuicao: [70, 76, 74, 64, 72, 75, 63, 60, 56, 59, 58] }
+    ],
+    "TECNOLOGIA": [
+        { nome: "Bruno Oliveira", hc: 34, contribuicao: [25, 22, 26, 23, 25, 27, 17, 44, 20, 16, 21] },
+        { nome: "Daniela Lima", hc: 34, contribuicao: [20, 18, 22, 19, 21, 23, 13, 40, 16, 12, 17] }
+    ],
+    "PEOPLE": [
+        { nome: "Vanessa Teixeira", hc: 30, contribuicao: [80, 78, 81, 68, 74, 62, 57, 72, 68, 82, 58] },
+        { nome: "Felipe Martins", hc: 29, contribuicao: [76, 74, 77, 64, 70, 58, 53, 68, 64, 78, 54] }
+    ],
+    "MARKETING": [
+        { nome: "Camila Santos", hc: 26, contribuicao: [94, 70, 85, 87, 88, 63, 57, 77, 54, 78, 47] },
+        { nome: "Diego Rocha", hc: 26, contribuicao: [90, 66, 81, 83, 84, 59, 53, 73, 50, 74, 43] }
+    ],
+    "JURÍDICO": [
+        { nome: "Flávio Barbosa", hc: 31, contribuicao: [84, 76, 78, 70, 73, 61, 55, 65, 88, 67, 28] }
+    ],
+    "SUPPLY CHAIN": [
+        { nome: "Gustavo Ferreira", hc: 62, contribuicao: [72, 63, 71, 60, 68, 58, 65, 52, 59, 63, 67] },
+        { nome: "Isabela Mendes", hc: 61, contribuicao: [68, 59, 67, 56, 64, 54, 61, 48, 55, 59, 63] }
+    ],
+    "INDUSTRIAL": [
+        { nome: "Julio Correa", hc: 24, contribuicao: [28, 35, 45, 38, 46, 55, 50, 36, 44, 49, 22] }
+    ]
+};
+
 // JSON mockado simulando retorno da API
 const dadosApiMock = {
     colaborador: "Luiz Silva",
@@ -618,14 +666,38 @@ function getAderenciaClass(percent) {
     return 'critical';
 }
 
-//Render Tabela Relatório
+// ===== REQUISIÇÃO REST PARA GESTORES (Preparado para API) =====
+async function fetchGestoresData(departamento) {
+    /**
+     * Função preparada para integração com API real
+     * Atualmente usa dados mockados locais
+     * 
+     * Exemplo de integração futura com API:
+     * const response = await fetch(`/api/relatorios/gestores?departamento=${departamento}`);
+     * const data = await response.json();
+     * return data;
+     */
+    
+    // Simular delay de requisição (será substituído por fetch real)
+    return new Promise((resolve) => {
+        setTimeout(() => {
+            const gestores = mockGestoresPorDepartamento[departamento] || [];
+            resolve(gestores);
+        }, 300); // 300ms de delay simulado
+    });
+}
+
+// Rastrear quais departamentos estão expandidos
+const expandedDepartamentos = new Set();
+
+//Render Tabela Relatório com expansão de gestores
 function renderRelatorioEmpresa(data) {
     const table = document.getElementById('aderenciaTable');
     const thead = table.querySelector('thead');
     thead.innerHTML = `
         <tr>
-            <th>BU / Área</th>
-            <th># HC</th>
+            <th style="width: 200px;">BU / Área</th>
+            <th style="width: 60px;"># HC</th>
             ${data.periods.map(p => `<th>${p}</th>`).join('')}
         </tr>
     `;
@@ -635,7 +707,7 @@ function renderRelatorioEmpresa(data) {
 
     let grupoAtual = null;
 
-    data.areas.forEach(area => {
+    data.areas.forEach((area, index) => {
         // Pula separador se grupo estiver vazio
         if (area.grupo && area.grupo !== grupoAtual) {
             grupoAtual = area.grupo;
@@ -646,29 +718,139 @@ function renderRelatorioEmpresa(data) {
             tbody.appendChild(separador);
         }
 
+        // ROW PRINCIPAL DO DEPARTAMENTO
         const tr = document.createElement('tr');
-        tr.innerHTML = `
-            <td class="department">${area.area}</td>
-            <td>${area.hc}</td>
+        tr.className = 'area-row';
+        tr.dataset.area = area.area;
+        tr.dataset.index = index;
+        
+        const departmentCell = document.createElement('td');
+        departmentCell.className = 'department';
+        departmentCell.innerHTML = `
+            <span class="expand-btn" data-area="${area.area}">+</span>
+            <span class="area-name">${area.area}</span>
         `;
+        tr.appendChild(departmentCell);
+
+        const hcCell = document.createElement('td');
+        hcCell.textContent = area.hc;
+        tr.appendChild(hcCell);
+
         area.valores.forEach(valor => {
             const cls = getAderenciaClass(valor);
-
-            const diamond = valor > 85
-                ? '<span class="diamond">💎</span>'
-                : '';
-
-            tr.innerHTML += `
-        <td class="${cls}">
-            <span class="percent">
-                ${valor}%${diamond}
-            </span>
-        </td>
-    `;
+            const diamond = valor > 85 ? '<span class="diamond">💎</span>' : '';
+            
+            const td = document.createElement('td');
+            td.className = cls;
+            td.innerHTML = `
+                <span class="percent">
+                    ${valor}%${diamond}
+                </span>
+            `;
+            tr.appendChild(td);
         });
 
         tbody.appendChild(tr);
+
+        // Adicionar event listener ao botão de expansão
+        const expandBtn = departmentCell.querySelector('.expand-btn');
+        expandBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            toggleGestoresExpansion(area.area, data, index);
+        });
     });
+}
+
+// Função para expandir/retrair gestores
+async function toggleGestoresExpansion(departamento, data, rowIndex) {
+    const tbody = document.querySelector('#aderenciaTable tbody');
+    const expandBtn = document.querySelector(`.expand-btn[data-area="${departamento}"]`);
+    
+    // Verificar se já está expandido
+    const isExpanded = expandedDepartamentos.has(departamento);
+    
+    if (isExpanded) {
+        // RETRAIR
+        expandBtn.textContent = '+';
+        expandBtn.classList.remove('expanded');
+        expandedDepartamentos.delete(departamento);
+        
+        // Animar remoção das linhas de gestores
+        const gestorRows = document.querySelectorAll(`[data-parent-area="${departamento}"]`);
+        gestorRows.forEach(row => {
+            row.classList.add('removing');
+            setTimeout(() => row.remove(), 300);
+        });
+    } else {
+        // EXPANDIR
+        expandBtn.textContent = '−';
+        expandBtn.classList.add('expanded');
+        expandedDepartamentos.add(departamento);
+        
+        // Mostrar loading
+        expandBtn.textContent = '⋯';
+        
+        try {
+            // Fazer requisição REST
+            const gestores = await fetchGestoresData(departamento);
+            expandBtn.textContent = '−';
+            
+            // Encontrar a row pai
+            const areaRow = expandBtn.closest('tr');
+            const periods = data.periods.length;
+            
+            // Adicionar linhas de gestores após a área
+            gestores.forEach((gestor, gestorIndex) => {
+                const gestorRow = document.createElement('tr');
+                gestorRow.className = 'gestor-row';
+                gestorRow.dataset.parentArea = departamento;
+                gestorRow.dataset.gestor = gestor.nome;
+                
+                // Célula com nome do gestor
+                const gestorNameCell = document.createElement('td');
+                gestorNameCell.className = 'gestor-name';
+                gestorNameCell.innerHTML = `
+                    <span class="indent">↳ ${gestor.nome}</span>
+                `;
+                gestorRow.appendChild(gestorNameCell);
+                
+                // Célula com HC do gestor
+                const gestorHcCell = document.createElement('td');
+                gestorHcCell.textContent = gestor.hc;
+                gestorHcCell.className = 'gestor-hc';
+                gestorRow.appendChild(gestorHcCell);
+                
+                // Célula de contribuição por período
+                gestor.contribuicao.forEach(valor => {
+                    const cls = getAderenciaClass(valor);
+                    const diamond = valor > 85 ? '<span class="diamond">💎</span>' : '';
+                    
+                    const td = document.createElement('td');
+                    td.className = `${cls} gestor-data`;
+                    td.innerHTML = `
+                        <span class="percent">
+                            ${valor}%${diamond}
+                        </span>
+                    `;
+                    gestorRow.appendChild(td);
+                });
+                
+                // Inserir após a row da área (ou após o último gestor anterior)
+                if (gestorIndex === 0) {
+                    areaRow.after(gestorRow);
+                } else {
+                    const lastGestor = document.querySelector(`[data-parent-area="${departamento}"][data-gestor="${gestores[gestorIndex - 1].nome}"]`);
+                    lastGestor.after(gestorRow);
+                }
+            });
+        } catch (error) {
+            console.error('Erro ao carregar gestores:', error);
+            expandBtn.textContent = '+';
+            expandBtn.classList.remove('expanded');
+            expandedDepartamentos.delete(departamento);
+            alert('Erro ao carregar dados dos gestores');
+        }
+    }
 }
 
 

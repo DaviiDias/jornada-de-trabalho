@@ -589,6 +589,117 @@ td.department {
     text-align: left;
     font-weight: 600;
     background: #f8fafc;
+    padding-left: 8px;
+    position: relative;
+}
+
+.expand-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 26px;
+    height: 26px;
+    margin-right: 8px;
+    background-color: var(--alpargatas-blue);
+    color: white;
+    border-radius: 50%;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 16px;
+    transition: all 0.2s ease;
+    user-select: none;
+    border: none;
+    padding: 0;
+}
+
+.expand-btn:hover {
+    background-color: var(--alpargatas-light-blue);
+    transform: scale(1.15);
+    box-shadow: 0 2px 8px rgba(5, 151, 242, 0.3);
+}
+
+.expand-btn.expanded {
+    background-color: #22c55e;
+}
+
+.area-name {
+    vertical-align: middle;
+    font-weight: 600;
+}
+
+/* Estilos para linhas de gestores */
+.gestor-row {
+    background-color: #f9f9f9;
+    border-left: 4px solid var(--alpargatas-blue);
+    animation: slideDown 0.3s ease-out;
+    transition: all 0.3s ease;
+}
+
+.gestor-row:hover {
+    background-color: #f0f7ff;
+}
+
+.gestor-row.removing {
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: all 0.3s ease;
+}
+
+.gestor-name {
+    padding-left: 24px;
+    font-weight: 500;
+    color: #555;
+    background: #fafafa;
+}
+
+.indent {
+    display: inline-block;
+    margin-left: 40px;
+    color: #666;
+    font-size: 0.95rem;
+}
+
+.gestor-hc {
+    color: #888;
+    font-size: 0.95rem;
+    background: #fafafa;
+}
+
+.gestor-data {
+    opacity: 0.85;
+    background-color: #f9f9f9;
+}
+
+.gestor-data.excellent {
+    background-color: rgba(34, 197, 94, 0.08) !important;
+}
+
+.gestor-data.good {
+    background-color: rgba(34, 197, 94, 0.05) !important;
+}
+
+.gestor-data.attention {
+    background-color: rgba(251, 146, 60, 0.05) !important;
+}
+
+.gestor-data.critical {
+    background-color: rgba(239, 68, 68, 0.05) !important;
+}
+
+/* Animação de expansão */
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.gestor-row {
+    animation: slideDown 0.25s ease-out;
 }
 
 .grupo-header {
