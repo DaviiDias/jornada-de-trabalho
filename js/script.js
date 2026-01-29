@@ -609,28 +609,7 @@ function getWeeksOfMonth(year, month) {
     return weeks;
 }
 
-function openJustificativaModal({ id, date }) {
-    const modal = document.getElementById('justificativaModal');
-
-    document.getElementById('modalInconformidadeId').value = id;
-    document.getElementById('modalDate').textContent =
-        `Data da inconformidade: ${date.toLocaleDateString('pt-BR')}`;
-
-    document.getElementById('modalTipo').value = '';
-    document.getElementById('modalDetalhes').value = '';
-
-    modal.style.display = 'flex';
-}
-
-document.getElementById('closeModal').onclick = () => {
-    document.getElementById('justificativaModal').style.display = 'none';
-};
-
-document.getElementById('justificativaModal').addEventListener('click', (e) => {
-    if (e.target.id === 'justificativaModal') {
-        e.target.style.display = 'none';
-    }
-});
+// Modal removida - funcionalidade descontinuada
 
 function getAderenciaClass(percent) {
     if (percent > 85) return 'excellent';
@@ -752,148 +731,146 @@ function showDetail(s, cardElement) {
     const st = getStatusSemana(pres);
 
     content.innerHTML = `
-    <h3 style="margin:0 0 20px; text-align:center; color:${st.cor}">
-      Semana ${s.num} – ${s.periodo} (${pres} presenciais)
-    </h3>
+        <h3 style="margin:0 0 20px; text-align:center; color:${st.cor}">
+            Semana ${s.num} – ${s.periodo} (${pres} presenciais)
+        </h3>
 
-    <div class="days-grid">
-      ${s.dias.map(d => {
-        let cls = '', txt = '';
+        <div class="days-grid">
+            ${s.dias.map(d => {
+                let cls = '', txt = '';
 
-        if (d.justificado) {
-            cls = 'status-justificado';
-            txt = 'Justificado';
-        } else if (d.status === 'presencial') {
-            cls = 'status-presencial';
-            txt = 'Presencial';
-        } else if (d.status === 'remoto') {
-            cls = 'status-remoto';
-            txt = 'Remoto';
-        } else {
-            cls = 'status-ausente';
-            txt = 'Ausente';
-        }
+                if (d.justificado) {
+                    cls = 'status-justificado';
+                    txt = 'Justificado';
+                } else if (d.status === 'presencial') {
+                    cls = 'status-presencial';
+                    txt = 'Presencial';
+                } else if (d.status === 'remoto') {
+                    cls = 'status-remoto';
+                    txt = 'Remoto';
+                } else {
+                    cls = 'status-ausente';
+                    txt = 'Ausente';
+                }
 
-        const podeJustificar = (d.status === 'ausente' || d.status === 'remoto') && !d.justificado;
+                const podeJustificar =
+                    (d.status === 'ausente' || d.status === 'remoto') && !d.justificado;
 
-        return `
-          <div class="day-card">
-            <div class="day-header">${d.dia}</div>
-            <div class="day-date">${d.data}</div>
-            <div class="status ${cls}">${txt}</div>
-            ${podeJustificar ? `
-              <div class="just-icon"
-                   data-dia="${d.dia}"
-                   data-data="${d.data}"
-                   data-tipo="${txt}">
-                J
-              </div>
-            ` : ''}
-          </div>`;
-    }).join('')}
-    </div>
-
-    ${isRequiredSemanal ? `
-      <div class="justifications-panel">
-        <strong>Justificativas</strong><br>
-        <small>Clique no ícone "J" nos dias para adicionar ou remover justificativa diária.</small>
-
-        <div id="daily-fields" style="margin:16px 0;"></div>
-
-        <div class="just-weekly">
-          <strong>Justificativa geral da semana (obrigatória)</strong>
-          <textarea id="weekly-textarea"
-            placeholder="Explique o motivo da não conformidade semanal"></textarea>
+                return `
+                    <div class="day-card">
+                        <div class="day-header">${d.dia}</div>
+                        <div class="day-date">${d.data}</div>
+                        <div class="status ${cls}">${txt}</div>
+                        ${podeJustificar ? `
+                            <div class="just-icon"
+                                data-dia="${d.dia}"
+                                data-data="${d.data}"
+                                data-tipo="${txt}">
+                                J
+                            </div>
+                        ` : ``}
+                    </div>
+                `;
+            }).join('')}
         </div>
 
-        <button id="submit-btn" class="submit-btn">
-          Salvar justificativas desta semana
-        </button>
-      </div>
-    ` : ''}
+        ${isRequiredSemanal ? `
+            <div class="justifications-panel">
+                <strong>Justificativas</strong><br>
+                <small>Clique no ícone "J" nos dias para adicionar ou remover justificativa diária.</small>
+
+                <div id="daily-fields" style="margin:16px 0;"></div>
+
+                <div class="just-weekly">
+                    <strong>Justificativa geral da semana (obrigatória)</strong>
+                    <textarea id="weekly-textarea"
+                        placeholder="Explique o motivo da não conformidade semanal"></textarea>
+                </div>
+
+                <button id="submit-btn" class="submit-btn">
+                    Salvar justificativas desta semana
+                </button>
+            </div>
+        ` : ``}
     `;
 
     content.classList.add('open');
     content.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
-    // if (!isRequiredSemanal) return;
+    // ⚠️ IMPORTANTE: se não exige justificativa, PARA AQUI
+    if (!isRequiredSemanal) return;
 
     const submitBtn = document.getElementById('submit-btn');
     const weeklyTextarea = document.getElementById('weekly-textarea');
     const dailyFieldsContainer = document.getElementById('daily-fields');
 
-document.querySelectorAll('.just-icon').forEach(icon => {
-    icon.addEventListener('click', function (e) {
-        e.stopPropagation();
+    document.querySelectorAll('.just-icon').forEach(icon => {
+        icon.addEventListener('click', function (e) {
+            e.stopPropagation();
 
-        const dia = this.dataset.dia;
-        const data = this.dataset.data;
-        const tipo = this.dataset.tipo;
+            const dia = this.dataset.dia;
+            const data = this.dataset.data;
+            const tipo = this.dataset.tipo;
 
-        const existing = dailyFieldsContainer.querySelector(
-            `[data-dia="${dia}"]`
-        );
+            const existing = dailyFieldsContainer.querySelector(
+                `[data-dia="${dia}"]`
+            );
 
-        if (existing) {
-            existing.remove();
-            this.classList.remove('active');
-            return;
-        }
-
-        dailyFieldsContainer.insertAdjacentHTML('beforeend', `
-          <div class="just-daily" data-dia="${dia}">
-            <strong>${dia} (${data}) – ${tipo}</strong>
-
-            <strong>Tipo</strong>
-            <select class="form-control daily-type">
-              <option value="" selected disabled>Selecione o tipo</option>
-              <option value="trabalho">Trabalho externo</option>
-              <option value="nao">Não Justificado</option>
-              <option value="outro">Outros</option>
-            </select>
-
-            <textarea
-              class="daily-textarea"
-              style="display:none"
-            ></textarea>
-
-            <button
-              class="daily-submit submit-btn"
-              style="display:none; margin-top:8px;">
-              Enviar
-            </button>
-          </div>
-        `);
-
-        this.classList.add('active');
-
-        const block = dailyFieldsContainer.querySelector(
-            `[data-dia="${dia}"]`
-        );
-        const select = block.querySelector('.daily-type');
-        const textarea = block.querySelector('.daily-textarea');
-        const sendBtn = block.querySelector('.daily-submit');
-
-        select.addEventListener('change', () => {
-            textarea.style.display = 'block';
-            sendBtn.style.display = 'inline-block';
-
-            if (select.value === 'trabalho') {
-                textarea.placeholder = 'Digite a Justificativa ...';
-            } else if (select.value === 'nao') {
-                textarea.placeholder = 'Digite a Medida Aplicada ...';
-            } else {
-                textarea.placeholder = 'Digite os Detalhes ...';
+            if (existing) {
+                existing.remove();
+                this.classList.remove('active');
+                return;
             }
-        });
 
-        sendBtn.addEventListener('click', (ev) => {
-            ev.stopPropagation();
-            alert('Justificativa enviada com sucesso!');
+            dailyFieldsContainer.insertAdjacentHTML('beforeend', `
+                <div class="just-daily" data-dia="${dia}">
+                    <strong>${dia} (${data}) – ${tipo}</strong>
+
+                    <strong>Tipo</strong>
+                    <select class="form-control daily-type">
+                        <option value="" selected disabled>Selecione o tipo</option>
+                        <option value="trabalho">Trabalho externo</option>
+                        <option value="nao">Não Justificado</option>
+                        <option value="outro">Outros</option>
+                    </select>
+
+                    <textarea class="daily-textarea" style="display:none"></textarea>
+
+                    <button class="daily-submit submit-btn"
+                        style="display:none; margin-top:8px;">
+                        Enviar
+                    </button>
+                </div>
+            `);
+
+            this.classList.add('active');
+
+            const block = dailyFieldsContainer.querySelector(
+                `[data-dia="${dia}"]`
+            );
+            const select = block.querySelector('.daily-type');
+            const textarea = block.querySelector('.daily-textarea');
+            const sendBtn = block.querySelector('.daily-submit');
+
+            select.addEventListener('change', () => {
+                textarea.style.display = 'block';
+                sendBtn.style.display = 'inline-block';
+
+                if (select.value === 'trabalho') {
+                    textarea.placeholder = 'Digite a Justificativa ...';
+                } else if (select.value === 'nao') {
+                    textarea.placeholder = 'Digite a Medida Aplicada ...';
+                } else {
+                    textarea.placeholder = 'Digite os Detalhes ...';
+                }
+            });
+
+            sendBtn.addEventListener('click', ev => {
+                ev.stopPropagation();
+                alert('Justificativa enviada com sucesso!');
+            });
         });
     });
-});
-
 
     submitBtn.addEventListener('click', () => {
         submitBtn.disabled = true;
@@ -927,9 +904,6 @@ document.querySelectorAll('.just-icon').forEach(icon => {
         }, 1500);
     });
 }
-
-
-
 
 function renderOverview(dados) {
     const overview = document.getElementById('overview');
@@ -1097,14 +1071,7 @@ function renderCalendar() {
 
             dayEl.addEventListener('click', (e) => {
                 e.stopPropagation();
-
-                const isoDate = formatISO(dayDate);
-                const inconformidadeId = `${selectedEmployee}-${isoDate}`;
-
-                openJustificativaModal({
-                    id: inconformidadeId,
-                    date: dayDate
-                });
+                // Modal removida - funcionalidade descontinuada
             });
         }
 

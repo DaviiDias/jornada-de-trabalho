@@ -90,13 +90,6 @@
                             <span class="nav-text">Histórico</span>
                         </a>
                     </div>
-                    <!-- <div class="nav-item">
-                        <a class="nav-link" data-page="relatorios">
-                            <span class="nav-icon"><img src="assets/historico-presenca.png" alt="Dashboard"
-                                    class="nav-icon-img"></span>
-                            <span class="nav-text">Relatórios</span>
-                        </a>
-                    </div> -->
                 </div>
 
                 <!-- Menu RH -->
@@ -140,7 +133,7 @@
             </header>
 
             <div class="content-area">
-                <!-- Dashboard Page -->
+                <!-- Dashboard Page All -->
                 <div id="dashboard" class="page-view active">
                     <div class="section-title">Dashboard Principal</div>
 
@@ -202,13 +195,7 @@
                     </div>
                 </div>
 
-                <!-- Presença Page -->
-                <div id="presenca" class="page-view" style="display: none;">
-                    <div class="section-title">Controle de Presença</div>
-                    <div id="presencaContainer"></div>
-                </div>
-
-                <!-- Histórico -->
+                <!-- Histórico Gestor -->
                 <div id="historico-presenca" class="page-view">
                     <div class="section-title">Histórico Semanal de Presença</div>
                     <div class="filter-group">
@@ -235,67 +222,7 @@
 
                 </div>
 
-                <!-- Justificativas Page -->
-                <!-- <div id="justificativas" class="page-view">
-                    <div class="section-title">Minhas Justificativas</div>
-                    <div class="adherence-card">
-                        <h2>Tipo</h2>
-                        <select class="form-control">
-                            <option>Trabalho externo</option>
-                            <option>Não Justificado</option>
-                            <option>Outros</option>
-                        </select>
-                        <div id="justificativasContainer"></div>
-
-                        <h2>Detalhes</h2>
-                        <div class="detalhes-wrapper">
-                            <textarea class="form-control textarea" rows="3"
-                                placeholder="Escreva os detalhes da justificativa ..."></textarea>
-
-                            <button class="btn-solicitar">Enviar Justificativa</button>
-                        </div>
-                    </div>
-
-                </div> -->
-
-                <!-- Histórico de Justificativa -->
-                <!-- <div id="historico-justificativa" class="page-view">
-                    <div class="section-title">Histórico de justificativas</div>
-                    <div class="adherence-card">
-                        <div class="section-title">Justificativas Recentes</div>
-
-                        <div class="team-table-container">
-                            <table class="team-table">
-                                <thead>
-                                    <tr>
-                                        <th>Data</th>
-                                        <th>Tipo</th>
-                                        <th>Detalhes</th>
-                                        <th>Status</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="justificationsTableBody">
-                                    <tr>
-                                        <td>13/01/2026</td>
-                                        <td><span class="badge badge-justificativa">FÉRIAS</span></td>
-                                        <td>Período de descanso programado</td>
-                                        <td><span class="badge badge-aprovado">APROVADO</span></td>
-                                    </tr>
-
-                                    <tr>
-                                        <td>06/01/2026</td>
-                                        <td><span class="badge badge-atestado">ATESTADO MÉDICO</span></td>
-                                        <td>Consulta médica com comprovante</td>
-                                        <td><span class="badge badge-pendente">PENDENTE</span></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-
-                    </div>
-                </div> -->
-
-                <!-- Relatorios page -->
+                <!-- Relatorios page RH -->
                 <div id="relatorios" class="page-view">
                     <div class="section-title">Relatórios</div>
 
@@ -507,46 +434,11 @@
                             <button class="btn-solicitar">Solicitar Férias</button>
                         </div>
                     </div>
-
                 </div>
 
-                <!-- Falta Justificada -->
-                <div id="falta-justificada" class="page-view">
-                    <div class="section-title">Solicitar Falta Justificada</div>
-                    <div id="faltaContainer"></div>
-                </div>
+                
             </div>
         </main>
-    </div>
-
-
-    <!-- Modal -->
-    <div class="modal-overlay" id="justificativaModal">
-        <div class="modal">
-            <div class="modal-header">
-                <h2>Justificar Inconformidade</h2>
-                <button class="modal-close" id="closeModal">×</button>
-            </div>
-
-            <p class="modal-date" id="modalDate"></p>
-
-            <input type="hidden" id="modalInconformidadeId">
-
-            <h3>Tipo</h3>
-            <select class="form-control" id="modalTipo">
-                <option>Trabalho externo</option>
-                <option>Não justificado</option>
-                <option>Outros</option>
-            </select>
-
-            <h3>Detalhes</h3>
-            <textarea class="form-control textarea" id="modalDetalhes" rows="3"
-                placeholder="Escreva os detalhes ..."></textarea>
-
-            <button class="btn-solicitar" id="enviarJustificativa">
-                Enviar Justificativa
-            </button>
-        </div>
     </div>
 
     <script src="js/script.js"></script>
