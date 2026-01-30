@@ -2224,7 +2224,7 @@ window.addEventListener('resize', () => {
 // ===============================
 
 // 🔹 Nome da linha média (empresa)
-const NOME_EMPRESA_CHART = 'ALPHASEDE';
+const NOME_EMPRESA_CHART = 'ALPA SEDE';
 
 // Mock de dados de 6 meses por área
 const mockDadosAreas = {
