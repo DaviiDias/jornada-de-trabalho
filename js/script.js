@@ -2352,6 +2352,12 @@ const mockDadosAreas = {
     meses: ['Setembro', 'Outubro', 'Novembro', 'Dezembro', 'Janeiro', 'Fevereiro'],
     areas: [
         { 
+            nome: 'ALPA SEDE', 
+            cor: '#000000', 
+            valores: [95, 92, 98, 94, 96, 99],
+            destaque: true
+        },
+        { 
             nome: 'LATAM', 
             cor: '#0597F2', 
             valores: [72, 68, 78, 70, 75, 82] 
@@ -2381,6 +2387,7 @@ const mockDadosAreas = {
 
 // Estado das áreas selecionadas
 let areasVisiveisChart = {
+    'ALPA SEDE': true,
     'LATAM': true,
     'IDM': true,
     'N&C': true,
@@ -2396,34 +2403,6 @@ function inicializarGraficoAreas() {
 
     container.innerHTML = '';
 
-    // Checkbox da empresa (média geral)
-    const labelEmpresa = document.createElement('label');
-    labelEmpresa.style.display = 'flex';
-    labelEmpresa.style.alignItems = 'center';
-    labelEmpresa.style.gap = '8px';
-    labelEmpresa.style.cursor = 'pointer';
-    labelEmpresa.style.fontSize = '13px';
-    labelEmpresa.style.fontWeight = '600';
-
-    const checkEmpresa = document.createElement('input');
-    checkEmpresa.type = 'checkbox';
-    checkEmpresa.checked = true;
-    checkEmpresa.onchange = () => {
-        areasVisiveisChart[NOME_EMPRESA_CHART] = checkEmpresa.checked;
-        desenharGraficoAreas();
-    };
-
-    const colorBoxEmpresa = document.createElement('div');
-    colorBoxEmpresa.style.width = '12px';
-    colorBoxEmpresa.style.height = '12px';
-    colorBoxEmpresa.style.backgroundColor = '#000000';
-    colorBoxEmpresa.style.borderRadius = '2px';
-
-    labelEmpresa.appendChild(checkEmpresa);
-    labelEmpresa.appendChild(colorBoxEmpresa);
-    labelEmpresa.appendChild(document.createTextNode(NOME_EMPRESA_CHART));
-    container.appendChild(labelEmpresa);
-
     // Checkboxes das áreas
     mockDadosAreas.areas.forEach(area => {
         const label = document.createElement('label');
@@ -2432,6 +2411,7 @@ function inicializarGraficoAreas() {
         label.style.gap = '8px';
         label.style.cursor = 'pointer';
         label.style.fontSize = '13px';
+        label.style.fontWeight = area.nome === 'ALPA SEDE' ? '700' : 'normal';
 
         const checkbox = document.createElement('input');
         checkbox.type = 'checkbox';
@@ -2510,29 +2490,24 @@ function desenharGraficoAreas() {
         ctx.fillText(i + '%', padding - 10, canvas.height - padding - (i * stepY) + 5);
     }
 
-    // Média da empresa
-    const empresaValores = meses.map((_, i) => {
-        const soma = areas.reduce((acc, a) => acc + a.valores[i], 0);
-        return Math.round(soma / areas.length);
-    });
-
-    // Linha da empresa
-    if (areasVisiveisChart[NOME_EMPRESA_CHART]) {
-        desenharLinha(ctx, empresaValores, '#000000', padding, canvas.height, stepX, stepY, false);
-    }
-
-    // Linhas das áreas
+    // Linhas das áreas (exceto ALPA SEDE)
     areas.forEach(area => {
-        if (areasVisiveisChart[area.nome]) {
+        if (area.nome !== 'ALPA SEDE' && areasVisiveisChart[area.nome]) {
             desenharLinha(ctx, area.valores, area.cor, padding, canvas.height, stepX, stepY, true);
         }
     });
+
+    // Linha ALPA SEDE por último (para aparecer por cima)
+    const alpaSede = areas.find(a => a.nome === 'ALPA SEDE');
+    if (alpaSede && areasVisiveisChart[alpaSede.nome]) {
+        desenharLinha(ctx, alpaSede.valores, alpaSede.cor, padding, canvas.height, stepX, stepY, false, true);
+    }
 }
 
 // Função auxiliar para desenhar linhas
-function desenharLinha(ctx, valores, cor, padding, canvasHeight, stepX, stepY, comPontos) {
+function desenharLinha(ctx, valores, cor, padding, canvasHeight, stepX, stepY, comPontos, isAlpaSede) {
     ctx.strokeStyle = cor;
-    ctx.lineWidth = comPontos ? 2 : 3;
+    ctx.lineWidth = isAlpaSede ? 4 : (comPontos ? 2 : 3);
     ctx.beginPath();
 
     valores.forEach((valor, i) => {
