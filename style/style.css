@@ -1433,6 +1433,12 @@ td.department {
     gap: 24px;
 }
 
+.dashboard-rh-container {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
 .gestor-section {
     background: var(--card-background);
     padding: 24px;

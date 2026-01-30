@@ -97,10 +97,17 @@
                     <div class="nav-section-title">RH</div>
 
                     <div class="nav-item">
-                        <a class="nav-link" data-page="dashboard-gestor">
+                        <a class="nav-link" data-page="dashboard-rh">
                             <span class="nav-icon"><img src="assets/painel.png" alt="Dashboard"
                                     class="nav-icon-img"></span>
                             <span class="nav-text">Dashboard</span>
+                        </a>
+                    </div>
+                    <div class="nav-item">
+                        <a class="nav-link" data-page="aderencia">
+                            <span class="nav-icon"><img src="assets/painel.png" alt="Aderência"
+                                    class="nav-icon-img"></span>
+                            <span class="nav-text">Aderência</span>
                         </a>
                     </div>
                     <div class="nav-item">
@@ -222,17 +229,15 @@
 
                 </div>
 
-                <!-- Relatorios page RH -->
-                <div id="relatorios" class="page-view">
-                    <div class="section-title">Relatórios</div>
+                <!-- Painel de Aderência RH -->
+                <div id="aderencia" class="page-view">
+                    <div class="section-title">Painel de Aderência</div>
 
                     <div class="adherence-card">
                         <div class="section-title">Aderência à Jornada 3×2</div>
                         <p class="subtitle">
                             Outubro/2025 a Janeiro/2026
                         </p>
-
-
 
                         <div class="table-container">
                             <table id="aderenciaTable">
@@ -267,6 +272,11 @@
                                 < 50% </div>
                             </div>
                     </div>
+                </div>
+
+                <!-- Relatorios page RH -->
+                <div id="relatorios" class="page-view">
+                    <div class="section-title">Relatórios</div>
 
 
 
@@ -368,58 +378,7 @@
                         </div>
                     </div>
 
-                    <div class="adherence-card">
-                        <!-- Resumo de KPIs RH - Layout em Grid -->
-                        <div class="section-title">Análise Consolidada</div>
-                        <div class="kpi-summary" id="kpiSummary">
-                            <div class="kpi-grid">
-                                <!-- Linha 1 -->
-                                <div class="kpi-card large">
-                                    <div class="kpi-label">Gestores mais regulares</div>
-                                    <div class="kpi-value small" id="kpiGestoresRegularesLista">-</div>
-                                    <div class="kpi-note">Top 5 gestores por média</div>
-                                </div>
-                                <div class="kpi-card small">
-                                    <div class="kpi-label">Gestores regulares</div>
-                                    <div class="kpi-value" id="kpiGestoresRegulares">--%</div>
-                                    <div class="kpi-note">Média ≥85%</div>
-                                </div>
-
-                                <!-- Linha 2 -->
-                                <div class="kpi-card large">
-                                    <div class="kpi-label">Gestores (melhores → piores)</div>
-                                    <div class="kpi-value small" id="kpiGestoresTop">-</div>
-                                    <div class="kpi-note">Ranking completo</div>
-                                </div>
-                                <div class="kpi-card small">
-                                    <div class="kpi-label">Aderência Geral</div>
-                                    <div class="kpi-value" id="kpiAderencia">--%</div>
-                                    <div class="kpi-note">Meta: 85%</div>
-                                </div>
-
-                                <!-- Linha 3 -->
-                                <div class="kpi-row-flex">
-                                    <div class="kpi-card kpi-diretorias">
-                                        <div class="kpi-label">Diretorias abaixo da meta</div>
-                                        <div class="kpi-value small" id="kpiPendentesList">-</div>
-                                        <div class="kpi-note">Resumo das pendências</div>
-                                    </div>
-                                    <div class="kpi-row-right">
-                                        <div class="kpi-card">
-                                            <div class="kpi-label">Principais causas de ausência</div>
-                                            <div class="kpi-value small" id="kpiCausas">-</div>
-                                            <div class="kpi-note">Tipos prevalentes</div>
-                                        </div>
-                                        <div class="kpi-card taxa-justificativa">
-                                            <div class="kpi-label">Taxa de Justificativa</div>
-                                            <div class="kpi-value" id="kpiJustificativa">--%</div>
-                                            <div class="kpi-note">Meta: 90%</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    <!-- Análise Consolidada movida para a página Dashboard RH (dashboard-rh) -->
 
                         <div class="adherence-card">
                             <div class="chart-card">
@@ -448,7 +407,7 @@
                 <div id="dashboard-gestor" class="page-view">
                         <div class="dashboard-gestor-container">
                             <!-- Seção Pessoal -->
-
+                            <div class="section-title">Dashboard Principal</div>
                             <div class="adherence-card">
                                 <h2>Aderência Semanal</h2>
                                 <div class="status-badge status-conformidade" id="statusBadgeGestor">Em conformidade
@@ -565,6 +524,182 @@
                                 </div>
                             </div>
                         </div>
+                </div>
+
+                <!-- Dashboard RH (duplicado do Gestor + Análise Consolidada) -->
+                <div id="dashboard-rh" class="page-view">
+                    <div class="dashboard-rh-container">
+                        <!-- Seção Pessoal -->
+
+                        <div class="section-title">Dashboard Principal</div>
+                        <div class="adherence-card">
+                            <h2>Aderência Semanal</h2>
+                            <div class="status-badge status-conformidade" id="statusBadgeRh">Em conformidade
+                            </div>
+
+                            <div class="adherence-grid">
+                                <div class="adherence-item">
+                                    <div class="adherence-label">Presença Semanal</div>
+                                    <div class="adherence-value" id="presencaValueRh">4 dias</div>
+                                    <div class="adherence-note" id="presencaNoteRh"></div>
+                                </div>
+
+                                <div class="adherence-item">
+                                    <div class="adherence-label">Dias na Sede</div>
+                                    <div class="adherence-value" id="sedeValueRh">2 dias</div>
+                                </div>
+
+                                <div class="adherence-item">
+                                    <div class="adherence-label">Dias em Home Office</div>
+                                    <div class="adherence-value" id="homeofficeValueRh">2 dias</div>
+                                </div>
+
+                                <div class="adherence-item">
+                                    <div class="adherence-label">Dias restantes na semana</div>
+                                    <div class="adherence-value" id="diasRestantesValueRh">1 dia</div>
+                                </div>
+                            </div>
+
+                            <!-- Conformidade 3x2 -->
+                            <div class="conformidade-section">
+                                <div class="conformidade-title">Conformidade 3x2 (3 Presenciais + 2 Remotos)</div>
+                                <div class="conformidade-bars">
+                                    <div class="conformidade-item">
+                                        <div class="conformidade-label">
+                                            <span class="conformidade-text">Dias Presenciais</span>
+                                        </div>
+                                        <div class="conformidade-progress">
+                                            <div class="progress-bar">
+                                                <div class="progress-fill presenciais-fill" style="width: 67%;">
+                                                </div>
+                                            </div>
+                                            <span class="conformidade-counter"
+                                                id="presenciaisCountRh">2/3</span>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <div class="status-section">
+                                <div class="status-container" id="statusContainerRh">
+                                    <div class="status-message" id="statusMessageRh">
+                                        <span class="status-icon">💡</span>
+                                        <span id="statusTextRh">Você tem opção de escolha dos dias para garantir a
+                                            conformidade</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <!-- Seção Equipe -->
+                        <div class="gestor-section">
+                            <div class="section-title">Ocorrências e não Conformidades da Equipe</div>
+
+                            <div class="team-table-container">
+                                <table class="team-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Data</th>
+                                            <th>Colaborador</th>
+                                            <th>Tipo</th>
+                                            <th>Descrição</th>
+                                            <th>Gravidade</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="teamTableBodyRh">
+                                        <tr>
+                                            <td>15/06/2025</td>
+                                            <td>Maria Santos</td>
+                                            <td><span class="badge badge-ausencia">AUSÊNCIA</span></td>
+                                            <td>Ausência não justificada</td>
+                                            <td><span class="badge badge-gravidade-alta">ALTA</span></td>
+                                            <td><span class="badge badge-pendente">PENDENTE</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td>14/06/2025</td>
+                                            <td>Pedro Alves</td>
+                                            <td><span class="badge badge-atraso">ATRASO</span></td>
+                                            <td>Chegada às 09:45 (3ª ocorrência)</td>
+                                            <td><span class="badge badge-gravidade-media">MÉDIA</span></td>
+                                            <td><span class="badge badge-analise">EM ANÁLISE</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td>13/06/2025</td>
+                                            <td>Ana Costa</td>
+                                            <td><span class="badge badge-justificativa">JUSTIFICATIVA</span></td>
+                                            <td>Consulta médica - Atestado anexado</td>
+                                            <td><span class="badge badge-gravidade-baixa">BAIXA</span></td>
+                                            <td><span class="badge badge-aprovado">APROVADO</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td>12/06/2025</td>
+                                            <td>Carlos Silva</td>
+                                            <td><span class="badge badge-hora-extra">HORA EXTRA</span></td>
+                                            <td>Excedeu limite de banco de horas (2h15m)</td>
+                                            <td><span class="badge badge-gravidade-media">MÉDIA</span></td>
+                                            <td><span class="badge badge-aguardando">AGUARDANDO GESTOR</span></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Análise Consolidada movida aqui (somente RH) -->
+                        <div class="adherence-card">
+                            <div class="section-title">Análise Consolidada</div>
+                            <div class="kpi-summary" id="kpiSummaryRh">
+                                <div class="kpi-grid">
+                                    <!-- Linha 1 -->
+                                    <div class="kpi-card large">
+                                        <div class="kpi-label">Gestores  regulares</div>
+                                        <div class="kpi-value small" id="kpiGestoresRegularesListaRh">-</div>
+                                        <div class="kpi-note">Top 5 gestores por média</div>
+                                    </div>
+                                    <div class="kpi-card small">
+                                        <div class="kpi-label">Porcentagem Gestores regulares</div>
+                                        <div class="kpi-value" id="kpiGestoresRegularesRh">--%</div>
+                                        <div class="kpi-note">Média ≥85%</div>
+                                    </div>
+
+                                    <!-- Linha 2 -->
+                                    <div class="kpi-card large">
+                                        <div class="kpi-label">Ranking Regularidade Gestores</div>
+                                        <div class="kpi-value small" id="kpiGestoresTopRh">-</div>
+                                        <div class="kpi-note">Ranking completo</div>
+                                    </div>
+                                    <div class="kpi-card small">
+                                        <div class="kpi-label">Aderência Geral</div>
+                                        <div class="kpi-value" id="kpiAderenciaRh">--%</div>
+                                        <div class="kpi-note">Meta: 85%</div>
+                                    </div>
+
+                                    <!-- Linha 3 -->
+                                    <div class="kpi-row-flex">
+                                        <div class="kpi-card kpi-diretorias">
+                                            <div class="kpi-label">Diretorias irregulares</div>
+                                            <div class="kpi-value small" id="kpiPendentesListRh">-</div>
+                                            <div class="kpi-note">Resumo das pendências</div>
+                                        </div>
+                                        <div class="kpi-row-right">
+                                            <div class="kpi-card">
+                                                <div class="kpi-label">Principais causas de ausência</div>
+                                                <div class="kpi-value small" id="kpiCausasRh">-</div>
+                                                <div class="kpi-note">Tipos prevalentes</div>
+                                            </div>
+                                            <div class="kpi-card taxa-justificativa">
+                                                <div class="kpi-label">Taxa de Justificativa</div>
+                                                <div class="kpi-value" id="kpiJustificativaRh">--%</div>
+                                                <div class="kpi-note">Meta: 90%</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                     <!-- Minhas Justificativas -->

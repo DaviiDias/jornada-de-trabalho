@@ -1216,6 +1216,36 @@ function renderRelatorioKPIs(data, gestoresPorDept) {
         elPendentes.innerHTML = `<ul>${mostrar.map(d => `<li><strong>${d.area}</strong> <span class="kpi-low">${d.valor}%</span></li>`).join('')}${more ? `<li><em>+ ${more} outros</em></li>` : ''}</ul>`;
     }
 
+    // Também preencher os elementos da página `dashboard-rh` (IDs com sufixo Rh), se existirem
+    const elAderRh = document.getElementById('kpiAderenciaRh');
+    const elJustRh = document.getElementById('kpiJustificativaRh');
+    const elGestRh = document.getElementById('kpiGestoresRegularesRh');
+    const elElGestRegularesListaRh = document.getElementById('kpiGestoresRegularesListaRh');
+    const elGestTopRh = document.getElementById('kpiGestoresTopRh');
+    const elCausasRh = document.getElementById('kpiCausasRh');
+    const elPendentesRh = document.getElementById('kpiPendentesListRh');
+
+    if (elAderRh) elAderRh.textContent = `${aderenciaGeral}%`;
+    if (elJustRh) elJustRh.textContent = `${taxaJustificativa}%`;
+    if (elGestRh) elGestRh.textContent = `${pctGestoresRegulares}%`;
+
+    if (elElGestRegularesListaRh) {
+        const topRegulares = gestoresList.filter(g => g.avg >= meta).slice(0, 5);
+        elElGestRegularesListaRh.innerHTML = `<ul>${topRegulares.map(g => `<li><strong>${g.nome}</strong> <span class="kpi-high">${g.avg}%</span></li>`).join('')}</ul>`;
+    }
+
+    if (elGestTopRh) {
+        elGestTopRh.innerHTML = `<ul>${gestoresList.map(g => `<li><strong>${g.nome}</strong> <span class="${g.avg >= meta ? 'kpi-high' : 'kpi-low'}">${g.avg}%</span> <small>(${g.dept})</small></li>`).join('')}</ul>`;
+    }
+
+    if (elCausasRh) elCausasRh.textContent = causasTexto;
+
+    if (elPendentesRh) {
+        const mostrar = belowSorted.slice(0, 6);
+        const more = Math.max(0, belowSorted.length - mostrar.length);
+        elPendentesRh.innerHTML = `<ul>${mostrar.map(d => `<li><strong>${d.area}</strong> <span class="kpi-low">${d.valor}%</span></li>`).join('')}${more ? `<li><em>+ ${more} outros</em></li>` : ''}</ul>`;
+    }
+
 }
 
 // Chamada dos KPIs usando os mocks
