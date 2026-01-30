@@ -391,25 +391,25 @@ const mockRelatorioEmpresa = {
             area: "ALPA SEDE",
             hc: 542,
             grupo: "",
-            valores: [62, 55, 64, 57, 61, 54, 53, 48, 52, 59, 46]
+            valores: [58, 52, 65, 48, 55, 42, 38, 45, 50, 60, 47]
         },
         {
             area: "LATAM",
             hc: 121,
             grupo: "BU's",
-            valores: [54, 52, 61, 55, 58, 46, 50, 34, 49, 57, 38]
+            valores: [72, 68, 78, 70, 75, 65, 62, 72, 75, 80, 72]
         },
         {
             area: "IDM",
             hc: 11,
             grupo: "BU's",
-            valores: [5, 8, 14, 12, 10, 65, 36, 25, 6, 62, 15]
+            valores: [45, 42, 52, 48, 50, 55, 38, 56, 54, 60, 48]
         },
         {
             area: "N&C",
             hc: 3,
             grupo: "BU's",
-            valores: [0, 0, 5, 0, 0, 48, 0, 0, 0, 0, 0]
+            valores: [35, 38, 48, 42, 45, 52, 40, 50, 46, 58, 44]
         },
         {
             area: "EUROPE",
@@ -421,43 +421,43 @@ const mockRelatorioEmpresa = {
             area: "FINANÇAS",
             hc: 73,
             grupo: "CORP",
-            valores: [72, 78, 76, 66, 74, 77, 65, 62, 58, 61, 60]
+            valores: [88, 85, 90, 87, 92, 82, 80, 86, 88, 92, 89]
         },
         {
             area: "TECNOLOGIA",
             hc: 68,
             grupo: "CORP",
-            valores: [22, 20, 24, 21, 23, 25, 15, 42, 18, 14, 19]
+            valores: [62, 58, 68, 60, 65, 55, 52, 62, 65, 70, 62]
         },
         {
             area: "PEOPLE",
             hc: 59,
             grupo: "CORP",
-            valores: [78, 76, 79, 66, 72, 60, 55, 70, 66, 80, 56]
+            valores: [78, 75, 82, 78, 85, 72, 70, 78, 80, 86, 78]
         },
         {
             area: "MARKETING",
             hc: 52,
             grupo: "CORP",
-            valores: [92, 68, 83, 85, 86, 61, 55, 75, 52, 76, 45]
+            valores: [92, 88, 95, 90, 96, 85, 82, 90, 88, 94, 91]
         },
         {
             area: "JURÍDICO",
             hc: 31,
             grupo: "CORP",
-            valores: [84, 76, 78, 70, 73, 61, 55, 65, 88, 67, 28]
+            valores: [52, 48, 58, 50, 55, 45, 42, 52, 54, 60, 50]
         },
         {
             area: "SUPPLY CHAIN",
             hc: 123,
             grupo: "OP",
-            valores: [70, 61, 69, 58, 66, 56, 63, 50, 57, 61, 65]
+            valores: [68, 65, 72, 68, 70, 62, 60, 68, 70, 75, 68]
         },
         {
             area: "INDUSTRIAL",
             hc: 24,
             grupo: "OP",
-            valores: [28, 35, 45, 38, 46, 55, 50, 36, 44, 49, 22]
+            valores: [42, 45, 55, 48, 52, 58, 50, 46, 50, 60, 54]
         }
     ]
 };
@@ -465,50 +465,175 @@ const mockRelatorioEmpresa = {
 // Mock de dados de gestores por departamento (estrutura para API futura)
 const mockGestoresPorDepartamento = {
     "ALPA SEDE": [
-        { nome: "Carlos Silva", hc: 180, contribuicao: [65, 58, 67, 60, 64, 57, 56, 51, 55, 62, 49] },
-        { nome: "Marina Costa", hc: 182, contribuicao: [60, 52, 61, 54, 58, 51, 50, 45, 49, 56, 43] },
-        { nome: "Ricardo Santos", hc: 180, contribuicao: [62, 55, 64, 57, 61, 54, 53, 48, 52, 59, 46] }
+        { nome: "Carlos Silva", hc: 180, contribuicao: [62, 55, 68, 52, 58, 48, 45, 55, 58, 65, 53] },
+        { nome: "Marina Costa", hc: 182, contribuicao: [48, 42, 55, 45, 50, 38, 35, 45, 48, 55, 42] },
+        { nome: "Ricardo Santos", hc: 180, contribuicao: [58, 52, 65, 48, 55, 42, 38, 50, 52, 60, 48] }
     ],
     "LATAM": [
-        { nome: "João Pereira", hc: 60, contribuicao: [55, 53, 62, 56, 59, 47, 51, 35, 50, 58, 39] },
-        { nome: "Ana Oliveira", hc: 61, contribuicao: [54, 52, 61, 55, 58, 46, 50, 34, 49, 57, 38] }
+        { nome: "João Pereira", hc: 60, contribuicao: [72, 68, 78, 70, 75, 65, 62, 72, 75, 80, 72] },
+        { nome: "Ana Oliveira", hc: 61, contribuicao: [68, 62, 72, 65, 70, 58, 55, 65, 68, 75, 65] }
     ],
     "IDM": [
-        { nome: "Pedro Alves", hc: 11, contribuicao: [5, 8, 14, 12, 10, 65, 36, 25, 6, 62, 15] }
+        { nome: "Pedro Alves", hc: 11, contribuicao: [45, 42, 52, 48, 50, 55, 38, 56, 54, 60, 48] }
     ],
     "N&C": [
-        { nome: "Lucia Ferreira", hc: 3, contribuicao: [0, 0, 5, 0, 0, 48, 0, 0, 0, 0, 0] }
+        { nome: "Lucia Ferreira", hc: 3, contribuicao: [35, 38, 48, 42, 45, 52, 40, 50, 46, 58, 44] }
     ],
     "EUROPE": [
         { nome: "Franz Mueller", hc: 2, contribuicao: [100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100] }
     ],
     "FINANÇAS": [
-        { nome: "Roberto Costa", hc: 35, contribuicao: [74, 80, 78, 68, 76, 79, 67, 64, 60, 63, 62] },
-        { nome: "Patricia Gomes", hc: 38, contribuicao: [70, 76, 74, 64, 72, 75, 63, 60, 56, 59, 58] }
+        { nome: "Roberto Costa", hc: 35, contribuicao: [88, 85, 90, 87, 92, 82, 80, 86, 88, 92, 89] },
+        { nome: "Patricia Gomes", hc: 38, contribuicao: [85, 82, 88, 85, 90, 80, 78, 84, 86, 90, 87] }
     ],
     "TECNOLOGIA": [
-        { nome: "Bruno Oliveira", hc: 34, contribuicao: [25, 22, 26, 23, 25, 27, 17, 44, 20, 16, 21] },
-        { nome: "Daniela Lima", hc: 34, contribuicao: [20, 18, 22, 19, 21, 23, 13, 40, 16, 12, 17] }
+        { nome: "Bruno Oliveira", hc: 34, contribuicao: [65, 60, 70, 62, 68, 55, 52, 65, 68, 75, 65] },
+        { nome: "Daniela Lima", hc: 34, contribuicao: [58, 52, 65, 55, 62, 48, 45, 58, 62, 70, 58] }
     ],
     "PEOPLE": [
-        { nome: "Vanessa Teixeira", hc: 30, contribuicao: [80, 78, 81, 68, 74, 62, 57, 72, 68, 82, 58] },
-        { nome: "Felipe Martins", hc: 29, contribuicao: [76, 74, 77, 64, 70, 58, 53, 68, 64, 78, 54] }
+        { nome: "Vanessa Teixeira", hc: 30, contribuicao: [80, 77, 85, 80, 88, 72, 70, 80, 82, 88, 80] },
+        { nome: "Felipe Martins", hc: 29, contribuicao: [75, 72, 80, 75, 82, 68, 65, 75, 78, 85, 75] }
     ],
     "MARKETING": [
-        { nome: "Camila Santos", hc: 26, contribuicao: [94, 70, 85, 87, 88, 63, 57, 77, 54, 78, 47] },
-        { nome: "Diego Rocha", hc: 26, contribuicao: [90, 66, 81, 83, 84, 59, 53, 73, 50, 74, 43] }
+        { nome: "Camila Santos", hc: 26, contribuicao: [92, 88, 95, 90, 96, 85, 82, 90, 88, 94, 91] },
+        { nome: "Diego Rocha", hc: 26, contribuicao: [88, 85, 92, 87, 94, 82, 80, 88, 86, 92, 88] }
     ],
     "JURÍDICO": [
-        { nome: "Flávio Barbosa", hc: 31, contribuicao: [84, 76, 78, 70, 73, 61, 55, 65, 88, 67, 28] }
+        { nome: "Flávio Barbosa", hc: 31, contribuicao: [52, 48, 58, 50, 55, 45, 42, 52, 54, 60, 50] }
     ],
     "SUPPLY CHAIN": [
-        { nome: "Gustavo Ferreira", hc: 62, contribuicao: [72, 63, 71, 60, 68, 58, 65, 52, 59, 63, 67] },
-        { nome: "Isabela Mendes", hc: 61, contribuicao: [68, 59, 67, 56, 64, 54, 61, 48, 55, 59, 63] }
+        { nome: "Gustavo Ferreira", hc: 62, contribuicao: [70, 67, 75, 70, 72, 62, 60, 70, 72, 78, 70] },
+        { nome: "Isabela Mendes", hc: 61, contribuicao: [65, 62, 70, 65, 68, 58, 55, 65, 68, 75, 65] }
     ],
     "INDUSTRIAL": [
-        { nome: "Julio Correa", hc: 24, contribuicao: [28, 35, 45, 38, 46, 55, 50, 36, 44, 49, 22] }
+        { nome: "Julio Correa", hc: 24, contribuicao: [42, 45, 55, 48, 52, 58, 50, 46, 50, 60, 54] }
     ]
 };
+
+// Mock de dados de relatório por diretoria
+const mockRelatorioAderenciaAreas = [
+    {
+        diretoria: "TI",
+        colaboradores: 80,
+        aderencia: 91,
+        ausencias: 42,
+        percentualJustificadas: 95,
+        gestoresQueJustificaram: 100
+    },
+    {
+        diretoria: "Comercial",
+        colaboradores: 120,
+        aderencia: 76,
+        ausencias: 98,
+        percentualJustificadas: 78,
+        gestoresQueJustificaram: 72
+    },
+    {
+        diretoria: "RH",
+        colaboradores: 40,
+        aderencia: 88,
+        ausencias: 18,
+        percentualJustificadas: 100,
+        gestoresQueJustificaram: 85
+    },
+    {
+        diretoria: "Operações",
+        colaboradores: 180,
+        aderencia: 84,
+        ausencias: 160,
+        percentualJustificadas: 86,
+        gestoresQueJustificaram: 80
+    },
+    {
+        diretoria: "Financeiro",
+        colaboradores: 60,
+        aderencia: 82,
+        ausencias: 52,
+        percentualJustificadas: 90,
+        gestoresQueJustificaram: 70
+    },
+    {
+        diretoria: "Jurídico",
+        colaboradores: 30,
+        aderencia: 87,
+        ausencias: 25,
+        percentualJustificadas: 92,
+        gestoresQueJustificaram: 88
+    }
+];
+
+// Mock de dados de relatório de justificativas de ausência
+const mockRelatorioJustificativas = [
+    {
+        tipoJustificativa: "Férias",
+        qtdeOcorrencias: 45,
+        percentualTotal: 28
+    },
+    {
+        tipoJustificativa: "Atestado Médico",
+        qtdeOcorrencias: 38,
+        percentualTotal: 23
+    },
+    {
+        tipoJustificativa: "Decisão Externa (viagem, visita técnica, evento)",
+        qtdeOcorrencias: 22,
+        percentualTotal: 14
+    },
+    {
+        tipoJustificativa: "Falta de marcação / Esquecimento",
+        qtdeOcorrencias: 30,
+        percentualTotal: 19
+    },
+    {
+        tipoJustificativa: "Falta sem justificativa",
+        qtdeOcorrencias: 27,
+        percentualTotal: 16
+    }
+];
+
+// Mock de dados de status das justificativas por gestor
+const mockRelatorioStatusJustificativas = [
+    {
+        gestor: "Ana Souza",
+        diretoria: "RH",
+        totalAusencias: 8,
+        justificadas: 8,
+        percentualJustificadas: 100,
+        pendenteAnalise: 0
+    },
+    {
+        gestor: "João Mendes",
+        diretoria: "Comercial",
+        totalAusencias: 15,
+        justificadas: 11,
+        percentualJustificadas: 73,
+        pendenteAnalise: 4
+    },
+    {
+        gestor: "Carla Ribeiro",
+        diretoria: "TI",
+        totalAusencias: 10,
+        justificadas: 10,
+        percentualJustificadas: 100,
+        pendenteAnalise: 0
+    },
+    {
+        gestor: "Marcos Silva",
+        diretoria: "Operações",
+        totalAusencias: 20,
+        justificadas: 16,
+        percentualJustificadas: 80,
+        pendenteAnalise: 4
+    },
+    {
+        gestor: "Paulo Almeida",
+        diretoria: "Financeiro",
+        totalAusencias: 9,
+        justificadas: 7,
+        percentualJustificadas: 77,
+        pendenteAnalise: 2
+    }
+];
 
 // JSON mockado simulando retorno da API
 const dadosApiMock = {
@@ -690,6 +815,143 @@ async function fetchGestoresData(departamento) {
 // Rastrear quais departamentos estão expandidos
 const expandedDepartamentos = new Set();
 
+// Renderiza tabela de Aderência por Diretoria
+function renderRelatorioAderenciaAreas(data) {
+    const tbody = document.getElementById('relatorioAderenciaTableBody');
+    if (!tbody) return;
+    
+    tbody.innerHTML = '';
+    
+    data.forEach(area => {
+        const tr = document.createElement('tr');
+        
+        // Determinar classe de cor baseado na aderência
+        const aderenciaClass = getAderenciaClass(area.aderencia);
+        
+        // Célula Diretoria
+        const cellDiretoria = document.createElement('td');
+        cellDiretoria.className = 'department';
+        cellDiretoria.textContent = area.diretoria;
+        tr.appendChild(cellDiretoria);
+        
+        // Célula Colaboradores
+        const cellColaboradores = document.createElement('td');
+        cellColaboradores.textContent = area.colaboradores;
+        tr.appendChild(cellColaboradores);
+        
+        // Célula Aderência (%)
+        const cellAderencia = document.createElement('td');
+        cellAderencia.className = `gestor-data ${aderenciaClass}`;
+        cellAderencia.innerHTML = `<span class="percent">${area.aderencia}%</span>`;
+        if (area.aderencia > 85) {
+            cellAderencia.innerHTML += ' 💎';
+        }
+        tr.appendChild(cellAderencia);
+        
+        // Célula Ausências
+        const cellAusencias = document.createElement('td');
+        cellAusencias.textContent = area.ausencias;
+        tr.appendChild(cellAusencias);
+        
+        // Célula % Justificadas
+        const cellJustificadas = document.createElement('td');
+        cellJustificadas.textContent = area.percentualJustificadas + '%';
+        tr.appendChild(cellJustificadas);
+        
+        // Célula % Gestores que justificaram
+        const cellGestores = document.createElement('td');
+        cellGestores.textContent = area.gestoresQueJustificaram + '%';
+        tr.appendChild(cellGestores);
+        
+        tbody.appendChild(tr);
+    });
+}
+
+// Renderiza tabela de Justificativas de Ausência
+function renderRelatorioJustificativas(data) {
+    const tbody = document.getElementById('relatorioJustificativasTableBody');
+    if (!tbody) return;
+    
+    tbody.innerHTML = '';
+    
+    // Calcular total de ocorrências
+    const totalOcorrencias = data.reduce((sum, item) => sum + item.qtdeOcorrencias, 0);
+    
+    data.forEach(justificativa => {
+        const tr = document.createElement('tr');
+        
+        // Célula Tipo de Justificativa
+        const cellTipo = document.createElement('td');
+        cellTipo.className = 'department';
+        cellTipo.textContent = justificativa.tipoJustificativa;
+        tr.appendChild(cellTipo);
+        
+        // Célula Quantidade de Ocorrências
+        const cellQtde = document.createElement('td');
+        cellQtde.textContent = justificativa.qtdeOcorrencias;
+        tr.appendChild(cellQtde);
+        
+        // Célula % sobre Total
+        const cellPercentual = document.createElement('td');
+        cellPercentual.innerHTML = `<span class="percent">${justificativa.percentualTotal}%</span>`;
+        tr.appendChild(cellPercentual);
+        
+        tbody.appendChild(tr);
+    });
+}
+
+// Renderiza tabela de Status das Justificativas por Gestor
+function renderRelatorioStatusJustificativas(data) {
+    const tbody = document.getElementById('relatorioStatusJustificativasTableBody');
+    if (!tbody) return;
+    
+    tbody.innerHTML = '';
+    
+    data.forEach(gestor => {
+        const tr = document.createElement('tr');
+        
+        // Determinar classe de cor baseado na % de justificadas
+        const percentualClass = getAderenciaClass(gestor.percentualJustificadas);
+        
+        // Célula Gestor
+        const cellGestor = document.createElement('td');
+        cellGestor.className = 'department';
+        cellGestor.textContent = gestor.gestor;
+        tr.appendChild(cellGestor);
+        
+        // Célula Diretoria
+        const cellDiretoria = document.createElement('td');
+        cellDiretoria.textContent = gestor.diretoria;
+        tr.appendChild(cellDiretoria);
+        
+        // Célula Total de Ausências
+        const cellTotal = document.createElement('td');
+        cellTotal.textContent = gestor.totalAusencias;
+        tr.appendChild(cellTotal);
+        
+        // Célula Justificadas
+        const cellJustificadas = document.createElement('td');
+        cellJustificadas.textContent = gestor.justificadas;
+        tr.appendChild(cellJustificadas);
+        
+        // Célula % Justificadas
+        const cellPercentual = document.createElement('td');
+        cellPercentual.className = `gestor-data ${percentualClass}`;
+        cellPercentual.innerHTML = `<span class="percent">${gestor.percentualJustificadas}%</span>`;
+        if (gestor.percentualJustificadas > 85) {
+            cellPercentual.innerHTML += ' 💎';
+        }
+        tr.appendChild(cellPercentual);
+        
+        // Célula Pendentes de Análise
+        const cellPendentes = document.createElement('td');
+        cellPendentes.textContent = gestor.pendenteAnalise;
+        tr.appendChild(cellPendentes);
+        
+        tbody.appendChild(tr);
+    });
+}
+
 //Render Tabela Relatório com expansão de gestores
 function renderRelatorioEmpresa(data) {
     const table = document.getElementById('aderenciaTable');
@@ -857,6 +1119,107 @@ async function toggleGestoresExpansion(departamento, data, rowIndex) {
 
 // chamada inicial
 renderRelatorioEmpresa(mockRelatorioEmpresa);
+renderRelatorioAderenciaAreas(mockRelatorioAderenciaAreas);
+renderRelatorioJustificativas(mockRelatorioJustificativas);
+renderRelatorioStatusJustificativas(mockRelatorioStatusJustificativas);
+
+// Renderiza KPIs e análise consolidada na aba Relatórios
+function renderRelatorioKPIs(data, gestoresPorDept) {
+    if (!data || !data.areas) return;
+
+    // Último período index
+    const lastIdx = data.periods.length - 1;
+
+    // Cálculo ponderado por HC da aderência no último período
+    let totalHc = 0;
+    let somaPonderada = 0;
+
+    data.areas.forEach(a => {
+        const val = a.valores && a.valores.length > 0 ? a.valores[a.valores.length - 1] : 0;
+        totalHc += a.hc || 0;
+        somaPonderada += (a.hc || 0) * val;
+    });
+
+    const aderenciaGeral = totalHc ? Math.round(somaPonderada / totalHc) : 0;
+
+    // Departamentos abaixo da meta (85%)
+    const meta = 85;
+    const departamentosAbaixo = data.areas.filter(a => {
+        const val = a.valores && a.valores.length > 0 ? a.valores[a.valores.length - 1] : 0;
+        return val < meta;
+    }).map(a => ({ area: a.area, valor: a.valores[a.valores.length - 1] }));
+
+    // Gestores regulares (média do gestor >= 85)
+    let totalGestores = 0;
+    let gestoresRegulares = 0;
+
+    Object.keys(gestoresPorDept).forEach(dept => {
+        gestoresPorDept[dept].forEach(g => {
+            totalGestores++;
+            const avg = g.contribuicao && g.contribuicao.length > 0 ?
+                g.contribuicao.reduce((s, v) => s + v, 0) / g.contribuicao.length : 0;
+            if (avg >= meta) gestoresRegulares++;
+        });
+    });
+
+    const pctGestoresRegulares = totalGestores ? Math.round((gestoresRegulares / totalGestores) * 100) : 0;
+
+    // Taxa de justificativa — usando valor mock/negócio informado
+    const taxaJustificativa = 89; // valor informado na conversa
+
+    // Construir lista de gestores com média e ordenar (desc)
+    const gestoresList = [];
+    Object.keys(gestoresPorDept).forEach(d => {
+        gestoresPorDept[d].forEach(g => {
+            const avg = g.contribuicao && g.contribuicao.length > 0 ?
+                g.contribuicao.reduce((s, v) => s + v, 0) / g.contribuicao.length : 0;
+            gestoresList.push({ nome: g.nome, dept: d, avg: Math.round(avg) });
+        });
+    });
+
+    gestoresList.sort((a, b) => b.avg - a.avg);
+
+    const topGestores = gestoresList.slice(0, 5);
+    const belowSorted = departamentosAbaixo.slice().sort((a, b) => a.valor - b.valor);
+    const causasTexto = 'Férias, Atestados Médicos';
+
+    // Preencher DOM - elementos novos do grid
+    const elAder = document.getElementById('kpiAderencia');
+    const elJust = document.getElementById('kpiJustificativa');
+    const elGest = document.getElementById('kpiGestoresRegulares');
+    const elGestRegularesLista = document.getElementById('kpiGestoresRegularesLista');
+    const elGestTop = document.getElementById('kpiGestoresTop');
+    const elCausas = document.getElementById('kpiCausas');
+    const elPendentes = document.getElementById('kpiPendentesList');
+
+    if (elAder) elAder.textContent = `${aderenciaGeral}%`;
+    if (elJust) elJust.textContent = `${taxaJustificativa}%`;
+    if (elGest) elGest.textContent = `${pctGestoresRegulares}%`;
+
+    // Linha 1 - Top 5 gestores regulares
+    if (elGestRegularesLista) {
+        const topRegulares = gestoresList.filter(g => g.avg >= meta).slice(0, 5);
+        elGestRegularesLista.innerHTML = `<ul>${topRegulares.map(g => `<li><strong>${g.nome}</strong> <span class="kpi-high">${g.avg}%</span></li>`).join('')}</ul>`;
+    }
+
+    // Linha 2 - Ranking completo de gestores (melhores → piores)
+    if (elGestTop) {
+        elGestTop.innerHTML = `<ul>${gestoresList.map(g => `<li><strong>${g.nome}</strong> <span class="${g.avg >= meta ? 'kpi-high' : 'kpi-low'}">${g.avg}%</span> <small>(${g.dept})</small></li>`).join('')}</ul>`;
+    }
+
+    // Linha 3 - Causas e Diretorias abaixo da meta
+    if (elCausas) elCausas.textContent = causasTexto;
+    
+    if (elPendentes) {
+        const mostrar = belowSorted.slice(0, 6);
+        const more = Math.max(0, belowSorted.length - mostrar.length);
+        elPendentes.innerHTML = `<ul>${mostrar.map(d => `<li><strong>${d.area}</strong> <span class="kpi-low">${d.valor}%</span></li>`).join('')}${more ? `<li><em>+ ${more} outros</em></li>` : ''}</ul>`;
+    }
+
+}
+
+// Chamada dos KPIs usando os mocks
+renderRelatorioKPIs(mockRelatorioEmpresa, mockGestoresPorDepartamento);
 
 // Teste integração luiz
 

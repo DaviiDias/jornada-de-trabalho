@@ -232,6 +232,8 @@
                             Outubro/2025 a Janeiro/2026
                         </p>
 
+
+
                         <div class="table-container">
                             <table id="aderenciaTable">
                                 <thead>
@@ -266,6 +268,158 @@
                             </div>
                     </div>
 
+
+
+                    <div class="adherence-card">
+                        <div class="section-title">Relatório de Aderência por Diretoria</div>
+                        <p class="subtitle">
+                            Período Atual - Outubro/2025 a Janeiro/2026
+                        </p>
+
+                        <div class="table-container">
+                            <table id="relatorioAderenciaTable">
+                                <thead>
+                                    <tr>
+                                        <th class="department">Diretoria</th>
+                                        <th>Colaboradores</th>
+                                        <th>Aderência (%)</th>
+                                        <th>Ausências</th>
+                                        <th>% Justificadas</th>
+                                        <th>% Gestores que justificaram</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="relatorioAderenciaTableBody"></tbody>
+                            </table>
+                        </div>
+
+                        <div class="legend">
+                            <div class="legend-item">
+                                <div class="color-box excellent"></div> > 85% 💎
+                            </div>
+                            <div class="legend-item">
+                                <div class="color-box good"></div> 61 – 84%
+                            </div>
+                            <div class="legend-item">
+                                <div class="color-box attention"></div> 50 – 60%
+                            </div>
+                            <div class="legend-item">
+                                <div class="color-box critical"></div>
+                                < 50%
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="adherence-card">
+                        <div class="section-title">Relatório de Justificativas de Ausência</div>
+                        <p class="subtitle">
+                            Quantitativo por Tipo de Justificativa
+                        </p>
+
+                        <div class="table-container">
+                            <table id="relatorioJustificativasTable">
+                                <thead>
+                                    <tr>
+                                        <th class="department">Tipo de Justificativa</th>
+                                        <th>Qtde. de Ocorrências</th>
+                                        <th>% sobre Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="relatorioJustificativasTableBody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="adherence-card">
+                        <div class="section-title">Relatório de Status das Justificativas por Gestor</div>
+                        <p class="subtitle">
+                            Análise de Conformidade nas Justificativas de Ausência
+                        </p>
+
+                        <div class="table-container">
+                            <table id="relatorioStatusJustificativasTable">
+                                <thead>
+                                    <tr>
+                                        <th class="department">Gestor</th>
+                                        <th>Diretoria</th>
+                                        <th>Total de Ausências</th>
+                                        <th>Justificadas</th>
+                                        <th>% Justificadas</th>
+                                        <th>Pendentes de Análise</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="relatorioStatusJustificativasTableBody"></tbody>
+                            </table>
+                        </div>
+
+                        <div class="legend">
+                            <div class="legend-item">
+                                <div class="color-box excellent"></div> > 85% 💎
+                            </div>
+                            <div class="legend-item">
+                                <div class="color-box good"></div> 61 – 84%
+                            </div>
+                            <div class="legend-item">
+                                <div class="color-box attention"></div> 50 – 60%
+                            </div>
+                            <div class="legend-item">
+                                <div class="color-box critical"></div>
+                                < 50%
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="adherence-card">
+                        <!-- Resumo de KPIs RH - Layout em Grid -->
+                        <div class="section-title">Análise Consolidada</div>
+                        <div class="kpi-summary" id="kpiSummary">
+                            <div class="kpi-grid">
+                                <!-- Linha 1 -->
+                                <div class="kpi-card large">
+                                    <div class="kpi-label">Gestores mais regulares</div>
+                                    <div class="kpi-value small" id="kpiGestoresRegularesLista">-</div>
+                                    <div class="kpi-note">Top 5 gestores por média</div>
+                                </div>
+                                <div class="kpi-card small">
+                                    <div class="kpi-label">Gestores regulares</div>
+                                    <div class="kpi-value" id="kpiGestoresRegulares">--%</div>
+                                    <div class="kpi-note">Média ≥85%</div>
+                                </div>
+
+                                <!-- Linha 2 -->
+                                <div class="kpi-card large">
+                                    <div class="kpi-label">Gestores (melhores → piores)</div>
+                                    <div class="kpi-value small" id="kpiGestoresTop">-</div>
+                                    <div class="kpi-note">Ranking completo</div>
+                                </div>
+                                <div class="kpi-card small">
+                                    <div class="kpi-label">Aderência Geral</div>
+                                    <div class="kpi-value" id="kpiAderencia">--%</div>
+                                    <div class="kpi-note">Meta: 85%</div>
+                                </div>
+
+                                <!-- Linha 3 -->
+                                <div class="kpi-row-flex">
+                                    <div class="kpi-card kpi-diretorias">
+                                        <div class="kpi-label">Diretorias abaixo da meta</div>
+                                        <div class="kpi-value small" id="kpiPendentesList">-</div>
+                                        <div class="kpi-note">Resumo das pendências</div>
+                                    </div>
+                                    <div class="kpi-row-right">
+                                        <div class="kpi-card">
+                                            <div class="kpi-label">Principais causas de ausência</div>
+                                            <div class="kpi-value small" id="kpiCausas">-</div>
+                                            <div class="kpi-note">Tipos prevalentes</div>
+                                        </div>
+                                        <div class="kpi-card taxa-justificativa">
+                                            <div class="kpi-label">Taxa de Justificativa</div>
+                                            <div class="kpi-value" id="kpiJustificativa">--%</div>
+                                            <div class="kpi-note">Meta: 90%</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
                         <div class="adherence-card">
                             <div class="chart-card">
