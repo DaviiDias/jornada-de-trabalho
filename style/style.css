@@ -1960,6 +1960,51 @@ td.department {
     margin-bottom: 20px;
 }
 
+/* Classes para layout do gráfico de áreas */
+.chart-areas-wrapper {
+    display: flex;
+    gap: 20px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+}
+
+.chart-canvas-wrapper {
+    flex: 1;
+    min-width: 250px;
+}
+
+.chart-canvas-container {
+    position: relative;
+    height: 350px;
+    width: 100%;
+}
+
+canvas#graficoAreasChart {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+.chart-legend {
+    width: 180px;
+    padding: 20px;
+    background: #f9f9f9;
+    border-radius: 8px;
+    height: fit-content;
+}
+
+.chart-legend-title {
+    font-weight: 700;
+    margin-bottom: 15px;
+    font-size: 14px;
+}
+
+.checkboxes-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
 .bar-chart {
     display: flex;
     align-items: flex-end;
@@ -2530,5 +2575,87 @@ h1 {
 
     .kpi-note {
         font-size: 0.65rem;
+    }
+}
+
+/* Responsividade para gráfico de áreas em mobile */
+@media (max-width: 768px) {
+    .chart-title {
+        font-size: 14px;
+    }
+
+    .chart-subtitle {
+        font-size: 12px;
+        margin-bottom: 15px;
+    }
+
+    .chart-card {
+        padding: 15px;
+    }
+
+    /* Ajustar checkboxes em tablet */
+    .checkboxes-container {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .chart-legend {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .chart-canvas-container {
+        height: 300px;
+    }
+}
+
+@media (max-width: 640px) {
+    /* Layout vertical em mobile */
+    .chart-areas-wrapper {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .chart-canvas-wrapper {
+        min-width: 100%;
+    }
+
+    /* Checkboxes em tela pequena */
+    .checkboxes-container {
+        width: 100%;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+        gap: 8px;
+    }
+
+    /* Canvas responsivo */
+    canvas#graficoAreasChart {
+        max-width: 100%;
+    }
+
+    /* Altura do container do canvas em mobile */
+    .chart-canvas-container {
+        height: 250px;
+    }
+
+    /* Legenda do gráfico em mobile */
+    .chart-legend {
+        width: 100%;
+        height: auto;
+    }
+
+    .chart-title {
+        font-size: 13px;
+    }
+
+    .chart-subtitle {
+        font-size: 11px;
+    }
+
+    .chart-card {
+        padding: 12px;
     }
 }

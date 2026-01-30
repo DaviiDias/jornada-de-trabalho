@@ -74,6 +74,22 @@ document.addEventListener('DOMContentLoaded', () => {
                     generateCalendar();
                 }
 
+                // Redesenhar gráficos quando entra na página de relatórios-gestor
+                if (targetPage === 'relatorios-gestor') {
+                    setTimeout(() => {
+                        desenharGraficoEvolucao();
+                        desenharGraficoComparativo();
+                        atualizarEstatisticasEquipe();
+                    }, 300);
+                }
+
+                // Redesenhar gráfico de áreas quando entra na página de relatórios
+                if (targetPage === 'relatorios') {
+                    setTimeout(() => {
+                        inicializarGraficoAreas();
+                    }, 300);
+                }
+
                 // Fechar menu em mobile ao clicar em um link
                 if (window.innerWidth <= 768) {
                     navigation.classList.add('collapsed');
@@ -822,6 +838,61 @@ function renderRelatorioAderenciaAreas(data) {
     
     tbody.innerHTML = '';
     
+    // Calcular totais
+    let totalColaboradores = 0;
+    let totalAusencias = 0;
+    let totalJustificadas = 0;
+    let totalGestoresJustificaram = 0;
+    
+    data.forEach(area => {
+        totalColaboradores += area.colaboradores;
+        totalAusencias += area.ausencias;
+        totalJustificadas += area.percentualJustificadas;
+        totalGestoresJustificaram += area.gestoresQueJustificaram;
+    });
+    
+    // Calcular médias para as colunas de percentual
+    const mediajustificadas = Math.round(totalJustificadas / data.length);
+    const mediaGestoresJustificaram = Math.round(totalGestoresJustificaram / data.length);
+    
+    // Adicionar linha de TOTAL no início
+    const trTotal = document.createElement('tr');
+    trTotal.style.fontWeight = 'bold';
+    trTotal.style.backgroundColor = '#f0f0f0';
+    trTotal.style.borderTop = '2px solid #d1d1d1';
+    trTotal.style.borderBottom = '3px solid #555555';
+    
+    const cellTotalLabel = document.createElement('td');
+    cellTotalLabel.className = 'department';
+    cellTotalLabel.textContent = 'TOTAL';
+    trTotal.appendChild(cellTotalLabel);
+    
+    const cellTotalColaboradores = document.createElement('td');
+    cellTotalColaboradores.textContent = totalColaboradores;
+    trTotal.appendChild(cellTotalColaboradores);
+    
+    const cellTotalAderencia = document.createElement('td');
+    const aderenciaGeral = totalColaboradores > 0 ? 
+        Math.round((totalColaboradores * 100) / totalColaboradores) : 0;
+    cellTotalAderencia.className = 'gestor-data excellent';
+    cellTotalAderencia.innerHTML = `<span class="percent">85%</span> 💎`;
+    trTotal.appendChild(cellTotalAderencia);
+    
+    const cellTotalAusencias = document.createElement('td');
+    cellTotalAusencias.textContent = totalAusencias;
+    trTotal.appendChild(cellTotalAusencias);
+    
+    const cellTotalJustificadas = document.createElement('td');
+    cellTotalJustificadas.textContent = mediajustificadas + '%';
+    trTotal.appendChild(cellTotalJustificadas);
+    
+    const cellTotalGestores = document.createElement('td');
+    cellTotalGestores.textContent = mediaGestoresJustificaram + '%';
+    trTotal.appendChild(cellTotalGestores);
+    
+    tbody.appendChild(trTotal);
+    
+    // Adicionar linhas de dados
     data.forEach(area => {
         const tr = document.createElement('tr');
         
@@ -907,6 +978,61 @@ function renderRelatorioStatusJustificativas(data) {
     
     tbody.innerHTML = '';
     
+    // Calcular totais
+    let totalAusencias = 0;
+    let totalJustificadas = 0;
+    let totalPendentes = 0;
+    
+    data.forEach(gestor => {
+        totalAusencias += gestor.totalAusencias;
+        totalJustificadas += gestor.justificadas;
+        totalPendentes += gestor.pendenteAnalise;
+    });
+    
+    // Calcular percentual total de justificadas
+    const percentualTotalJustificadas = totalAusencias > 0 ? 
+        Math.round((totalJustificadas / totalAusencias) * 100) : 0;
+    
+    // Adicionar linha de TOTAL no início
+    const trTotal = document.createElement('tr');
+    trTotal.style.fontWeight = 'bold';
+    trTotal.style.backgroundColor = '#f0f0f0';
+    trTotal.style.borderTop = '2px solid #d1d1d1';
+    trTotal.style.borderBottom = '3px solid #555555';
+    
+    const cellTotalLabel = document.createElement('td');
+    cellTotalLabel.className = 'department';
+    cellTotalLabel.textContent = 'TOTAL';
+    trTotal.appendChild(cellTotalLabel);
+    
+    const cellTotalDiretoria = document.createElement('td');
+    cellTotalDiretoria.textContent = '-';
+    trTotal.appendChild(cellTotalDiretoria);
+    
+    const cellTotalAusencias = document.createElement('td');
+    cellTotalAusencias.textContent = totalAusencias;
+    trTotal.appendChild(cellTotalAusencias);
+    
+    const cellTotalJustificadas = document.createElement('td');
+    cellTotalJustificadas.textContent = totalJustificadas;
+    trTotal.appendChild(cellTotalJustificadas);
+    
+    const cellTotalPercentual = document.createElement('td');
+    const percentualClass = getAderenciaClass(percentualTotalJustificadas);
+    cellTotalPercentual.className = `gestor-data ${percentualClass}`;
+    cellTotalPercentual.innerHTML = `<span class="percent">${percentualTotalJustificadas}%</span>`;
+    if (percentualTotalJustificadas > 85) {
+        cellTotalPercentual.innerHTML += ' 💎';
+    }
+    trTotal.appendChild(cellTotalPercentual);
+    
+    const cellTotalPendentes = document.createElement('td');
+    cellTotalPendentes.textContent = totalPendentes;
+    trTotal.appendChild(cellTotalPendentes);
+    
+    tbody.appendChild(trTotal);
+    
+    // Adicionar linhas de dados
     data.forEach(gestor => {
         const tr = document.createElement('tr');
         
@@ -1303,7 +1429,9 @@ function showDetail(s, cardElement) {
     const content = document.getElementById('detail-content');
     const pres = s.dias.filter(d => d.status === 'presencial').length;
     const isRequiredSemanal = pres < 3;
-    const st = getStatusSemana(pres);
+    // use o flag de semana justificada para calcular status corretamente
+    const st = getStatusSemana(pres, s.justificada);
+    const weekOk = st.class === 'week-ok';
 
     content.innerHTML = `
         <h3 style="margin:0 0 20px; text-align:center; color:${st.cor}">
@@ -1328,8 +1456,8 @@ function showDetail(s, cardElement) {
                     txt = 'Ausente';
                 }
 
-                const podeJustificar =
-                    (d.status === 'ausente' || d.status === 'remoto') && !d.justificado;
+                // Não mostrar ícone se semana estiver em conformidade
+                const podeJustificar = !weekOk && (d.status === 'ausente' || d.status === 'remoto') && !d.justificado;
 
                 return `
                     <div class="day-card">
@@ -2058,29 +2186,277 @@ function atualizarEstatisticasEquipe() {
 
 // Inicializar gráficos quando a página carregar ou mudar para relatórios-gestor
 document.addEventListener('DOMContentLoaded', () => {
-    setTimeout(() => {
-        desenharGraficoEvolucao();
-        desenharGraficoComparativo();
-        atualizarEstatisticasEquipe();
-    }, 500);
+    // Os gráficos serão inicializados quando o usuário navegar para suas respectivas páginas
+    // No entanto, é seguro chamar uma vez inicialmente se as páginas estiverem visíveis
+    const relatoriosGestorPage = document.getElementById('relatorios-gestor');
+    const relatoriosPage = document.getElementById('relatorios');
+    
+    if (relatoriosGestorPage && relatoriosGestorPage.classList.contains('active')) {
+        setTimeout(() => {
+            desenharGraficoEvolucao();
+            desenharGraficoComparativo();
+            atualizarEstatisticasEquipe();
+        }, 500);
+    }
+    
+    if (relatoriosPage && relatoriosPage.classList.contains('active')) {
+        setTimeout(() => {
+            inicializarGraficoAreas();
+        }, 500);
+    }
 });
 
 // Re-desenhar ao redimensionar a janela
 window.addEventListener('resize', () => {
     desenharGraficoEvolucao();
     desenharGraficoComparativo();
+    desenharGraficoAreas();
 });
 
-// Também tentar desenhar quando a página de relatórios-gestor ficar visível
-document.addEventListener('click', (e) => {
-    const navLink = e.target.closest('[data-page="relatorios-gestor"]');
-    if (navLink) {
-        setTimeout(() => {
-            desenharGraficoEvolucao();
-            desenharGraficoComparativo();
-            atualizarEstatisticasEquipe();
-        }, 300);
+// ===============================
+// GRÁFICO INTERATIVO DE ÁREAS
+// ===============================
+
+// Mock de dados de 6 meses por área
+const mockDadosAreas = {
+    meses: ['Setembro', 'Outubro', 'Novembro', 'Dezembro', 'Janeiro', 'Fevereiro'],
+    areas: [
+        { 
+            nome: 'LATAM', 
+            cor: '#0597F2', 
+            valores: [72, 68, 78, 70, 75, 82] 
+        },
+        { 
+            nome: 'IDM', 
+            cor: '#4BB2F2', 
+            valores: [45, 42, 52, 48, 50, 58] 
+        },
+        { 
+            nome: 'N&C', 
+            cor: '#107c10', 
+            valores: [35, 38, 48, 42, 45, 52] 
+        },
+        { 
+            nome: 'FINANÇAS', 
+            cor: '#d13438', 
+            valores: [88, 85, 90, 87, 92, 95] 
+        },
+        { 
+            nome: 'TECNOLOGIA', 
+            cor: '#ff8c00', 
+            valores: [62, 58, 68, 60, 65, 70] 
+        }
+    ]
+};
+
+// Estado das áreas selecionadas
+let areasVisiveisChart = {
+    'LATAM': true,
+    'IDM': true,
+    'N&C': true,
+    'FINANÇAS': true,
+    'TECNOLOGIA': true,
+    'Empresa': true
+};
+
+// Função para inicializar o gráfico de áreas
+function inicializarGraficoAreas() {
+    console.log('inicializarGraficoAreas called');
+    const container = document.getElementById('checkboxesAreas');
+    console.log('Container found:', !!container);
+    if (!container) return;
+
+    container.innerHTML = '';
+
+    // Checkbox para "Empresa" (total/média)
+    const labelEmpresa = document.createElement('label');
+    labelEmpresa.style.display = 'flex';
+    labelEmpresa.style.alignItems = 'center';
+    labelEmpresa.style.gap = '8px';
+    labelEmpresa.style.cursor = 'pointer';
+    labelEmpresa.style.fontSize = '13px';
+    labelEmpresa.style.fontWeight = '600';
+
+    const checkEmpresa = document.createElement('input');
+    checkEmpresa.type = 'checkbox';
+    checkEmpresa.checked = true;
+    checkEmpresa.onchange = () => {
+        areasVisiveisChart['Empresa'] = checkEmpresa.checked;
+        desenharGraficoAreas();
+    };
+
+    const colorBoxEmpresa = document.createElement('div');
+    colorBoxEmpresa.style.width = '12px';
+    colorBoxEmpresa.style.height = '12px';
+    colorBoxEmpresa.style.backgroundColor = '#000000';
+    colorBoxEmpresa.style.borderRadius = '2px';
+
+    labelEmpresa.appendChild(checkEmpresa);
+    labelEmpresa.appendChild(colorBoxEmpresa);
+    labelEmpresa.appendChild(document.createTextNode('Empresa'));
+    container.appendChild(labelEmpresa);
+
+    // Checkboxes para cada área
+    mockDadosAreas.areas.forEach(area => {
+        const label = document.createElement('label');
+        label.style.display = 'flex';
+        label.style.alignItems = 'center';
+        label.style.gap = '8px';
+        label.style.cursor = 'pointer';
+        label.style.fontSize = '13px';
+
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.checked = true;
+        checkbox.onchange = () => {
+            areasVisiveisChart[area.nome] = checkbox.checked;
+            desenharGraficoAreas();
+        };
+
+        const colorBox = document.createElement('div');
+        colorBox.style.width = '12px';
+        colorBox.style.height = '12px';
+        colorBox.style.backgroundColor = area.cor;
+        colorBox.style.borderRadius = '2px';
+
+        label.appendChild(checkbox);
+        label.appendChild(colorBox);
+        label.appendChild(document.createTextNode(area.nome));
+        container.appendChild(label);
+    });
+
+    desenharGraficoAreas();
+}
+
+// Função para desenhar o gráfico de áreas
+function desenharGraficoAreas() {
+    const canvas = document.getElementById('graficoAreasChart');
+    console.log('desenharGraficoAreas called, canvas found:', !!canvas);
+    if (!canvas) return;
+
+    const ctx = canvas.getContext('2d');
+    
+    // Obter dimensões do container pai
+    let containerWidth = canvas.parentElement.offsetWidth;
+    console.log('Container width:', containerWidth);
+    
+    // Se não conseguir obter a largura, tenta pelo estilo inline
+    if (containerWidth === 0 || !containerWidth) {
+        const parentStyle = window.getComputedStyle(canvas.parentElement);
+        containerWidth = parseInt(parentStyle.width) || 500;
     }
-});
+    
+    if (containerWidth === 0 || containerWidth < 100) {
+        containerWidth = 500; // fallback final
+    }
+    
+    // Altura responsiva: menor em mobile
+    let containerHeight = 350;
+    if (window.innerWidth < 640) {
+        containerHeight = 250; // Mobile
+    } else if (window.innerWidth < 768) {
+        containerHeight = 300; // Tablet
+    }
+
+    canvas.width = containerWidth;
+    canvas.height = containerHeight;
+    console.log('Canvas dimensions set to:', canvas.width, 'x', canvas.height);
+
+    const meses = mockDadosAreas.meses;
+    const areas = mockDadosAreas.areas;
+
+    const padding = 50;
+    const width = canvas.width - (padding * 2);
+    const height = canvas.height - (padding * 2);
+
+    // Limpar canvas
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    // Desenhar eixos
+    ctx.strokeStyle = '#d1d1d1';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(padding, canvas.height - padding);
+    ctx.lineTo(canvas.width - padding, canvas.height - padding);
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.moveTo(padding, padding);
+    ctx.lineTo(padding, canvas.height - padding);
+    ctx.stroke();
+
+    // Escala
+    const maxValor = 100;
+    const stepX = width / (meses.length - 1);
+    const stepY = height / maxValor;
+
+    // Labels X (meses)
+    ctx.fillStyle = '#605e5c';
+    ctx.font = '12px Arial';
+    ctx.textAlign = 'center';
+
+    meses.forEach((mes, i) => {
+        const x = padding + (i * stepX);
+        ctx.fillText(mes, x, canvas.height - padding + 20);
+    });
+
+    // Labels Y (porcentagem)
+    ctx.textAlign = 'right';
+    for (let i = 0; i <= 100; i += 20) {
+        const y = canvas.height - padding - (i * stepY);
+        ctx.fillText(i + '%', padding - 10, y + 5);
+    }
+
+    // Calcular linha da empresa (média de todas as áreas)
+    const empresaValores = [];
+    for (let i = 0; i < meses.length; i++) {
+        const soma = areas.reduce((s, a) => s + a.valores[i], 0);
+        empresaValores.push(Math.round(soma / areas.length));
+    }
+
+    // Desenhar linhas
+    if (areasVisiveisChart['Empresa']) {
+        desenharLinha(ctx, empresaValores, '#000000', padding, canvas.height, stepX, stepY, false);
+    }
+
+    areas.forEach(area => {
+        if (areasVisiveisChart[area.nome]) {
+            desenharLinha(ctx, area.valores, area.cor, padding, canvas.height, stepX, stepY, true);
+        }
+    });
+}
+
+// Função auxiliar para desenhar uma linha no gráfico
+function desenharLinha(ctx, valores, cor, padding, canvasHeight, stepX, stepY, comPontos) {
+    ctx.strokeStyle = cor;
+    ctx.lineWidth = comPontos ? 2 : 3;
+    ctx.beginPath();
+
+    valores.forEach((valor, i) => {
+        const x = padding + (i * stepX);
+        const y = canvasHeight - padding - (valor * stepY);
+
+        if (i === 0) {
+            ctx.moveTo(x, y);
+        } else {
+            ctx.lineTo(x, y);
+        }
+    });
+
+    ctx.stroke();
+
+    // Desenhar pontos
+    if (comPontos) {
+        ctx.fillStyle = cor;
+        valores.forEach((valor, i) => {
+            const x = padding + (i * stepX);
+            const y = canvasHeight - padding - (valor * stepY);
+            ctx.beginPath();
+            ctx.arc(x, y, 4, 0, Math.PI * 2);
+            ctx.fill();
+        });
+    }
+}
 
 
