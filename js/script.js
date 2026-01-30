@@ -859,8 +859,8 @@ function renderRelatorioAderenciaAreas(data) {
     const trTotal = document.createElement('tr');
     trTotal.style.fontWeight = 'bold';
     trTotal.style.backgroundColor = '#f0f0f0';
-    trTotal.style.borderTop = '2px solid #d1d1d1';
-    trTotal.style.borderBottom = '3px solid #555555';
+    trTotal.style.borderTop = '2px solid #555555';
+    // trTotal.style.borderBottom = '3px solid #555555';
     
     const cellTotalLabel = document.createElement('td');
     cellTotalLabel.className = 'department';
@@ -890,7 +890,7 @@ function renderRelatorioAderenciaAreas(data) {
     cellTotalGestores.textContent = mediaGestoresJustificaram + '%';
     trTotal.appendChild(cellTotalGestores);
     
-    tbody.appendChild(trTotal);
+    // Preparada linha de TOTAL (será adicionada ao final)
     
     // Adicionar linhas de dados
     data.forEach(area => {
@@ -936,6 +936,9 @@ function renderRelatorioAderenciaAreas(data) {
         
         tbody.appendChild(tr);
     });
+
+    // Adicionar linha TOTAL no final
+    tbody.appendChild(trTotal);
 }
 
 // Renderiza tabela de Justificativas de Ausência
@@ -997,8 +1000,8 @@ function renderRelatorioStatusJustificativas(data) {
     const trTotal = document.createElement('tr');
     trTotal.style.fontWeight = 'bold';
     trTotal.style.backgroundColor = '#f0f0f0';
-    trTotal.style.borderTop = '2px solid #d1d1d1';
-    trTotal.style.borderBottom = '3px solid #555555';
+    trTotal.style.borderTop = '2px solid #555555';
+    // trTotal.style.borderBottom = '3px solid #555555';
     
     const cellTotalLabel = document.createElement('td');
     cellTotalLabel.className = 'department';
@@ -1030,7 +1033,7 @@ function renderRelatorioStatusJustificativas(data) {
     cellTotalPendentes.textContent = totalPendentes;
     trTotal.appendChild(cellTotalPendentes);
     
-    tbody.appendChild(trTotal);
+    // Preparada linha de TOTAL (será adicionada ao final)
     
     // Adicionar linhas de dados
     data.forEach(gestor => {
@@ -1076,6 +1079,9 @@ function renderRelatorioStatusJustificativas(data) {
         
         tbody.appendChild(tr);
     });
+
+    // Adicionar linha TOTAL no final
+    tbody.appendChild(trTotal);
 }
 
 //Render Tabela Relatório com expansão de gestores
@@ -2217,6 +2223,9 @@ window.addEventListener('resize', () => {
 // GRÁFICO INTERATIVO DE ÁREAS
 // ===============================
 
+// 🔹 Nome da linha média (empresa)
+const NOME_EMPRESA_CHART = 'ALPHASEDE';
+
 // Mock de dados de 6 meses por área
 const mockDadosAreas = {
     meses: ['Setembro', 'Outubro', 'Novembro', 'Dezembro', 'Janeiro', 'Fevereiro'],
@@ -2228,7 +2237,7 @@ const mockDadosAreas = {
         },
         { 
             nome: 'IDM', 
-            cor: '#4BB2F2', 
+            cor: '#A855F7', 
             valores: [45, 42, 52, 48, 50, 58] 
         },
         { 
@@ -2256,19 +2265,17 @@ let areasVisiveisChart = {
     'N&C': true,
     'FINANÇAS': true,
     'TECNOLOGIA': true,
-    'Empresa': true
+    [NOME_EMPRESA_CHART]: true
 };
 
 // Função para inicializar o gráfico de áreas
 function inicializarGraficoAreas() {
-    console.log('inicializarGraficoAreas called');
     const container = document.getElementById('checkboxesAreas');
-    console.log('Container found:', !!container);
     if (!container) return;
 
     container.innerHTML = '';
 
-    // Checkbox para "Empresa" (total/média)
+    // Checkbox da empresa (média geral)
     const labelEmpresa = document.createElement('label');
     labelEmpresa.style.display = 'flex';
     labelEmpresa.style.alignItems = 'center';
@@ -2281,7 +2288,7 @@ function inicializarGraficoAreas() {
     checkEmpresa.type = 'checkbox';
     checkEmpresa.checked = true;
     checkEmpresa.onchange = () => {
-        areasVisiveisChart['Empresa'] = checkEmpresa.checked;
+        areasVisiveisChart[NOME_EMPRESA_CHART] = checkEmpresa.checked;
         desenharGraficoAreas();
     };
 
@@ -2293,10 +2300,10 @@ function inicializarGraficoAreas() {
 
     labelEmpresa.appendChild(checkEmpresa);
     labelEmpresa.appendChild(colorBoxEmpresa);
-    labelEmpresa.appendChild(document.createTextNode('Empresa'));
+    labelEmpresa.appendChild(document.createTextNode(NOME_EMPRESA_CHART));
     container.appendChild(labelEmpresa);
 
-    // Checkboxes para cada área
+    // Checkboxes das áreas
     mockDadosAreas.areas.forEach(area => {
         const label = document.createElement('label');
         label.style.display = 'flex';
@@ -2328,39 +2335,18 @@ function inicializarGraficoAreas() {
     desenharGraficoAreas();
 }
 
-// Função para desenhar o gráfico de áreas
+// Função para desenhar o gráfico
 function desenharGraficoAreas() {
     const canvas = document.getElementById('graficoAreasChart');
-    console.log('desenharGraficoAreas called, canvas found:', !!canvas);
     if (!canvas) return;
 
     const ctx = canvas.getContext('2d');
-    
-    // Obter dimensões do container pai
-    let containerWidth = canvas.parentElement.offsetWidth;
-    console.log('Container width:', containerWidth);
-    
-    // Se não conseguir obter a largura, tenta pelo estilo inline
-    if (containerWidth === 0 || !containerWidth) {
-        const parentStyle = window.getComputedStyle(canvas.parentElement);
-        containerWidth = parseInt(parentStyle.width) || 500;
-    }
-    
-    if (containerWidth === 0 || containerWidth < 100) {
-        containerWidth = 500; // fallback final
-    }
-    
-    // Altura responsiva: menor em mobile
-    let containerHeight = 350;
-    if (window.innerWidth < 640) {
-        containerHeight = 250; // Mobile
-    } else if (window.innerWidth < 768) {
-        containerHeight = 300; // Tablet
-    }
+
+    let containerWidth = canvas.parentElement.offsetWidth || 500;
+    let containerHeight = window.innerWidth < 640 ? 250 : 350;
 
     canvas.width = containerWidth;
     canvas.height = containerHeight;
-    console.log('Canvas dimensions set to:', canvas.width, 'x', canvas.height);
 
     const meses = mockDadosAreas.meses;
     const areas = mockDadosAreas.areas;
@@ -2369,11 +2355,10 @@ function desenharGraficoAreas() {
     const width = canvas.width - (padding * 2);
     const height = canvas.height - (padding * 2);
 
-    // Limpar canvas
     ctx.fillStyle = '#ffffff';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    // Desenhar eixos
+    // Eixos
     ctx.strokeStyle = '#d1d1d1';
     ctx.lineWidth = 1;
     ctx.beginPath();
@@ -2386,40 +2371,36 @@ function desenharGraficoAreas() {
     ctx.lineTo(padding, canvas.height - padding);
     ctx.stroke();
 
-    // Escala
     const maxValor = 100;
     const stepX = width / (meses.length - 1);
     const stepY = height / maxValor;
 
-    // Labels X (meses)
+    // Labels X
     ctx.fillStyle = '#605e5c';
     ctx.font = '12px Arial';
     ctx.textAlign = 'center';
-
     meses.forEach((mes, i) => {
-        const x = padding + (i * stepX);
-        ctx.fillText(mes, x, canvas.height - padding + 20);
+        ctx.fillText(mes, padding + (i * stepX), canvas.height - padding + 20);
     });
 
-    // Labels Y (porcentagem)
+    // Labels Y
     ctx.textAlign = 'right';
     for (let i = 0; i <= 100; i += 20) {
-        const y = canvas.height - padding - (i * stepY);
-        ctx.fillText(i + '%', padding - 10, y + 5);
+        ctx.fillText(i + '%', padding - 10, canvas.height - padding - (i * stepY) + 5);
     }
 
-    // Calcular linha da empresa (média de todas as áreas)
-    const empresaValores = [];
-    for (let i = 0; i < meses.length; i++) {
-        const soma = areas.reduce((s, a) => s + a.valores[i], 0);
-        empresaValores.push(Math.round(soma / areas.length));
-    }
+    // Média da empresa
+    const empresaValores = meses.map((_, i) => {
+        const soma = areas.reduce((acc, a) => acc + a.valores[i], 0);
+        return Math.round(soma / areas.length);
+    });
 
-    // Desenhar linhas
-    if (areasVisiveisChart['Empresa']) {
+    // Linha da empresa
+    if (areasVisiveisChart[NOME_EMPRESA_CHART]) {
         desenharLinha(ctx, empresaValores, '#000000', padding, canvas.height, stepX, stepY, false);
     }
 
+    // Linhas das áreas
     areas.forEach(area => {
         if (areasVisiveisChart[area.nome]) {
             desenharLinha(ctx, area.valores, area.cor, padding, canvas.height, stepX, stepY, true);
@@ -2427,7 +2408,7 @@ function desenharGraficoAreas() {
     });
 }
 
-// Função auxiliar para desenhar uma linha no gráfico
+// Função auxiliar para desenhar linhas
 function desenharLinha(ctx, valores, cor, padding, canvasHeight, stepX, stepY, comPontos) {
     ctx.strokeStyle = cor;
     ctx.lineWidth = comPontos ? 2 : 3;
@@ -2436,17 +2417,11 @@ function desenharLinha(ctx, valores, cor, padding, canvasHeight, stepX, stepY, c
     valores.forEach((valor, i) => {
         const x = padding + (i * stepX);
         const y = canvasHeight - padding - (valor * stepY);
-
-        if (i === 0) {
-            ctx.moveTo(x, y);
-        } else {
-            ctx.lineTo(x, y);
-        }
+        i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
     });
 
     ctx.stroke();
 
-    // Desenhar pontos
     if (comPontos) {
         ctx.fillStyle = cor;
         valores.forEach((valor, i) => {

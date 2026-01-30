@@ -153,7 +153,7 @@
                     <div class="section-title">Dashboard Principal</div>
 
                     <div class="adherence-card">
-                        <h2>Aderência Semanal</h2>
+                        <div class="section-title">Aderência Semanal</div>
                         <div class="status-badge status-conformidade" id="statusBadge">Em conformidade</div>
 
                         <div class="adherence-grid">
@@ -279,389 +279,404 @@
                                 <div class="color-box critical"></div>
                                 < 50% </div>
                             </div>
-                    </div>
-                </div>
-
-                <!-- Relatorios page RH -->
-                <div id="relatorios" class="page-view">
-                    <div class="section-title">Relatórios</div>
-
-
-
-                    <div class="adherence-card">
-                        <div class="section-title">Relatório de Aderência por Diretoria</div>
-                        <p class="subtitle">
-                            Período Atual - Outubro/2025 a Janeiro/2026
-                        </p>
-
-                        <div class="table-container">
-                            <table id="relatorioAderenciaTable">
-                                <thead>
-                                    <tr>
-                                        <th class="department">Diretoria</th>
-                                        <th>Colaboradores</th>
-                                        <th>Aderência (%)</th>
-                                        <th>Ausências</th>
-                                        <th>% Justificadas</th>
-                                        <th>% Gestores que justificaram</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="relatorioAderenciaTableBody"></tbody>
-                            </table>
-                        </div>
-
-                        <div class="legend">
-                            <div class="legend-item">
-                                <div class="color-box excellent"></div> > 85% 💎
-                            </div>
-                            <div class="legend-item">
-                                <div class="color-box good"></div> 61 – 84%
-                            </div>
-                            <div class="legend-item">
-                                <div class="color-box attention"></div> 50 – 60%
-                            </div>
-                            <div class="legend-item">
-                                <div class="color-box critical"></div>
-                                < 50%
-                            </div>
                         </div>
                     </div>
 
-                    <div class="adherence-card">
-                        <div class="section-title">Relatório de Justificativas de Ausência</div>
-                        <p class="subtitle">
-                            Quantitativo por Tipo de Justificativa
-                        </p>
+                    <!-- Relatorios page RH -->
+                    <div id="relatorios" class="page-view">
+                        <div class="section-title">Relatórios</div>
 
-                        <div class="table-container">
-                            <table id="relatorioJustificativasTable">
-                                <thead>
-                                    <tr>
-                                        <th class="department">Tipo de Justificativa</th>
-                                        <th>Qtde. de Ocorrências</th>
-                                        <th>% sobre Total</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="relatorioJustificativasTableBody"></tbody>
-                            </table>
-                        </div>
-                    </div>
 
-                    <div class="adherence-card">
-                        <div class="section-title">Relatório de Status das Justificativas por Gestor</div>
-                        <p class="subtitle">
-                            Análise de Conformidade nas Justificativas de Ausência
-                        </p>
-
-                        <div class="table-container">
-                            <table id="relatorioStatusJustificativasTable">
-                                <thead>
-                                    <tr>
-                                        <th class="department">Gestor</th>
-                                        <th>Diretoria</th>
-                                        <th>Total de Ausências</th>
-                                        <th>Justificadas</th>
-                                        <th>% Justificadas</th>
-                                        <th>Pendentes de Análise</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="relatorioStatusJustificativasTableBody"></tbody>
-                            </table>
-                        </div>
-
-                        <div class="legend">
-                            <div class="legend-item">
-                                <div class="color-box excellent"></div> > 85% 💎
-                            </div>
-                            <div class="legend-item">
-                                <div class="color-box good"></div> 61 – 84%
-                            </div>
-                            <div class="legend-item">
-                                <div class="color-box attention"></div> 50 – 60%
-                            </div>
-                            <div class="legend-item">
-                                <div class="color-box critical"></div>
-                                < 50%
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Análise Consolidada movida para a página Dashboard RH (dashboard-rh) -->
 
                         <div class="adherence-card">
-                            <div class="chart-card">
-                                <h3 class="chart-title">Evolução de Aderência por Área - Últimos 6 Meses</h3>
-                                <p class="chart-subtitle">Comparação entre áreas da ALPA SEDE</p>
+                            <div class="section-title">Relatório de Aderência por Diretoria</div>
+                            <p class="subtitle">
+                                Período Atual - Outubro/2025 a Janeiro/2026
+                            </p>
 
-                                <div class="chart-areas-wrapper">
-                                    <div class="chart-canvas-wrapper">
-                                        <div class="chart-canvas-container">
-                                            <canvas id="graficoAreasChart"></canvas>
-                                        </div>
-                                    </div>
-                                    <div class="chart-legend">
-                                        <div class="chart-legend-title">Áreas</div>
-                                        <div id="checkboxesAreas" class="checkboxes-container">
-                                            <!-- Checkboxes serão inseridos aqui pelo JS -->
-                                        </div>
-                                    </div>
+                            <div class="table-container">
+                                <table id="relatorioAderenciaTable">
+                                    <thead>
+                                        <tr>
+                                            <th class="department">Diretoria</th>
+                                            <th>Colaboradores</th>
+                                            <th>Aderência (%)</th>
+                                            <th>Ausências</th>
+                                            <th>% Justificadas</th>
+                                            <th>% Gestores que justificaram</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="relatorioAderenciaTableBody"></tbody>
+                                </table>
+                            </div>
+
+                            <div class="legend">
+                                <div class="legend-item">
+                                    <div class="color-box excellent"></div> > 85% 💎
+                                </div>
+                                <div class="legend-item">
+                                    <div class="color-box good"></div> 61 – 84%
+                                </div>
+                                <div class="legend-item">
+                                    <div class="color-box attention"></div> 50 – 60%
+                                </div>
+                                <div class="legend-item">
+                                    <div class="color-box critical"></div>
+                                    < 50% </div>
                                 </div>
                             </div>
 
-                        </div>
-                </div>
-
-                <!-- Dashboard Gestor -->
-                <div id="dashboard-gestor" class="page-view">
-                        <div class="dashboard-gestor-container">
-                            <!-- Seção Pessoal -->
-                            <div class="section-title">Dashboard Principal</div>
                             <div class="adherence-card">
-                                <h2>Aderência Semanal</h2>
-                                <div class="status-badge status-conformidade" id="statusBadgeGestor">Em conformidade
-                                </div>
+                                <div class="section-title">Relatório de Justificativas de Ausência</div>
+                                <p class="subtitle">
+                                    Quantitativo por Tipo de Justificativa
+                                </p>
 
-                                <div class="adherence-grid">
-                                    <div class="adherence-item">
-                                        <div class="adherence-label">Presença Semanal</div>
-                                        <div class="adherence-value" id="presencaValueGestor">4 dias</div>
-                                        <div class="adherence-note" id="presencaNoteGestor"></div>
-                                    </div>
-
-                                    <div class="adherence-item">
-                                        <div class="adherence-label">Dias na Sede</div>
-                                        <div class="adherence-value" id="sedeValueGestor">2 dias</div>
-                                    </div>
-
-                                    <div class="adherence-item">
-                                        <div class="adherence-label">Dias em Home Office</div>
-                                        <div class="adherence-value" id="homeofficeValueGestor">2 dias</div>
-                                    </div>
-
-                                    <div class="adherence-item">
-                                        <div class="adherence-label">Dias restantes na semana</div>
-                                        <div class="adherence-value" id="diasRestantesValueGestor">1 dia</div>
-                                    </div>
-                                </div>
-
-                                <!-- Conformidade 3x2 -->
-                                <div class="conformidade-section">
-                                    <div class="conformidade-title">Conformidade 3x2 (3 Presenciais + 2 Remotos)</div>
-                                    <div class="conformidade-bars">
-                                        <div class="conformidade-item">
-                                            <div class="conformidade-label">
-                                                <span class="conformidade-text">Dias Presenciais</span>
-                                            </div>
-                                            <div class="conformidade-progress">
-                                                <div class="progress-bar">
-                                                    <div class="progress-fill presenciais-fill" style="width: 67%;">
-                                                    </div>
-                                                </div>
-                                                <span class="conformidade-counter"
-                                                    id="presenciaisCountGestor">2/3</span>
-                                            </div>
-                                        </div>
-
-                                    </div>
-                                </div>
-
-                                <div class="status-section">
-                                    <div class="status-container" id="statusContainerGestor">
-                                        <div class="status-message" id="statusMessageGestor">
-                                            <span class="status-icon">💡</span>
-                                            <span id="statusTextGestor">Você tem opção de escolha dos dias para garantir
-                                                a
-                                                conformidade</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-
-                            <!-- Seção Equipe -->
-                            <div class="gestor-section">
-                                <div class="section-title">Ocorrências e não Conformidades da Equipe</div>
-
-                                <div class="team-table-container">
-                                    <table class="team-table">
+                                <div class="table-container">
+                                    <table id="relatorioJustificativasTable">
                                         <thead>
                                             <tr>
-                                                <th>Data</th>
-                                                <th>Colaborador</th>
-                                                <th>Tipo</th>
-                                                <th>Descrição</th>
-                                                <th>Gravidade</th>
-                                                <th>Status</th>
+                                                <th class="department">Tipo de Justificativa</th>
+                                                <th>Qtde. de Ocorrências</th>
+                                                <th>% sobre Total</th>
                                             </tr>
                                         </thead>
-                                        <tbody id="teamTableBody">
-                                            <tr>
-                                                <td>15/06/2025</td>
-                                                <td>Maria Santos</td>
-                                                <td><span class="badge badge-ausencia">AUSÊNCIA</span></td>
-                                                <td>Ausência não justificada</td>
-                                                <td><span class="badge badge-gravidade-alta">ALTA</span></td>
-                                                <td><span class="badge badge-pendente">PENDENTE</span></td>
-                                            </tr>
-                                            <tr>
-                                                <td>14/06/2025</td>
-                                                <td>Pedro Alves</td>
-                                                <td><span class="badge badge-atraso">ATRASO</span></td>
-                                                <td>Chegada às 09:45 (3ª ocorrência)</td>
-                                                <td><span class="badge badge-gravidade-media">MÉDIA</span></td>
-                                                <td><span class="badge badge-analise">EM ANÁLISE</span></td>
-                                            </tr>
-                                            <tr>
-                                                <td>13/06/2025</td>
-                                                <td>Ana Costa</td>
-                                                <td><span class="badge badge-justificativa">JUSTIFICATIVA</span></td>
-                                                <td>Consulta médica - Atestado anexado</td>
-                                                <td><span class="badge badge-gravidade-baixa">BAIXA</span></td>
-                                                <td><span class="badge badge-aprovado">APROVADO</span></td>
-                                            </tr>
-                                            <tr>
-                                                <td>12/06/2025</td>
-                                                <td>Carlos Silva</td>
-                                                <td><span class="badge badge-hora-extra">HORA EXTRA</span></td>
-                                                <td>Excedeu limite de banco de horas (2h15m)</td>
-                                                <td><span class="badge badge-gravidade-media">MÉDIA</span></td>
-                                                <td><span class="badge badge-aguardando">AGUARDANDO GESTOR</span></td>
-                                            </tr>
-                                        </tbody>
+                                        <tbody id="relatorioJustificativasTableBody"></tbody>
                                     </table>
                                 </div>
                             </div>
-                        </div>
-                </div>
 
-                <!-- Dashboard RH (duplicado do Gestor + Análise Consolidada) -->
-                <div id="dashboard-rh" class="page-view">
-                    <div class="dashboard-rh-container">
-                        <!-- Seção Pessoal -->
+                            <div class="adherence-card">
+                                <div class="section-title">Relatório de Status das Justificativas por Gestor</div>
+                                <p class="subtitle">
+                                    Análise de Conformidade nas Justificativas de Ausência
+                                </p>
 
-                        <div class="section-title">Dashboard Principal</div>
-                        <div class="adherence-card">
-                            <h2>Aderência Semanal</h2>
-                            <div class="status-badge status-conformidade" id="statusBadgeRh">Em conformidade
-                            </div>
-
-                            <div class="adherence-grid">
-                                <div class="adherence-item">
-                                    <div class="adherence-label">Presença Semanal</div>
-                                    <div class="adherence-value" id="presencaValueRh">4 dias</div>
-                                    <div class="adherence-note" id="presencaNoteRh"></div>
+                                <div class="table-container">
+                                    <table id="relatorioStatusJustificativasTable">
+                                        <thead>
+                                            <tr>
+                                                <th class="department">Gestor</th>
+                                                <th>Diretoria</th>
+                                                <th>Total de Ausências</th>
+                                                <th>Justificadas</th>
+                                                <th>% Justificadas</th>
+                                                <th>Pendentes de Análise</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="relatorioStatusJustificativasTableBody"></tbody>
+                                    </table>
                                 </div>
 
-                                <div class="adherence-item">
-                                    <div class="adherence-label">Dias na Sede</div>
-                                    <div class="adherence-value" id="sedeValueRh">2 dias</div>
+                                <div class="legend">
+                                    <div class="legend-item">
+                                        <div class="color-box excellent"></div> > 85% 💎
+                                    </div>
+                                    <div class="legend-item">
+                                        <div class="color-box good"></div> 61 – 84%
+                                    </div>
+                                    <div class="legend-item">
+                                        <div class="color-box attention"></div> 50 – 60%
+                                    </div>
+                                    <div class="legend-item">
+                                        <div class="color-box critical"></div>
+                                        < 50% </div>
+                                    </div>
                                 </div>
 
-                                <div class="adherence-item">
-                                    <div class="adherence-label">Dias em Home Office</div>
-                                    <div class="adherence-value" id="homeofficeValueRh">2 dias</div>
-                                </div>
+                                <!-- Análise Consolidada movida para a página Dashboard RH (dashboard-rh) -->
 
-                                <div class="adherence-item">
-                                    <div class="adherence-label">Dias restantes na semana</div>
-                                    <div class="adherence-value" id="diasRestantesValueRh">1 dia</div>
-                                </div>
-                            </div>
+                                <div class="adherence-card">
+                                    <div class="chart-card">
+                                        <h3 class="chart-title">Evolução de Aderência por Área - Últimos 6 Meses</h3>
+                                        <p class="chart-subtitle">Comparação entre áreas da ALPA SEDE</p>
 
-                            <!-- Conformidade 3x2 -->
-                            <div class="conformidade-section">
-                                <div class="conformidade-title">Conformidade 3x2 (3 Presenciais + 2 Remotos)</div>
-                                <div class="conformidade-bars">
-                                    <div class="conformidade-item">
-                                        <div class="conformidade-label">
-                                            <span class="conformidade-text">Dias Presenciais</span>
-                                        </div>
-                                        <div class="conformidade-progress">
-                                            <div class="progress-bar">
-                                                <div class="progress-fill presenciais-fill" style="width: 67%;">
+                                        <div class="chart-areas-wrapper">
+                                            <div class="chart-canvas-wrapper">
+                                                <div class="chart-canvas-container">
+                                                    <canvas id="graficoAreasChart"></canvas>
                                                 </div>
                                             </div>
-                                            <span class="conformidade-counter"
-                                                id="presenciaisCountRh">2/3</span>
+                                            <div class="chart-legend">
+                                                <div class="chart-legend-title">Áreas</div>
+                                                <div id="checkboxesAreas" class="checkboxes-container">
+                                                    <!-- Checkboxes serão inseridos aqui pelo JS -->
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
 
                                 </div>
                             </div>
 
-                            <div class="status-section">
-                                <div class="status-container" id="statusContainerRh">
-                                    <div class="status-message" id="statusMessageRh">
-                                        <span class="status-icon">💡</span>
-                                        <span id="statusTextRh">Você tem opção de escolha dos dias para garantir a
-                                            conformidade</span>
+                            <!-- Dashboard Gestor -->
+                            <div id="dashboard-gestor" class="page-view">
+                                <div class="dashboard-gestor-container">
+                                    <!-- Seção Pessoal -->
+                                    <div class="section-title">Dashboard Principal</div>
+                                    <h2>Visão Pessoal</h2>
+                                    <div class="adherence-card">
+                                        <div class="section-title">Aderência Semanal</div>
+                                        <div class="status-badge status-conformidade" id="statusBadgeGestor">Em
+                                            conformidade
+                                        </div>
+
+                                        <div class="adherence-grid">
+                                            <div class="adherence-item">
+                                                <div class="adherence-label">Presença Semanal</div>
+                                                <div class="adherence-value" id="presencaValueGestor">4 dias</div>
+                                                <div class="adherence-note" id="presencaNoteGestor"></div>
+                                            </div>
+
+                                            <div class="adherence-item">
+                                                <div class="adherence-label">Dias na Sede</div>
+                                                <div class="adherence-value" id="sedeValueGestor">2 dias</div>
+                                            </div>
+
+                                            <div class="adherence-item">
+                                                <div class="adherence-label">Dias em Home Office</div>
+                                                <div class="adherence-value" id="homeofficeValueGestor">2 dias</div>
+                                            </div>
+
+                                            <div class="adherence-item">
+                                                <div class="adherence-label">Dias restantes na semana</div>
+                                                <div class="adherence-value" id="diasRestantesValueGestor">1 dia</div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Conformidade 3x2 -->
+                                        <div class="conformidade-section">
+                                            <div class="conformidade-title">Conformidade 3x2 (3 Presenciais + 2 Remotos)
+                                            </div>
+                                            <div class="conformidade-bars">
+                                                <div class="conformidade-item">
+                                                    <div class="conformidade-label">
+                                                        <span class="conformidade-text">Dias Presenciais</span>
+                                                    </div>
+                                                    <div class="conformidade-progress">
+                                                        <div class="progress-bar">
+                                                            <div class="progress-fill presenciais-fill"
+                                                                style="width: 67%;">
+                                                            </div>
+                                                        </div>
+                                                        <span class="conformidade-counter"
+                                                            id="presenciaisCountGestor">2/3</span>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+
+                                        <div class="status-section">
+                                            <div class="status-container" id="statusContainerGestor">
+                                                <div class="status-message" id="statusMessageGestor">
+                                                    <span class="status-icon">💡</span>
+                                                    <span id="statusTextGestor">Você tem opção de escolha dos dias para
+                                                        garantir
+                                                        a
+                                                        conformidade</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    <!-- Seção Equipe -->
+                                    <h2>Visão meus Colaboradores</h2>
+
+                                    <div class="gestor-section">
+                                        <div class="section-title">Ocorrências e não Conformidades da Equipe</div>
+
+                                        <div class="team-table-container">
+                                            <table class="team-table">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Data</th>
+                                                        <th>Colaborador</th>
+                                                        <th>Tipo</th>
+                                                        <th>Descrição</th>
+                                                        <th>Gravidade</th>
+                                                        <th>Status</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="teamTableBody">
+                                                    <tr>
+                                                        <td>15/06/2025</td>
+                                                        <td>Maria Santos</td>
+                                                        <td><span class="badge badge-ausencia">AUSÊNCIA</span></td>
+                                                        <td>Ausência não justificada</td>
+                                                        <td><span class="badge badge-gravidade-alta">ALTA</span></td>
+                                                        <td><span class="badge badge-pendente">PENDENTE</span></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>14/06/2025</td>
+                                                        <td>Pedro Alves</td>
+                                                        <td><span class="badge badge-atraso">ATRASO</span></td>
+                                                        <td>Chegada às 09:45 (3ª ocorrência)</td>
+                                                        <td><span class="badge badge-gravidade-media">MÉDIA</span></td>
+                                                        <td><span class="badge badge-analise">EM ANÁLISE</span></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>13/06/2025</td>
+                                                        <td>Ana Costa</td>
+                                                        <td><span class="badge badge-justificativa">JUSTIFICATIVA</span>
+                                                        </td>
+                                                        <td>Consulta médica - Atestado anexado</td>
+                                                        <td><span class="badge badge-gravidade-baixa">BAIXA</span></td>
+                                                        <td><span class="badge badge-aprovado">APROVADO</span></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>12/06/2025</td>
+                                                        <td>Carlos Silva</td>
+                                                        <td><span class="badge badge-hora-extra">HORA EXTRA</span></td>
+                                                        <td>Excedeu limite de banco de horas (2h15m)</td>
+                                                        <td><span class="badge badge-gravidade-media">MÉDIA</span></td>
+                                                        <td><span class="badge badge-aguardando">AGUARDANDO
+                                                                GESTOR</span></td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+
+                            <!-- Dashboard RH (duplicado do Gestor + Análise Consolidada) -->
+                            <div id="dashboard-rh" class="page-view">
+                                <div class="dashboard-rh-container">
+                                    <!-- Seção Pessoal -->
+
+                                    <div class="section-title">Dashboard Principal</div>
+                                    <h2>Visão Pessoal</h2>
+                                    <div class="adherence-card">
+                                        <div class="section-title">Aderência Semanal</div>
+                                        <div class="status-badge status-conformidade" id="statusBadgeRh">Em conformidade
+                                        </div>
+
+                                        <div class="adherence-grid">
+                                            <div class="adherence-item">
+                                                <div class="adherence-label">Presença Semanal</div>
+                                                <div class="adherence-value" id="presencaValueRh">4 dias</div>
+                                                <div class="adherence-note" id="presencaNoteRh"></div>
+                                            </div>
+
+                                            <div class="adherence-item">
+                                                <div class="adherence-label">Dias na Sede</div>
+                                                <div class="adherence-value" id="sedeValueRh">2 dias</div>
+                                            </div>
+
+                                            <div class="adherence-item">
+                                                <div class="adherence-label">Dias em Home Office</div>
+                                                <div class="adherence-value" id="homeofficeValueRh">2 dias</div>
+                                            </div>
+
+                                            <div class="adherence-item">
+                                                <div class="adherence-label">Dias restantes na semana</div>
+                                                <div class="adherence-value" id="diasRestantesValueRh">1 dia</div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Conformidade 3x2 -->
+                                        <div class="conformidade-section">
+                                            <div class="conformidade-title">Conformidade 3x2 (3 Presenciais + 2 Remotos)
+                                            </div>
+                                            <div class="conformidade-bars">
+                                                <div class="conformidade-item">
+                                                    <div class="conformidade-label">
+                                                        <span class="conformidade-text">Dias Presenciais</span>
+                                                    </div>
+                                                    <div class="conformidade-progress">
+                                                        <div class="progress-bar">
+                                                            <div class="progress-fill presenciais-fill"
+                                                                style="width: 67%;">
+                                                            </div>
+                                                        </div>
+                                                        <span class="conformidade-counter"
+                                                            id="presenciaisCountRh">2/3</span>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+
+                                        <div class="status-section">
+                                            <div class="status-container" id="statusContainerRh">
+                                                <div class="status-message" id="statusMessageRh">
+                                                    <span class="status-icon">💡</span>
+                                                    <span id="statusTextRh">Você tem opção de escolha dos dias para
+                                                        garantir a
+                                                        conformidade</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
 
 
-                        <!-- Seção Equipe -->
-                        <div class="gestor-section">
-                            <div class="section-title">Ocorrências e não Conformidades da Equipe</div>
+                                    <!-- Seção Equipe -->
+                                    <h2>Visão da Equipe</h2>
+                                    <div class="gestor-section">
+                                        <div class="section-title">Ocorrências e não Conformidades da Equipe</div>
 
-                            <div class="team-table-container">
-                                <table class="team-table">
-                                    <thead>
-                                        <tr>
-                                            <th>Data</th>
-                                            <th>Colaborador</th>
-                                            <th>Tipo</th>
-                                            <th>Descrição</th>
-                                            <th>Gravidade</th>
-                                            <th>Status</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="teamTableBodyRh">
-                                        <tr>
-                                            <td>15/06/2025</td>
-                                            <td>Maria Santos</td>
-                                            <td><span class="badge badge-ausencia">AUSÊNCIA</span></td>
-                                            <td>Ausência não justificada</td>
-                                            <td><span class="badge badge-gravidade-alta">ALTA</span></td>
-                                            <td><span class="badge badge-pendente">PENDENTE</span></td>
-                                        </tr>
-                                        <tr>
-                                            <td>14/06/2025</td>
-                                            <td>Pedro Alves</td>
-                                            <td><span class="badge badge-atraso">ATRASO</span></td>
-                                            <td>Chegada às 09:45 (3ª ocorrência)</td>
-                                            <td><span class="badge badge-gravidade-media">MÉDIA</span></td>
-                                            <td><span class="badge badge-analise">EM ANÁLISE</span></td>
-                                        </tr>
-                                        <tr>
-                                            <td>13/06/2025</td>
-                                            <td>Ana Costa</td>
-                                            <td><span class="badge badge-justificativa">JUSTIFICATIVA</span></td>
-                                            <td>Consulta médica - Atestado anexado</td>
-                                            <td><span class="badge badge-gravidade-baixa">BAIXA</span></td>
-                                            <td><span class="badge badge-aprovado">APROVADO</span></td>
-                                        </tr>
-                                        <tr>
-                                            <td>12/06/2025</td>
-                                            <td>Carlos Silva</td>
-                                            <td><span class="badge badge-hora-extra">HORA EXTRA</span></td>
-                                            <td>Excedeu limite de banco de horas (2h15m)</td>
-                                            <td><span class="badge badge-gravidade-media">MÉDIA</span></td>
-                                            <td><span class="badge badge-aguardando">AGUARDANDO GESTOR</span></td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
+                                        <div class="team-table-container">
+                                            <table class="team-table">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Data</th>
+                                                        <th>Colaborador</th>
+                                                        <th>Tipo</th>
+                                                        <th>Descrição</th>
+                                                        <th>Gravidade</th>
+                                                        <th>Status</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="teamTableBodyRh">
+                                                    <tr>
+                                                        <td>15/06/2025</td>
+                                                        <td>Maria Santos</td>
+                                                        <td><span class="badge badge-ausencia">AUSÊNCIA</span></td>
+                                                        <td>Ausência não justificada</td>
+                                                        <td><span class="badge badge-gravidade-alta">ALTA</span></td>
+                                                        <td><span class="badge badge-pendente">PENDENTE</span></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>14/06/2025</td>
+                                                        <td>Pedro Alves</td>
+                                                        <td><span class="badge badge-atraso">ATRASO</span></td>
+                                                        <td>Chegada às 09:45 (3ª ocorrência)</td>
+                                                        <td><span class="badge badge-gravidade-media">MÉDIA</span></td>
+                                                        <td><span class="badge badge-analise">EM ANÁLISE</span></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>13/06/2025</td>
+                                                        <td>Ana Costa</td>
+                                                        <td><span class="badge badge-justificativa">JUSTIFICATIVA</span>
+                                                        </td>
+                                                        <td>Consulta médica - Atestado anexado</td>
+                                                        <td><span class="badge badge-gravidade-baixa">BAIXA</span></td>
+                                                        <td><span class="badge badge-aprovado">APROVADO</span></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>12/06/2025</td>
+                                                        <td>Carlos Silva</td>
+                                                        <td><span class="badge badge-hora-extra">HORA EXTRA</span></td>
+                                                        <td>Excedeu limite de banco de horas (2h15m)</td>
+                                                        <td><span class="badge badge-gravidade-media">MÉDIA</span></td>
+                                                        <td><span class="badge badge-aguardando">AGUARDANDO
+                                                                GESTOR</span></td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
 
-                        <!-- Análise Consolidada movida aqui (somente RH) -->
-                        <div class="adherence-card">
-                            <div class="section-title">Análise Consolidada</div>
-                            <div class="kpi-summary" id="kpiSummaryRh">
-                                <div class="kpi-grid">
-                                    <!-- Linha 1 -->
-                                    <div class="kpi-card large">
+                                    <!-- Análise Consolidada movida aqui (somente RH) -->
+                                     <h2>Visão Corporativa</h2>
+                                    <div class="adherence-card">
+                                        <div class="section-title">Análise Consolidada</div>
+                                        <div class="kpi-summary" id="kpiSummaryRh">
+                                            <div class="kpi-grid">
+                                                <!-- Linha 1 -->
+                                                <!-- <div class="kpi-card large">
                                         <div class="kpi-label">Gestores  regulares</div>
                                         <div class="kpi-value small" id="kpiGestoresRegularesListaRh">-</div>
                                         <div class="kpi-note">Top 5 gestores por média</div>
@@ -670,220 +685,233 @@
                                         <div class="kpi-label">Porcentagem Gestores regulares</div>
                                         <div class="kpi-value" id="kpiGestoresRegularesRh">--%</div>
                                         <div class="kpi-note">Média ≥85%</div>
-                                    </div>
+                                    </div> -->
 
-                                    <!-- Linha 2 -->
-                                    <div class="kpi-card large">
-                                        <div class="kpi-label">Ranking Regularidade Gestores</div>
-                                        <div class="kpi-value small" id="kpiGestoresTopRh">-</div>
-                                        <div class="kpi-note">Ranking completo</div>
-                                    </div>
-                                    <div class="kpi-card small">
-                                        <div class="kpi-label">Aderência Geral</div>
-                                        <div class="kpi-value" id="kpiAderenciaRh">--%</div>
-                                        <div class="kpi-note">Meta: 85%</div>
-                                    </div>
+                                                <!-- Linha 2 -->
+                                                <div class="kpi-card large">
+                                                    <div class="kpi-label">Ranking Regularidade Gestores</div>
+                                                    <div class="kpi-value small" id="kpiGestoresTopRh">-</div>
+                                                    <div class="kpi-note">Ranking completo</div>
+                                                </div>
+                                                <div class="kpi-card small">
+                                                    <div class="kpi-label">Aderência Geral</div>
+                                                    <div class="kpi-value" id="kpiAderenciaRh">--%</div>
+                                                    <div class="kpi-note">Meta: 85%</div>
+                                                </div>
 
-                                    <!-- Linha 3 -->
-                                    <div class="kpi-row-flex">
-                                        <div class="kpi-card kpi-diretorias">
-                                            <div class="kpi-label">Diretorias irregulares</div>
-                                            <div class="kpi-value small" id="kpiPendentesListRh">-</div>
-                                            <div class="kpi-note">Resumo das pendências</div>
-                                        </div>
-                                        <div class="kpi-row-right">
-                                            <div class="kpi-card">
-                                                <div class="kpi-label">Principais causas de ausência</div>
-                                                <div class="kpi-value small" id="kpiCausasRh">-</div>
-                                                <div class="kpi-note">Tipos prevalentes</div>
+                                                <!-- Linha 3 -->
+                                                <div class="kpi-row-flex">
+                                                    <div class="kpi-card kpi-diretorias">
+                                                        <div class="kpi-label">Diretorias que exigem atenção</div>
+                                                        <div class="kpi-value small" id="kpiPendentesListRh">-</div>
+                                                        <div class="kpi-note">Resumo das pendências</div>
+                                                    </div>
+                                                    <div class="kpi-row-right">
+                                                        <div class="kpi-card">
+                                                            <div class="kpi-label">Principais causas de ausência</div>
+                                                            <div class="kpi-value small" id="kpiCausasRh">-</div>
+                                                            <div class="kpi-note">Tipos prevalentes</div>
+                                                        </div>
+                                                        <div class="kpi-card taxa-justificativa">
+                                                            <div class="kpi-label">Taxa de Justificativa</div>
+                                                            <div class="kpi-value" id="kpiJustificativaRh">--%</div>
+                                                            <div class="kpi-note">Meta: 90%</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
-                                            <div class="kpi-card taxa-justificativa">
-                                                <div class="kpi-label">Taxa de Justificativa</div>
-                                                <div class="kpi-value" id="kpiJustificativaRh">--%</div>
-                                                <div class="kpi-note">Meta: 90%</div>
-                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                </div>
 
-                <!-- Relatórios Gestor -->
-                <div id="relatorios-gestor" class="page-view">
-                    <div class="section-title">Relatórios - Evolução da Equipe</div>
+                            <!-- Relatórios Gestor -->
+                            <div id="relatorios-gestor" class="page-view">
+                                <div class="section-title">Relatórios - Evolução da Equipe</div>
 
-                    <!-- Gráfico de Evolução Temporal -->
-                    <div class="adherence-card">
-                        <div class="section-title">Evolução da Aderência ao Longo dos Meses</div>
-                        <p class="subtitle">Acompanhamento mensal da equipe</p>
-                        <div style="position: relative; height: 350px;">
-                            <canvas id="evolucaoChart"></canvas>
-                        </div>
-                    </div>
-
-                    <!-- Gráfico Comparativo entre Colaboradores -->
-                    <div class="adherence-card">
-                        <div class="section-title">Comparação de Aderência por Colaborador</div>
-                        <p class="subtitle">Performance dos membros da equipe</p>
-                        <div style="position: relative; height: 350px;">
-                            <canvas id="comparativoChart"></canvas>
-                        </div>
-                    </div>
-
-                    <!-- Estatísticas da Equipe -->
-                    <div class="adherence-card">
-                        <div class="section-title">Resumo Estatístico da Equipe</div>
-                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px;">
-                            <div style="padding: 20px; border-radius: 8px; background: #f5f5f5;">
-                                <div style="font-size: 14px; color: #605e5c; font-weight: 500;">Aderência Média</div>
-                                <div style="font-size: 32px; font-weight: 700; color: #0597F2; margin-top: 8px;" id="mediaAdereciaEquipe">--%</div>
-                            </div>
-                            <div style="padding: 20px; border-radius: 8px; background: #f5f5f5;">
-                                <div style="font-size: 14px; color: #605e5c; font-weight: 500;">Melhor Performer</div>
-                                <div style="font-size: 18px; font-weight: 700; color: #107c10; margin-top: 8px;" id="melhorPerformer">-</div>
-                            </div>
-                            <div style="padding: 20px; border-radius: 8px; background: #f5f5f5;">
-                                <div style="font-size: 14px; color: #605e5c; font-weight: 500;">Que Necessita Atenção</div>
-                                <div style="font-size: 18px; font-weight: 700; color: #d13438; margin-top: 8px;" id="necesitaAtencao">-</div>
-                            </div>
-                            <div style="padding: 20px; border-radius: 8px; background: #f5f5f5;">
-                                <div style="font-size: 14px; color: #605e5c; font-weight: 500;">Total de Colaboradores</div>
-                                <div style="font-size: 32px; font-weight: 700; color: #323130; margin-top: 8px;" id="totalColaboradores">-</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                    <!-- Minhas Justificativas -->
-                    <div id="justificativas" class="page-view">
-                        <div class="section-title">Minhas Justificativas</div>
-
-                        <div class="adherence-card">
-                            <h2>Enviar Justificativa</h2>
-
-                            <!-- Seletor de Justificativas Predefinidas -->
-                            <div class="predefined-justifications">
-                                <h3>Justificativas Rápidas</h3>
-                                <p class="subtitle">Selecione um tipo predefinido ou descreva sua justificativa</p>
-
-                                <div class="justification-grid" id="justificationGrid"></div>
-                            </div>
-
-                            <hr style="margin: 24px 0; border: none; border-top: 1px solid #e0e0e0;">
-
-                            <!-- Formulário de Justificativa -->
-                            <div class="justification-form">
-                                <div class="form-group">
-                                    <label for="justType">Tipo de Justificativa</label>
-                                    <select class="form-control" id="justType">
-                                        <option value="">Selecione...</option>
-                                        <option value="ferias">Férias</option>
-                                        <option value="atestado">Atestado Médico</option>
-                                        <option value="maternidade">Licença Maternidade/Paternidade</option>
-                                        <option value="luto">Licença por Luto</option>
-                                        <option value="comparecimento">Mandado de Comparecimento</option>
-                                        <option value="trabalho_ext">Trabalho Externo</option>
-                                        <option value="outro">Outro</option>
-                                    </select>
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="justDate">Data</label>
-                                    <input type="date" class="form-control" id="justDate">
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="justDetails">Detalhes/Observações</label>
-                                    <textarea class="form-control textarea" id="justDetails" rows="4"
-                                        placeholder="Descreva os detalhes da sua justificativa..."></textarea>
-                                </div>
-
-                                <button class="btn-solicitar" id="submitJustification">Enviar Justificativa</button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Solicitar Falta Justificada -->
-                    <div id="falta-justificada" class="page-view">
-                        <div class="section-title">Solicitar Falta Justificada</div>
-
-                        <div class="adherence-card">
-                            <h2>Justificar Ausência</h2>
-
-                            <!-- Seletor de Justificativas Predefinidas -->
-                            <div class="predefined-justifications">
-                                <h3>Motivos Comuns</h3>
-                                <p class="subtitle">Escolha um dos motivos pré-aprovados ou descreva seu caso</p>
-
-                                <div class="absence-reasons" id="absenceReasons"></div>
-                            </div>
-
-                            <hr style="margin: 24px 0; border: none; border-top: 1px solid #e0e0e0;">
-
-                            <!-- Formulário de Falta -->
-                            <div class="absence-form">
-                                <div class="form-group">
-                                    <label for="absenceDate">Data da Ausência</label>
-                                    <input type="date" class="form-control" id="absenceDate">
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="absenceType">Tipo de Ausência</label>
-                                    <select class="form-control" id="absenceType">
-                                        <option value="">Selecione...</option>
-                                        <option value="medica">Consulta/Atestado Médico</option>
-                                        <option value="odontologica">Consulta Odontológica</option>
-                                        <option value="procedimento">Procedimento Médico</option>
-                                        <option value="luto">Falecimento de Familiar</option>
-                                        <option value="juridico">Comparecimento Judicial</option>
-                                        <option value="outra">Outra</option>
-                                    </select>
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="absenceDocument">Documentação</label>
-                                    <p class="form-hint">Para ausências médicas, anexe comprovante (atestado, recibo,
-                                        etc)</p>
-                                    <div class="file-upload">
-                                        <input type="file" id="absenceDocument" class="form-control">
-                                        <span class="upload-text">Clique ou arraste um arquivo</span>
+                                <!-- Gráfico de Evolução Temporal -->
+                                <div class="adherence-card">
+                                    <div class="section-title">Evolução da Aderência ao Longo dos Meses</div>
+                                    <p class="subtitle">Acompanhamento mensal da equipe</p>
+                                    <div style="position: relative; height: 350px;">
+                                        <canvas id="evolucaoChart"></canvas>
                                     </div>
                                 </div>
 
-                                <div class="form-group">
-                                    <label for="absenceObservations">Observações</label>
-                                    <textarea class="form-control textarea" id="absenceObservations" rows="4"
-                                        placeholder="Adicione detalhes sobre a sua ausência..."></textarea>
+                                <!-- Gráfico Comparativo entre Colaboradores -->
+                                <div class="adherence-card">
+                                    <div class="section-title">Comparação de Aderência por Colaborador</div>
+                                    <p class="subtitle">Performance dos membros da equipe</p>
+                                    <div style="position: relative; height: 350px;">
+                                        <canvas id="comparativoChart"></canvas>
+                                    </div>
                                 </div>
 
-                                <button class="btn-solicitar" id="submitAbsence">Enviar Justificativa de
-                                    Ausência</button>
+                                <!-- Estatísticas da Equipe -->
+                                <div class="adherence-card">
+                                    <div class="section-title">Resumo Estatístico da Equipe</div>
+                                    <div
+                                        style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px;">
+                                        <div style="padding: 20px; border-radius: 8px; background: #f5f5f5;">
+                                            <div style="font-size: 14px; color: #605e5c; font-weight: 500;">Aderência
+                                                Média</div>
+                                            <div style="font-size: 32px; font-weight: 700; color: #0597F2; margin-top: 8px;"
+                                                id="mediaAdereciaEquipe">--%</div>
+                                        </div>
+                                        <div style="padding: 20px; border-radius: 8px; background: #f5f5f5;">
+                                            <div style="font-size: 14px; color: #605e5c; font-weight: 500;">Melhor
+                                                Performer</div>
+                                            <div style="font-size: 18px; font-weight: 700; color: #107c10; margin-top: 8px;"
+                                                id="melhorPerformer">-</div>
+                                        </div>
+                                        <div style="padding: 20px; border-radius: 8px; background: #f5f5f5;">
+                                            <div style="font-size: 14px; color: #605e5c; font-weight: 500;">Que
+                                                Necessita Atenção</div>
+                                            <div style="font-size: 18px; font-weight: 700; color: #d13438; margin-top: 8px;"
+                                                id="necesitaAtencao">-</div>
+                                        </div>
+                                        <div style="padding: 20px; border-radius: 8px; background: #f5f5f5;">
+                                            <div style="font-size: 14px; color: #605e5c; font-weight: 500;">Total de
+                                                Colaboradores</div>
+                                            <div style="font-size: 32px; font-weight: 700; color: #323130; margin-top: 8px;"
+                                                id="totalColaboradores">-</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Minhas Justificativas -->
+                            <div id="justificativas" class="page-view">
+                                <div class="section-title">Minhas Justificativas</div>
+
+                                <div class="adherence-card">
+                                    <h2>Enviar Justificativa</h2>
+
+                                    <!-- Seletor de Justificativas Predefinidas -->
+                                    <div class="predefined-justifications">
+                                        <h3>Justificativas Rápidas</h3>
+                                        <p class="subtitle">Selecione um tipo predefinido ou descreva sua justificativa
+                                        </p>
+
+                                        <div class="justification-grid" id="justificationGrid"></div>
+                                    </div>
+
+                                    <hr style="margin: 24px 0; border: none; border-top: 1px solid #e0e0e0;">
+
+                                    <!-- Formulário de Justificativa -->
+                                    <div class="justification-form">
+                                        <div class="form-group">
+                                            <label for="justType">Tipo de Justificativa</label>
+                                            <select class="form-control" id="justType">
+                                                <option value="">Selecione...</option>
+                                                <option value="ferias">Férias</option>
+                                                <option value="atestado">Atestado Médico</option>
+                                                <option value="maternidade">Licença Maternidade/Paternidade</option>
+                                                <option value="luto">Licença por Luto</option>
+                                                <option value="comparecimento">Mandado de Comparecimento</option>
+                                                <option value="trabalho_ext">Trabalho Externo</option>
+                                                <option value="outro">Outro</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="justDate">Data</label>
+                                            <input type="date" class="form-control" id="justDate">
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="justDetails">Detalhes/Observações</label>
+                                            <textarea class="form-control textarea" id="justDetails" rows="4"
+                                                placeholder="Descreva os detalhes da sua justificativa..."></textarea>
+                                        </div>
+
+                                        <button class="btn-solicitar" id="submitJustification">Enviar
+                                            Justificativa</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Solicitar Falta Justificada -->
+                            <div id="falta-justificada" class="page-view">
+                                <div class="section-title">Solicitar Falta Justificada</div>
+
+                                <div class="adherence-card">
+                                    <h2>Justificar Ausência</h2>
+
+                                    <!-- Seletor de Justificativas Predefinidas -->
+                                    <div class="predefined-justifications">
+                                        <h3>Motivos Comuns</h3>
+                                        <p class="subtitle">Escolha um dos motivos pré-aprovados ou descreva seu caso
+                                        </p>
+
+                                        <div class="absence-reasons" id="absenceReasons"></div>
+                                    </div>
+
+                                    <hr style="margin: 24px 0; border: none; border-top: 1px solid #e0e0e0;">
+
+                                    <!-- Formulário de Falta -->
+                                    <div class="absence-form">
+                                        <div class="form-group">
+                                            <label for="absenceDate">Data da Ausência</label>
+                                            <input type="date" class="form-control" id="absenceDate">
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="absenceType">Tipo de Ausência</label>
+                                            <select class="form-control" id="absenceType">
+                                                <option value="">Selecione...</option>
+                                                <option value="medica">Consulta/Atestado Médico</option>
+                                                <option value="odontologica">Consulta Odontológica</option>
+                                                <option value="procedimento">Procedimento Médico</option>
+                                                <option value="luto">Falecimento de Familiar</option>
+                                                <option value="juridico">Comparecimento Judicial</option>
+                                                <option value="outra">Outra</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="absenceDocument">Documentação</label>
+                                            <p class="form-hint">Para ausências médicas, anexe comprovante (atestado,
+                                                recibo,
+                                                etc)</p>
+                                            <div class="file-upload">
+                                                <input type="file" id="absenceDocument" class="form-control">
+                                                <span class="upload-text">Clique ou arraste um arquivo</span>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="absenceObservations">Observações</label>
+                                            <textarea class="form-control textarea" id="absenceObservations" rows="4"
+                                                placeholder="Adicione detalhes sobre a sua ausência..."></textarea>
+                                        </div>
+
+                                        <button class="btn-solicitar" id="submitAbsence">Enviar Justificativa de
+                                            Ausência</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Férias -->
+                            <div id="ferias" class="page-view">
+                                <div class="section-title">Solicitar Férias</div>
+                                <div class="ferias-container">
+                                    <div class="ferias-controls">
+                                        <label for="feriasMes">Mês/Ano:</label>
+                                        <input type="month" id="feriasMes" class="ferias-input">
+                                    </div>
+                                    <div class="calendar" id="calendar"></div>
+                                    <div class="ferias-info">
+                                        <p>Data inicial: <strong id="dataInicial">-</strong></p>
+                                        <p>Data final: <strong id="dataFinal">-</strong></p>
+                                    </div>
+                                    <button class="btn-solicitar">Solicitar Férias</button>
+                                </div>
                             </div>
                         </div>
+
+
                     </div>
-
-                    <!-- Férias -->
-                    <div id="ferias" class="page-view">
-                        <div class="section-title">Solicitar Férias</div>
-                        <div class="ferias-container">
-                            <div class="ferias-controls">
-                                <label for="feriasMes">Mês/Ano:</label>
-                                <input type="month" id="feriasMes" class="ferias-input">
-                            </div>
-                            <div class="calendar" id="calendar"></div>
-                            <div class="ferias-info">
-                                <p>Data inicial: <strong id="dataInicial">-</strong></p>
-                                <p>Data final: <strong id="dataFinal">-</strong></p>
-                            </div>
-                            <button class="btn-solicitar">Solicitar Férias</button>
-                        </div>
-                    </div>
-                </div>
-
-
-            </div>
         </main>
     </div>
 

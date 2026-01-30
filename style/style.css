@@ -585,6 +585,28 @@ th {
     font-weight: 600;
 }
 
+/* Borda preta no topo do cabeçalho somente para os relatórios RH */
+/* Borda preta no topo do cabeçalho somente para os relatórios RH */
+#relatorioAderenciaTable thead tr,
+#relatorioStatusJustificativasTable thead tr {
+    border-top: 3px solid #555555;
+    border-bottom: none;
+}
+
+/* Estilo da linha TOTAL posicionada no final da tabela */
+.total-row {
+    font-weight: 700;
+    background-color: #f0f0f0;
+    border-top: 2px solid #d1d1d1;
+}
+
+/* Garantir que a linha TOTAL não mostre borda inferior e que use apenas borda superior */
+#relatorioAderenciaTable tbody tr.total-row td,
+#relatorioStatusJustificativasTable tbody tr.total-row td {
+    border-bottom: none !important;
+    border-top: 2px solid #d1d1d1 !important;
+}
+
 td.department {
     text-align: left;
     font-weight: 600;
