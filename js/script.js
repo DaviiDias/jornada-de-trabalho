@@ -2354,7 +2354,7 @@ const mockDadosAreas = {
         { 
             nome: 'ALPA SEDE', 
             cor: '#000000', 
-            valores: [95, 92, 98, 94, 96, 99],
+            valores: [62, 58, 68, 60, 65, 70],
             destaque: true
         },
         { 
@@ -2370,7 +2370,7 @@ const mockDadosAreas = {
         { 
             nome: 'N&C', 
             cor: '#107c10', 
-            valores: [35, 38, 48, 42, 45, 52] 
+            valores: [95, 92, 98, 94, 96, 99] 
         },
         { 
             nome: 'FINANÇAS', 
@@ -2380,7 +2380,7 @@ const mockDadosAreas = {
         { 
             nome: 'TECNOLOGIA', 
             cor: '#ff8c00', 
-            valores: [62, 58, 68, 60, 65, 70] 
+            valores: [35, 38, 48, 42, 45, 52] 
         }
     ]
 };
