@@ -1852,4 +1852,235 @@ if (typeof atualizarResumo === 'function') {
 renderOverview(dadosApiMock);
 atualizarResumo();
 
+// ===============================
+// GRÁFICOS RELATÓRIOS GESTOR
+// ===============================
+
+// Mock de dados de aderência mensal por colaborador
+const mockDadosEvolucao = {
+    meses: ['Outubro', 'Novembro', 'Dezembro', 'Janeiro'],
+    mediaEquipe: [78, 81, 79, 82]
+};
+
+const mockColaboradores = [
+    { nome: 'João Silva', aderencia: 88 },
+    { nome: 'Maria Santos', aderencia: 92 },
+    { nome: 'Pedro Alves', aderencia: 75 },
+    { nome: 'Ana Costa', aderencia: 85 },
+    { nome: 'Carlos Souza', aderencia: 79 }
+];
+
+// Função para desenhar gráfico de evolução (linha)
+function desenharGraficoEvolucao() {
+    const canvas = document.getElementById('evolucaoChart');
+    if (!canvas) return;
+
+    const ctx = canvas.getContext('2d');
+    
+    // Definir tamanho do canvas
+    const containerWidth = canvas.parentElement.offsetWidth || 800;
+    const containerHeight = 350;
+    
+    canvas.width = containerWidth;
+    canvas.height = containerHeight;
+
+    const meses = mockDadosEvolucao.meses;
+    const dados = mockDadosEvolucao.mediaEquipe;
+
+    const padding = 50;
+    const width = canvas.width - (padding * 2);
+    const height = canvas.height - (padding * 2);
+
+    // Limpar canvas
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    // Desenhar eixos
+    ctx.strokeStyle = '#d1d1d1';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(padding, canvas.height - padding);
+    ctx.lineTo(canvas.width - padding, canvas.height - padding);
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.moveTo(padding, padding);
+    ctx.lineTo(padding, canvas.height - padding);
+    ctx.stroke();
+
+    // Escala
+    const maxValor = 100;
+    const stepX = width / (meses.length - 1);
+    const stepY = height / maxValor;
+
+    // Desenhar grid e labels
+    ctx.fillStyle = '#605e5c';
+    ctx.font = '12px Arial';
+    ctx.textAlign = 'center';
+
+    // Labels X (meses)
+    meses.forEach((mes, i) => {
+        const x = padding + (i * stepX);
+        ctx.fillText(mes, x, canvas.height - padding + 20);
+    });
+
+    // Labels Y (porcentagem)
+    ctx.textAlign = 'right';
+    for (let i = 0; i <= 100; i += 20) {
+        const y = canvas.height - padding - (i * stepY);
+        ctx.fillText(i + '%', padding - 10, y + 5);
+    }
+
+    // Desenhar linha de dados
+    ctx.strokeStyle = '#0597F2';
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+
+    dados.forEach((valor, i) => {
+        const x = padding + (i * stepX);
+        const y = canvas.height - padding - (valor * stepY);
+
+        if (i === 0) {
+            ctx.moveTo(x, y);
+        } else {
+            ctx.lineTo(x, y);
+        }
+    });
+
+    ctx.stroke();
+
+    // Desenhar pontos
+    ctx.fillStyle = '#0597F2';
+    dados.forEach((valor, i) => {
+        const x = padding + (i * stepX);
+        const y = canvas.height - padding - (valor * stepY);
+        ctx.beginPath();
+        ctx.arc(x, y, 5, 0, Math.PI * 2);
+        ctx.fill();
+    });
+}
+
+// Função para desenhar gráfico comparativo (barras)
+function desenharGraficoComparativo() {
+    const canvas = document.getElementById('comparativoChart');
+    if (!canvas) return;
+
+    const ctx = canvas.getContext('2d');
+    
+    // Definir tamanho do canvas
+    const containerWidth = canvas.parentElement.offsetWidth || 800;
+    const containerHeight = 350;
+    
+    canvas.width = containerWidth;
+    canvas.height = containerHeight;
+
+    const colaboradores = mockColaboradores;
+    const padding = 50;
+    const width = canvas.width - (padding * 2);
+    const height = canvas.height - (padding * 2);
+
+    // Limpar canvas
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    // Desenhar eixos
+    ctx.strokeStyle = '#d1d1d1';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(padding, canvas.height - padding);
+    ctx.lineTo(canvas.width - padding, canvas.height - padding);
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.moveTo(padding, padding);
+    ctx.lineTo(padding, canvas.height - padding);
+    ctx.stroke();
+
+    // Escala
+    const maxValor = 100;
+    const stepX = width / colaboradores.length;
+    const stepY = height / maxValor;
+    const barWidth = (stepX * 0.6);
+
+    // Labels Y
+    ctx.fillStyle = '#605e5c';
+    ctx.font = '12px Arial';
+    ctx.textAlign = 'right';
+    for (let i = 0; i <= 100; i += 20) {
+        const y = canvas.height - padding - (i * stepY);
+        ctx.fillText(i + '%', padding - 10, y + 5);
+    }
+
+    // Desenhar barras
+    ctx.textAlign = 'center';
+    colaboradores.forEach((colab, i) => {
+        const x = padding + (i * stepX) + (stepX / 2);
+        const barHeight = colab.aderencia * stepY;
+        const y = canvas.height - padding - barHeight;
+
+        // Cor baseada em performance
+        if (colab.aderencia >= 85) {
+            ctx.fillStyle = '#107c10'; // Verde
+        } else if (colab.aderencia >= 70) {
+            ctx.fillStyle = '#4BB2F2'; // Azul claro
+        } else {
+            ctx.fillStyle = '#d13438'; // Vermelho
+        }
+
+        ctx.fillRect(x - (barWidth / 2), y, barWidth, barHeight);
+
+        // Label com nome
+        ctx.fillStyle = '#323130';
+        ctx.font = 'bold 12px Arial';
+        ctx.fillText(colab.aderencia + '%', x, y - 10);
+
+        ctx.font = '11px Arial';
+        ctx.fillText(colab.nome, x, canvas.height - padding + 20);
+    });
+}
+
+// Função para atualizar estatísticas
+function atualizarEstatisticasEquipe() {
+    const media = Math.round(mockColaboradores.reduce((s, c) => s + c.aderencia, 0) / mockColaboradores.length);
+    const melhor = mockColaboradores.reduce((prev, curr) => (prev.aderencia > curr.aderencia ? prev : curr));
+    const pior = mockColaboradores.reduce((prev, curr) => (prev.aderencia < curr.aderencia ? prev : curr));
+
+    const elMedia = document.getElementById('mediaAdereciaEquipe');
+    const elMelhor = document.getElementById('melhorPerformer');
+    const elPior = document.getElementById('necesitaAtencao');
+    const elTotal = document.getElementById('totalColaboradores');
+
+    if (elMedia) elMedia.textContent = media + '%';
+    if (elMelhor) elMelhor.textContent = melhor.nome + ' (' + melhor.aderencia + '%)';
+    if (elPior) elPior.textContent = pior.nome + ' (' + pior.aderencia + '%)';
+    if (elTotal) elTotal.textContent = mockColaboradores.length;
+}
+
+// Inicializar gráficos quando a página carregar ou mudar para relatórios-gestor
+document.addEventListener('DOMContentLoaded', () => {
+    setTimeout(() => {
+        desenharGraficoEvolucao();
+        desenharGraficoComparativo();
+        atualizarEstatisticasEquipe();
+    }, 500);
+});
+
+// Re-desenhar ao redimensionar a janela
+window.addEventListener('resize', () => {
+    desenharGraficoEvolucao();
+    desenharGraficoComparativo();
+});
+
+// Também tentar desenhar quando a página de relatórios-gestor ficar visível
+document.addEventListener('click', (e) => {
+    const navLink = e.target.closest('[data-page="relatorios-gestor"]');
+    if (navLink) {
+        setTimeout(() => {
+            desenharGraficoEvolucao();
+            desenharGraficoComparativo();
+            atualizarEstatisticasEquipe();
+        }, 300);
+    }
+});
+
 

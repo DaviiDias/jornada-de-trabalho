@@ -90,6 +90,14 @@
                             <span class="nav-text">Histórico</span>
                         </a>
                     </div>
+
+                    <div class="nav-item">
+                        <a class="nav-link" data-page="relatorios-gestor">
+                            <span class="nav-icon"><img src="assets/historico-presenca.png" alt="Relatórios"
+                                    class="nav-icon-img"></span>
+                            <span class="nav-text">Relatórios</span>
+                        </a>
+                    </div>
                 </div>
 
                 <!-- Menu RH -->
@@ -697,6 +705,52 @@
                                         </div>
                                     </div>
                                 </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Relatórios Gestor -->
+                <div id="relatorios-gestor" class="page-view">
+                    <div class="section-title">Relatórios - Evolução da Equipe</div>
+
+                    <!-- Gráfico de Evolução Temporal -->
+                    <div class="adherence-card">
+                        <div class="section-title">Evolução da Aderência ao Longo dos Meses</div>
+                        <p class="subtitle">Acompanhamento mensal da equipe</p>
+                        <div style="position: relative; height: 350px;">
+                            <canvas id="evolucaoChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Gráfico Comparativo entre Colaboradores -->
+                    <div class="adherence-card">
+                        <div class="section-title">Comparação de Aderência por Colaborador</div>
+                        <p class="subtitle">Performance dos membros da equipe</p>
+                        <div style="position: relative; height: 350px;">
+                            <canvas id="comparativoChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Estatísticas da Equipe -->
+                    <div class="adherence-card">
+                        <div class="section-title">Resumo Estatístico da Equipe</div>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px;">
+                            <div style="padding: 20px; border-radius: 8px; background: #f5f5f5;">
+                                <div style="font-size: 14px; color: #605e5c; font-weight: 500;">Aderência Média</div>
+                                <div style="font-size: 32px; font-weight: 700; color: #0597F2; margin-top: 8px;" id="mediaAdereciaEquipe">--%</div>
+                            </div>
+                            <div style="padding: 20px; border-radius: 8px; background: #f5f5f5;">
+                                <div style="font-size: 14px; color: #605e5c; font-weight: 500;">Melhor Performer</div>
+                                <div style="font-size: 18px; font-weight: 700; color: #107c10; margin-top: 8px;" id="melhorPerformer">-</div>
+                            </div>
+                            <div style="padding: 20px; border-radius: 8px; background: #f5f5f5;">
+                                <div style="font-size: 14px; color: #605e5c; font-weight: 500;">Que Necessita Atenção</div>
+                                <div style="font-size: 18px; font-weight: 700; color: #d13438; margin-top: 8px;" id="necesitaAtencao">-</div>
+                            </div>
+                            <div style="padding: 20px; border-radius: 8px; background: #f5f5f5;">
+                                <div style="font-size: 14px; color: #605e5c; font-weight: 500;">Total de Colaboradores</div>
+                                <div style="font-size: 32px; font-weight: 700; color: #323130; margin-top: 8px;" id="totalColaboradores">-</div>
                             </div>
                         </div>
                     </div>
