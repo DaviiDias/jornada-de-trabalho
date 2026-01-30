@@ -608,6 +608,59 @@ const mockRelatorioJustificativas = [
 ];
 
 // Mock de dados de status das justificativas por gestor
+// Mock de dados de Ocorr\u00eancias e n\u00e3o Conformidades da Equipe
+const mockOcorrenciasEquipe = [
+    {
+        data: "15/06/2025",
+        colaborador: "Maria Santos",
+        tipo: "AUS\u00caNCIA",
+        descricao: "Aus\u00eancia n\u00e3o justificada",
+        gravidade: "ALTA",
+        status: "PENDENTE"
+    },
+    {
+        data: "14/06/2025",
+        colaborador: "Pedro Alves",
+        tipo: "ATRASO",
+        descricao: "Chegada \u00e0s 09:45 (3\u00aa ocorr\u00eancia)",
+        gravidade: "M\u00c9DIA",
+        status: "EM AN\u00c1LISE"
+    },
+    {
+        data: "13/06/2025",
+        colaborador: "Ana Costa",
+        tipo: "JUSTIFICATIVA",
+        descricao: "Consulta m\u00e9dica - Atestado anexado",
+        gravidade: "BAIXA",
+        status: "APROVADO"
+    },
+    {
+        data: "12/06/2025",
+        colaborador: "Carlos Silva",
+        tipo: "HORA EXTRA",
+        descricao: "Excedeu limite de banco de horas (2h15m)",
+        gravidade: "M\u00c9DIA",
+        status: "AGUARDANDO GESTOR"
+    },
+    {
+        data: "11/06/2025",
+        colaborador: "Julia Ferreira",
+        tipo: "AUS\u00caNCIA",
+        descricao: "Aus\u00eancia justificada por atestado",
+        gravidade: "BAIXA",
+        status: "APROVADO"
+    },
+    {
+        data: "10/06/2025",
+        colaborador: "Marcos Santos",
+        tipo: "ATRASO",
+        descricao: "Chegada \u00e0s 10:15",
+        gravidade: "BAIXA",
+        status: "EM AN\u00c1LISE"
+    }
+];
+
+// Mock de dados de status das justificativas por gestor
 const mockRelatorioStatusJustificativas = [
     {
         gestor: "Ana Souza",
@@ -1249,11 +1302,79 @@ async function toggleGestoresExpansion(departamento, data, rowIndex) {
 
 
 
+// Função para renderizar tabela de Ocorrências e não Conformidades
+function renderOcorrenciasEquipe(data) {
+    // Renderiza na tabela do Gestor
+    const tbody = document.getElementById('teamTableBody');
+    if (tbody) {
+        tbody.innerHTML = '';
+        renderTableRows(tbody, data);
+    }
+    
+    // Renderiza na tabela do RH
+    const tbodyRh = document.getElementById('teamTableBodyRh');
+    if (tbodyRh) {
+        tbodyRh.innerHTML = '';
+        renderTableRows(tbodyRh, data);
+    }
+}
+
+// Função auxiliar para renderizar as linhas
+function renderTableRows(tbody, data) {
+    data.forEach(ocorrencia => {
+        const row = document.createElement('tr');
+        
+        // Função para obter classe CSS baseada no tipo
+        const getTipoBadgeClass = (tipo) => {
+            const tipoMap = {
+                'AUSÊNCIA': 'badge-ausencia',
+                'ATRASO': 'badge-atraso',
+                'JUSTIFICATIVA': 'badge-justificativa',
+                'HORA EXTRA': 'badge-hora-extra'
+            };
+            return tipoMap[tipo] || 'badge';
+        };
+        
+        // Função para obter classe CSS baseada na gravidade
+        const getGravidadeBadgeClass = (gravidade) => {
+            const gravidadeMap = {
+                'ALTA': 'badge-gravidade-alta',
+                'MÉDIA': 'badge-gravidade-media',
+                'BAIXA': 'badge-gravidade-baixa'
+            };
+            return gravidadeMap[gravidade] || 'badge';
+        };
+        
+        // Função para obter classe CSS baseada no status
+        const getStatusBadgeClass = (status) => {
+            const statusMap = {
+                'PENDENTE': 'badge-pendente',
+                'EM ANÁLISE': 'badge-analise',
+                'APROVADO': 'badge-aprovado',
+                'AGUARDANDO GESTOR': 'badge-aguardando'
+            };
+            return statusMap[status] || 'badge';
+        };
+        
+        row.innerHTML = `
+            <td class="department">${ocorrencia.data}</td>
+            <td class="department">${ocorrencia.colaborador}</td>
+            <td><span class="badge ${getTipoBadgeClass(ocorrencia.tipo)}">${ocorrencia.tipo}</span></td>
+            <td class="department">${ocorrencia.descricao}</td>
+            <td><span class="badge ${getGravidadeBadgeClass(ocorrencia.gravidade)}">${ocorrencia.gravidade}</span></td>
+            <td><span class="badge ${getStatusBadgeClass(ocorrencia.status)}">${ocorrencia.status}</span></td>
+        `;
+        
+        tbody.appendChild(row);
+    });
+}
+
 // chamada inicial
 renderRelatorioEmpresa(mockRelatorioEmpresa);
 renderRelatorioAderenciaAreas(mockRelatorioAderenciaAreas);
 renderRelatorioJustificativas(mockRelatorioJustificativas);
 renderRelatorioStatusJustificativas(mockRelatorioStatusJustificativas);
+renderOcorrenciasEquipe(mockOcorrenciasEquipe);
 
 // Renderiza KPIs e análise consolidada na aba Relatórios
 function renderRelatorioKPIs(data, gestoresPorDept) {
