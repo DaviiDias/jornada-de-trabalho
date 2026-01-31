@@ -712,48 +712,52 @@ const dadosApiMock = {
             num: 1,
             periodo: "19/01/2026 → 23/01/2026",
             justificada: false,
+            justificacaoSemanal: null,
             dias: [
-                { dia: "Seg", data: "19/01", status: "presencial" },
-                { dia: "Ter", data: "20/01", status: "presencial" },
-                { dia: "Qua", data: "21/01", status: "remoto" },
-                { dia: "Qui", data: "22/01", status: "presencial" },
-                { dia: "Sex", data: "23/01", status: "remoto" }
+                { dia: "Seg", data: "19/01", status: "presencial", justificacao: null },
+                { dia: "Ter", data: "20/01", status: "presencial", justificacao: null },
+                { dia: "Qua", data: "21/01", status: "remoto", justificacao: null },
+                { dia: "Qui", data: "22/01", status: "presencial", justificacao: null },
+                { dia: "Sex", data: "23/01", status: "remoto", justificacao: null }
             ]
         },
         {
             num: 2,
             periodo: "12/01/2026 → 16/01/2026",
-            justificada: true, // 👈 inconformidade já tratada
+            justificada: true,
+            justificacaoSemanal: "Problemas operacionais resolvidos",
             dias: [
-                { dia: "Seg", data: "12/01", status: "remoto" },
-                { dia: "Ter", data: "13/01", status: "presencial" },
-                { dia: "Qua", data: "14/01", status: "ausente", justificado: true },
-                { dia: "Qui", data: "15/01", status: "remoto" },
-                { dia: "Sex", data: "16/01", status: "presencial" }
+                { dia: "Seg", data: "12/01", status: "remoto", justificacao: null },
+                { dia: "Ter", data: "13/01", status: "presencial", justificacao: null },
+                { dia: "Qua", data: "14/01", status: "ausente", justificado: true, justificacao: "Trabalho externo" },
+                { dia: "Qui", data: "15/01", status: "remoto", justificacao: null },
+                { dia: "Sex", data: "16/01", status: "presencial", justificacao: null }
             ]
         },
         {
             num: 3,
             periodo: "05/01/2026 → 09/01/2026",
             justificada: false,
+            justificacaoSemanal: null,
             dias: [
-                { dia: "Seg", data: "05/01", status: "ausente" },
-                { dia: "Ter", data: "06/01", status: "remoto" },
-                { dia: "Qua", data: "07/01", status: "ausente" },
-                { dia: "Qui", data: "08/01", status: "remoto" },
-                { dia: "Sex", data: "09/01", status: "ausente" }
+                { dia: "Seg", data: "05/01", status: "ausente", justificacao: null },
+                { dia: "Ter", data: "06/01", status: "remoto", justificacao: null },
+                { dia: "Qua", data: "07/01", status: "ausente", justificacao: null },
+                { dia: "Qui", data: "08/01", status: "remoto", justificacao: null },
+                { dia: "Sex", data: "09/01", status: "ausente", justificacao: null }
             ]
         },
         {
             num: 4,
             periodo: "29/12/2025 → 02/01/2026",
             justificada: false,
+            justificacaoSemanal: null,
             dias: [
-                { dia: "Seg", data: "29/12", status: "presencial" },
-                { dia: "Ter", data: "30/12", status: "presencial" },
-                { dia: "Qua", data: "31/12", status: "remoto" },
-                { dia: "Qui", data: "01/01", status: "remoto" },
-                { dia: "Sex", data: "02/01", status: "remoto" }
+                { dia: "Seg", data: "29/12", status: "presencial", justificacao: null },
+                { dia: "Ter", data: "30/12", status: "presencial", justificacao: null },
+                { dia: "Qua", data: "31/12", status: "remoto", justificacao: null },
+                { dia: "Qui", data: "01/01", status: "remoto", justificacao: null },
+                { dia: "Sex", data: "02/01", status: "remoto", justificacao: null }
             ]
         }
     ]
@@ -1554,15 +1558,30 @@ function getStatusSemana(presCount, justificada = false) {
 
 function showDetail(s, cardElement) {
     const content = document.getElementById('detail-content');
-    const pres = s.dias.filter(d => d.status === 'presencial').length;
-    const isRequiredSemanal = pres < 3;
-    // use o flag de semana justificada para calcular status corretamente
-    const st = getStatusSemana(pres, s.justificada);
-    const weekOk = st.class === 'week-ok';
+    
+    // ✅ Usa a mesma lógica de contagem: presenciais + justificados
+    const presenciais = s.dias.filter(d => d.status === 'presencial' || d.justificado).length;
+    const isRequiredSemanal = presenciais < 3;
+    
+    // ✅ Semana está OK se tem 3 ou mais dias presenciais/justificados
+    const weekOk = presenciais >= 3;
+    
+    // ✅ Calcula status e cor para exibição
+    let statusDisplay, corDisplay;
+    if (weekOk) {
+        statusDisplay = 'Em conformidade';
+        corDisplay = 'var(--verde)';
+    } else if (s.justificada) {
+        statusDisplay = 'Inconformidade justificada';
+        corDisplay = 'var(--azul)';
+    } else {
+        statusDisplay = 'Inconformidade';
+        corDisplay = 'var(--vermelho)';
+    }
 
     content.innerHTML = `
-        <h3 style="margin:0 0 20px; text-align:center; color:${st.cor}">
-            Semana ${s.num} – ${s.periodo} (${pres} presenciais)
+        <h3 style="margin:0 0 20px; text-align:center; color:${corDisplay}">
+            Semana ${s.num} – ${s.periodo} (${presenciais} presenciais)
         </h3>
 
         <div class="days-grid">
@@ -1583,8 +1602,8 @@ function showDetail(s, cardElement) {
                     txt = 'Ausente';
                 }
 
-                // Não mostrar ícone se semana estiver em conformidade
-                const podeJustificar = !weekOk && (d.status === 'ausente' || d.status === 'remoto') && !d.justificado;
+                // ✅ Não mostrar ícone "J" se semana estiver em conformidade ou já justificada
+                const podeJustificar = !weekOk && !s.justificada && (d.status === 'ausente' || d.status === 'remoto') && !d.justificado;
 
                 return `
                     <div class="day-card">
@@ -1604,7 +1623,7 @@ function showDetail(s, cardElement) {
             }).join('')}
         </div>
 
-        ${isRequiredSemanal ? `
+        ${isRequiredSemanal && !s.justificada ? `
             <div class="justifications-panel">
                 <strong>Justificativas</strong><br>
                 <small>Clique no ícone "J" nos dias para adicionar ou remover justificativa diária.</small>
@@ -1627,8 +1646,8 @@ function showDetail(s, cardElement) {
     content.classList.add('open');
     content.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
-    // ⚠️ IMPORTANTE: se não exige justificativa, PARA AQUI
-    if (!isRequiredSemanal) return;
+    // ⚠️ IMPORTANTE: se não exige justificativa ou já foi justificada, PARA AQUI
+    if (!isRequiredSemanal || s.justificada) return;
 
     const submitBtn = document.getElementById('submit-btn');
     const weeklyTextarea = document.getElementById('weekly-textarea');
@@ -1681,6 +1700,7 @@ function showDetail(s, cardElement) {
             const select = block.querySelector('.daily-type');
             const textarea = block.querySelector('.daily-textarea');
             const sendBtn = block.querySelector('.daily-submit');
+            const iconRef = this; // ✅ Salva a referência do icon
 
             select.addEventListener('change', () => {
                 textarea.style.display = 'block';
@@ -1697,7 +1717,39 @@ function showDetail(s, cardElement) {
 
             sendBtn.addEventListener('click', ev => {
                 ev.stopPropagation();
+                const textareaValue = textarea.value.trim();
+                
+                if (!textareaValue) {
+                    alert('Preencha o texto antes de enviar!');
+                    return;
+                }
+                
+                // ✅ Atualiza o dia nos dados mockados
+                const diaObj = s.dias.find(d => d.dia === dia);
+                if (diaObj) {
+                    diaObj.justificacao = textareaValue;
+                    diaObj.justificado = true;
+                }
+                
                 alert('Justificativa enviada com sucesso!');
+                
+                // Remove o campo de justificativa após enviar
+                block.remove();
+                iconRef.classList.remove('active');
+                
+                // Re-renderiza a visualização
+                setTimeout(() => {
+                    renderOverview(dadosApiMock);
+                    atualizarResumo(); // ✅ Atualiza o resumo
+                    
+                    // ✅ Clica no card da semana para atualizar instantaneamente
+                    setTimeout(() => {
+                        const weekCard = document.querySelector(`.week-card[data-semana="${s.num}"]`);
+                        if (weekCard) {
+                            weekCard.click();
+                        }
+                    }, 100);
+                }, 300);
             });
         });
     });
@@ -1728,9 +1780,47 @@ function showDetail(s, cardElement) {
         console.log('Enviando para o servidor:', payload);
 
         setTimeout(() => {
+            // ✅ ATUALIZA OS DADOS MOCKADOS
+            const semanaObj = dadosApiMock.semanas.find(sem => sem.num === s.num);
+            if (semanaObj) {
+                // Se houver justificativa semanal, marca a semana como justificada
+                if (weeklyTextarea.value.trim()) {
+                    semanaObj.justificacaoSemanal = weeklyTextarea.value.trim();
+                    semanaObj.justificada = true;
+                } else {
+                    // Se houver justificativas diárias, marca como justificadas
+                    justificativasDiarias.forEach(jd => {
+                        const diaObj = semanaObj.dias.find(d => d.dia === jd.dia);
+                        if (diaObj) {
+                            diaObj.justificacao = jd.justificativa;
+                            diaObj.justificado = true;
+                        }
+                    });
+                    
+                    // Verifica se há pelo menos 3 dias com justificativa + presenciais
+                    const diasJustificados = justificativasDiarias.length;
+                    const diasPresenciais = semanaObj.dias.filter(d => d.status === 'presencial').length;
+                    if (diasJustificados + diasPresenciais >= 3) {
+                        semanaObj.justificada = true;
+                    }
+                }
+            }
+            
             alert('Justificativas salvas com sucesso!');
             submitBtn.disabled = false;
             submitBtn.textContent = 'Salvar justificativas desta semana';
+            
+            // Re-renderiza a visualização
+            renderOverview(dadosApiMock);
+            atualizarResumo(); // ✅ Atualiza o resumo
+            
+            // ✅ Clica no card da semana para atualizar instantaneamente
+            setTimeout(() => {
+                const weekCard = document.querySelector(`.week-card[data-semana="${s.num}"]`);
+                if (weekCard) {
+                    weekCard.click();
+                }
+            }, 100);
         }, 1500);
     });
 }
@@ -1741,15 +1831,23 @@ function renderOverview(dados) {
 
     dados.semanas.forEach(s => {
 
-        // ✅ CONTADOR REAL (nunca zera)
-        const presenciais = s.dias.filter(d => d.status === 'presencial').length;
-        const remotos = s.dias.filter(d => d.status === 'remoto').length;
-        const ausentes = s.dias.filter(d => d.status === 'ausente').length;
+        // ✅ CONTADOR: dias presenciais + dias justificados contam como presenciais
+        const presenciais = s.dias.filter(d => d.status === 'presencial' || d.justificado).length;
+        const remotos = s.dias.filter(d => d.status === 'remoto' && !d.justificado).length;
+        const ausentes = s.dias.filter(d => d.status === 'ausente' && !d.justificado).length;
 
         // ✅ REGRA DE CONFORMIDADE
         let statusSemana;
 
-        if (s.justificada) {
+        if (presenciais >= 3) {
+            // Se tem 3 ou mais dias presenciais/justificados, está em conformidade
+            statusSemana = {
+                class: 'week-ok',
+                label: 'Em conformidade',
+                cor: 'var(--verde)'
+            };
+        } else if (s.justificada) {
+            // Se não tem 3 dias presenciais mas tem justificativa, mostra azul
             statusSemana = {
                 class: 'week-justificada',
                 label: 'Inconformidade justificada',
@@ -1836,14 +1934,16 @@ function updateJustificadoStatus(cardElement, s) {
 function atualizarResumo() {
     const dados = dadosApiMock;
 
-    const nc = dados.semanas.filter(
-        s => s.dias.filter(d => d.status === 'presencial').length < 3
-    ).length;
+    // ✅ Conta semanas que exigem justificativa: presenciais + justificados < 3 E não foi justificada
+    const nc = dados.semanas.filter(s => {
+        const presenciais = s.dias.filter(d => d.status === 'presencial' || d.justificado).length;
+        return presenciais < 3 && !s.justificada;
+    }).length;
 
-    const total = dados.semanas.reduce(
-        (sum, s) => sum + s.dias.filter(d => d.status === 'presencial').length,
-        0
-    );
+    // ✅ Total de dias presenciais + justificados
+    const total = dados.semanas.reduce((sum, s) => {
+        return sum + s.dias.filter(d => d.status === 'presencial' || d.justificado).length;
+    }, 0);
 
     const nome = colaboradorSelecionado || 'Colaborador não identificado';
 

@@ -213,28 +213,29 @@
                 <!-- Histórico Gestor -->
                 <div id="historico-presenca" class="page-view">
                     <div class="section-title">Histórico Semanal de Presença</div>
-                    <div class="filter-group">
-                        <label>Colaborador</label>
-                        <select class="filter-select" id="employeeFilter">
-                            <option value="">Selecione</option>
-                            <option value="luiz">Luiz Silva</option>
-                            <option value="ana">Ana Souza</option>
-                        </select>
-                    </div>
-                    <div id="historico-content" style="display:none ;">
-
-                        <div class="resumo" id="resumo">
-                            Selecione um colaborador
+                    <div class="adherence-card">
+                        <div class="filter-group">
+                            <label>Colaborador</label>
+                            <select class="filter-select" id="employeeFilter">
+                                <option value="" selected disabled>Selecione</option>
+                                <option value="luiz">Luiz Silva</option>
+                                <option value="ana">Ana Souza</option>
+                            </select>
                         </div>
+                        <div id="historico-content" style="display:none ;">
 
-                        <div class="overview" id="overview"></div>
+                            <div class="resumo" id="resumo">
+                                Selecione um colaborador
+                            </div>
 
-                        <div id="detail-panel">
-                            <div class="detail-content" id="detail-content"></div>
+                            <div class="overview" id="overview"></div>
+
+                            <div id="detail-panel">
+                                <div class="detail-content" id="detail-content"></div>
+                            </div>
+
                         </div>
-
                     </div>
-
                 </div>
 
                 <!-- Painel de Aderência RH -->
@@ -602,7 +603,7 @@
                                     </div>
 
                                     <!-- Análise Consolidada movida aqui (somente RH) -->
-                                     <h2>Visão Corporativa</h2>
+                                    <h2>Visão Corporativa</h2>
                                     <div class="adherence-card">
                                         <div class="section-title">Análise Consolidada</div>
                                         <div class="kpi-summary" id="kpiSummaryRh">
@@ -661,7 +662,7 @@
                             <div id="relatorios-gestor" class="page-view">
                                 <div class="section-title">Relatórios - Evolução da Equipe</div>
 
-                                                                <!-- Estatísticas da Equipe -->
+                                <!-- Estatísticas da Equipe -->
                                 <div class="adherence-card">
                                     <div class="section-title">Resumo Estatístico da Equipe</div>
                                     <div
