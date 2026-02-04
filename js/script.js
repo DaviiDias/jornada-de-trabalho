@@ -603,11 +603,16 @@ function initGestorDatePicker() {
     const filterBtn = document.getElementById('filterBtnGestor');
     if (filterBtn) {
         filterBtn.addEventListener('click', () => {
-            const startValue = pickersGestor.startGestor.input.value || 'Não selecionado';
-            const endValue = pickersGestor.endGestor.input.value || 'Não selecionado';
+            const startValue = pickersGestor.startGestor.input.value;
+            const endValue = pickersGestor.endGestor.input.value;
             
-            console.log('Filtro aplicado:', { inicio: startValue, fim: endValue });
-            alert(`Período selecionado:\nInício: ${startValue}\nFim: ${endValue}\n\n(Aqui você pode aplicar o filtro nos dados)`);
+            if (!startValue || !endValue) {
+                alert('Por favor, selecione o período inicial e final.');
+                return;
+            }
+
+            // Aplicar filtro nos dados mockados
+            aplicarFiltroRelatorios(startValue, endValue);
         });
     }
 
@@ -695,6 +700,133 @@ function confirmSelectionGestor(pickerName) {
         const formattedDate = `${MONTH_ABBREVIATIONS_GESTOR[picker.selectedMonth]}/${picker.selectedYear}`;
         picker.input.value = formattedDate;
         closeCalendarGestor(pickerName);
+    }
+}
+
+// ===============================
+// FILTRO DE DADOS - RELATÓRIOS GESTOR
+// ===============================
+
+// Função para converter string de data "Abr/2025" para objeto Date
+function parseMonthYear(dateStr) {
+    try {
+        const [monthAbbr, year] = dateStr.split('/');
+        const monthIndex = MONTH_ABBREVIATIONS_GESTOR.indexOf(monthAbbr);
+        
+        if (monthIndex === -1) {
+            console.error('Mês não encontrado:', monthAbbr);
+            return null;
+        }
+        
+        return new Date(parseInt(year), monthIndex, 1);
+    } catch (error) {
+        console.error('Erro ao parsear data:', dateStr, error);
+        return null;
+    }
+}
+
+// Função para aplicar filtro nos dados e redesenhar gráficos
+function aplicarFiltroRelatorios(dataInicio, dataFim) {
+    console.log('🔍 Iniciando filtro:', { dataInicio, dataFim });
+    
+    try {
+        const dataInicioObj = parseMonthYear(dataInicio);
+        const dataFimObj = parseMonthYear(dataFim);
+
+        if (!dataInicioObj || !dataFimObj) {
+            alert('Erro ao processar as datas. Verifique o formato.');
+            return;
+        }
+
+        if (dataInicioObj > dataFimObj) {
+            alert('A data inicial deve ser anterior à data final!');
+            return;
+        }
+
+        // Filtrar os dados mockados
+        const mesesFiltrados = [];
+        const mediaFiltrada = [];
+        const colaboradoresDados = mockColaboradoresCompleto.map(col => ({
+            nome: col.nome,
+            dados: []
+        }));
+
+        console.log('📊 Processando dados mockados...');
+        console.log('Total de meses disponíveis:', mockDadosEvolucaoCompleto.meses.length);
+
+        mockDadosEvolucaoCompleto.meses.forEach((mes, index) => {
+            const dataAtual = parseMonthYear(mes);
+            
+            if (dataAtual && dataAtual >= dataInicioObj && dataAtual <= dataFimObj) {
+                mesesFiltrados.push(mes);
+                mediaFiltrada.push(mockDadosEvolucaoCompleto.mediaEquipe[index]);
+                
+                // Adicionar dados dos colaboradores
+                mockColaboradoresCompleto.forEach((col, colIndex) => {
+                    colaboradoresDados[colIndex].dados.push(col.dados[index]);
+                });
+            }
+        });
+
+        console.log('✅ Meses filtrados:', mesesFiltrados);
+
+        if (mesesFiltrados.length === 0) {
+            alert('Nenhum dado encontrado para o período selecionado!');
+            return;
+        }
+
+        // Atualizar dados filtrados
+        dadosEvolucaoFiltrados = {
+            meses: mesesFiltrados,
+            mediaEquipe: mediaFiltrada
+        };
+
+        // Calcular média do período para cada colaborador
+        colaboradoresFiltrados = colaboradoresDados.map(col => {
+            const media = col.dados.reduce((a, b) => a + b, 0) / col.dados.length;
+            return {
+                nome: col.nome,
+                aderencia: Math.round(media)
+            };
+        });
+
+        console.log('📈 Dados filtrados preparados:', {
+            meses: dadosEvolucaoFiltrados.meses,
+            colaboradores: colaboradoresFiltrados
+        });
+
+        // Atualizar estatísticas
+        console.log('📊 Atualizando estatísticas...');
+        atualizarEstatisticasEquipe();
+
+        // Redesenhar gráficos
+        console.log('🎨 Redesenhando gráficos...');
+        setTimeout(() => {
+            try {
+                desenharGraficoEvolucao();
+                desenharGraficoComparativo();
+                console.log('✅ Gráficos redesenhados com sucesso!');
+            } catch (graphError) {
+                console.error('❌ Erro ao desenhar gráficos:', graphError);
+                alert('Erro ao desenhar os gráficos. Verifique o console para mais detalhes.');
+            }
+        }, 100);
+
+        // Mostrar mensagem de sucesso
+        const infoMsg = document.createElement('div');
+        infoMsg.style.cssText = 'position: fixed; top: 20px; right: 20px; background: #107c10; color: white; padding: 15px 25px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); z-index: 1000; animation: slideIn 0.3s ease;';
+        infoMsg.innerHTML = `<strong>✓ Filtro aplicado!</strong><br>Período: ${dataInicio} até ${dataFim}<br>${mesesFiltrados.length} ${mesesFiltrados.length === 1 ? 'mês' : 'meses'} encontrado${mesesFiltrados.length === 1 ? '' : 's'}`;
+        document.body.appendChild(infoMsg);
+        
+        setTimeout(() => {
+            infoMsg.style.animation = 'slideOut 0.3s ease';
+            setTimeout(() => infoMsg.remove(), 300);
+        }, 3000);
+
+    } catch (error) {
+        console.error('❌ Erro ao aplicar filtro:', error);
+        console.error('Stack trace:', error.stack);
+        alert('Erro ao processar o filtro: ' + error.message);
     }
 }
 
@@ -2589,24 +2721,57 @@ atualizarResumo();
 // GRÁFICOS RELATÓRIOS GESTOR
 // ===============================
 
-// Mock de dados de aderência mensal por colaborador
-const mockDadosEvolucao = {
-    meses: ['Outubro', 'Novembro', 'Dezembro', 'Janeiro'],
-    mediaEquipe: [78, 81, 79, 82]
+// Mock de dados COMPLETO de aderência mensal (12 meses) por colaborador
+const mockDadosEvolucaoCompleto = {
+    meses: ['Jan/2025', 'Fev/2025', 'Mar/2025', 'Abr/2025', 'Mai/2025', 'Jun/2025', 
+            'Jul/2025', 'Ago/2025', 'Set/2025', 'Out/2025', 'Nov/2025', 'Dez/2025',
+            'Jan/2026', 'Fev/2026'],
+    mediaEquipe: [75, 77, 76, 78, 80, 79, 81, 78, 82, 78, 81, 79, 82, 85]
 };
 
-const mockColaboradores = [
-    { nome: 'João Silva', aderencia: 88 },
-    { nome: 'Maria Santos', aderencia: 92 },
-    { nome: 'Pedro Alves', aderencia: 75 },
-    { nome: 'Ana Costa', aderencia: 85 },
-    { nome: 'Carlos Souza', aderencia: 79 }
+const mockColaboradoresCompleto = [
+    { 
+        nome: 'João Silva', 
+        dados: [85, 87, 86, 88, 90, 89, 91, 88, 92, 88, 91, 89, 92, 95]
+    },
+    { 
+        nome: 'Maria Santos', 
+        dados: [90, 92, 91, 93, 95, 94, 96, 93, 97, 92, 95, 93, 96, 98]
+    },
+    { 
+        nome: 'Pedro Alves', 
+        dados: [70, 72, 71, 73, 75, 74, 76, 73, 77, 75, 78, 76, 79, 82]
+    },
+    { 
+        nome: 'Ana Costa', 
+        dados: [82, 84, 83, 85, 87, 86, 88, 85, 89, 85, 88, 86, 89, 92]
+    },
+    { 
+        nome: 'Carlos Souza', 
+        dados: [76, 78, 77, 79, 81, 80, 82, 79, 83, 79, 82, 80, 83, 86]
+    }
 ];
+
+// Dados filtrados (inicialmente mostram os últimos 4 meses)
+let dadosEvolucaoFiltrados = {
+    meses: mockDadosEvolucaoCompleto.meses.slice(-4),
+    mediaEquipe: mockDadosEvolucaoCompleto.mediaEquipe.slice(-4)
+};
+
+let colaboradoresFiltrados = mockColaboradoresCompleto.map(col => ({
+    nome: col.nome,
+    aderencia: col.dados[col.dados.length - 1] // Último mês
+}));
 
 // Função para desenhar gráfico de evolução (linha)
 function desenharGraficoEvolucao() {
+    console.log('🎨 Iniciando desenho do gráfico de evolução...');
+    
     const canvas = document.getElementById('evolucaoChart');
-    if (!canvas) return;
+    if (!canvas) {
+        console.warn('⚠️ Canvas evolucaoChart não encontrado!');
+        return;
+    }
 
     const ctx = canvas.getContext('2d');
     
@@ -2617,8 +2782,19 @@ function desenharGraficoEvolucao() {
     canvas.width = containerWidth;
     canvas.height = containerHeight;
 
-    const meses = mockDadosEvolucao.meses;
-    const dados = mockDadosEvolucao.mediaEquipe;
+    const meses = dadosEvolucaoFiltrados.meses;
+    const dados = dadosEvolucaoFiltrados.mediaEquipe;
+
+    console.log('📊 Dados do gráfico:', { meses, dados });
+
+    if (!meses || meses.length === 0) {
+        console.warn('⚠️ Sem dados para desenhar o gráfico!');
+        ctx.fillStyle = '#333';
+        ctx.font = '16px Arial';
+        ctx.textAlign = 'center';
+        ctx.fillText('Nenhum dado disponível', canvas.width / 2, canvas.height / 2);
+        return;
+    }
 
     const padding = 50;
     const width = canvas.width - (padding * 2);
@@ -2643,7 +2819,7 @@ function desenharGraficoEvolucao() {
 
     // Escala
     const maxValor = 100;
-    const stepX = width / (meses.length - 1);
+    const stepX = meses.length > 1 ? width / (meses.length - 1) : width / 2;
     const stepY = height / maxValor;
 
     // Desenhar grid e labels
@@ -2695,8 +2871,13 @@ function desenharGraficoEvolucao() {
 
 // Função para desenhar gráfico comparativo (barras)
 function desenharGraficoComparativo() {
+    console.log('🎨 Iniciando desenho do gráfico comparativo...');
+    
     const canvas = document.getElementById('comparativoChart');
-    if (!canvas) return;
+    if (!canvas) {
+        console.warn('⚠️ Canvas comparativoChart não encontrado!');
+        return;
+    }
 
     const ctx = canvas.getContext('2d');
     
@@ -2707,8 +2888,20 @@ function desenharGraficoComparativo() {
     canvas.width = containerWidth;
     canvas.height = containerHeight;
 
-    const colaboradores = mockColaboradores;
-    const padding = 50;
+    const colaboradores = colaboradoresFiltrados;
+
+    console.log('📊 Colaboradores:', colaboradores);
+
+    if (!colaboradores || colaboradores.length === 0) {
+        console.warn('⚠️ Sem colaboradores para desenhar o gráfico!');
+        ctx.fillStyle = '#333';
+        ctx.font = '16px Arial';
+        ctx.textAlign = 'center';
+        ctx.fillText('Nenhum dado disponível', canvas.width / 2, canvas.height / 2);
+        return;
+    }
+
+    const padding = 60;
     const width = canvas.width - (padding * 2);
     const height = canvas.height - (padding * 2);
 
@@ -2731,7 +2924,7 @@ function desenharGraficoComparativo() {
 
     // Escala
     const maxValor = 100;
-    const stepX = width / colaboradores.length;
+    const stepX = width / colaboradoresFiltrados.length;
     const stepY = height / maxValor;
     const barWidth = (stepX * 0.6);
 
@@ -2746,7 +2939,7 @@ function desenharGraficoComparativo() {
 
     // Desenhar barras
     ctx.textAlign = 'center';
-    colaboradores.forEach((colab, i) => {
+    colaboradoresFiltrados.forEach((colab, i) => {
         const x = padding + (i * stepX) + (stepX / 2);
         const barHeight = colab.aderencia * stepY;
         const y = canvas.height - padding - barHeight;
@@ -2774,9 +2967,17 @@ function desenharGraficoComparativo() {
 
 // Função para atualizar estatísticas
 function atualizarEstatisticasEquipe() {
-    const media = Math.round(mockColaboradores.reduce((s, c) => s + c.aderencia, 0) / mockColaboradores.length);
-    const melhor = mockColaboradores.reduce((prev, curr) => (prev.aderencia > curr.aderencia ? prev : curr));
-    const pior = mockColaboradores.reduce((prev, curr) => (prev.aderencia < curr.aderencia ? prev : curr));
+    console.log('📊 Atualizando estatísticas da equipe...');
+    console.log('Colaboradores filtrados:', colaboradoresFiltrados);
+    
+    if (!colaboradoresFiltrados || colaboradoresFiltrados.length === 0) {
+        console.warn('⚠️ Sem dados de colaboradores para calcular estatísticas!');
+        return;
+    }
+
+    const media = Math.round(colaboradoresFiltrados.reduce((s, c) => s + c.aderencia, 0) / colaboradoresFiltrados.length);
+    const melhor = colaboradoresFiltrados.reduce((prev, curr) => (prev.aderencia > curr.aderencia ? prev : curr));
+    const pior = colaboradoresFiltrados.reduce((prev, curr) => (prev.aderencia < curr.aderencia ? prev : curr));
 
     const elMedia = document.getElementById('mediaAdereciaEquipe');
     const elMelhor = document.getElementById('melhorPerformer');
@@ -2786,7 +2987,9 @@ function atualizarEstatisticasEquipe() {
     if (elMedia) elMedia.textContent = media + '%';
     if (elMelhor) elMelhor.textContent = melhor.nome + ' (' + melhor.aderencia + '%)';
     if (elPior) elPior.textContent = pior.nome + ' (' + pior.aderencia + '%)';
-    if (elTotal) elTotal.textContent = mockColaboradores.length;
+    if (elTotal) elTotal.textContent = colaboradoresFiltrados.length;
+    
+    console.log('✅ Estatísticas atualizadas:', { media, melhor: melhor.nome, pior: pior.nome });
 }
 
 // Inicializar gráficos quando a página carregar ou mudar para relatórios-gestor
