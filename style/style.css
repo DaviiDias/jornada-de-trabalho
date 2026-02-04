@@ -1656,6 +1656,13 @@ td.department {
     min-width: 140px;
 }
 
+.badge-nao-conforme {
+    background-color: #ffebee;
+    color: #c62828;
+    font-weight: 600;
+    min-width: 140px;
+}
+
 .badge-analise {
     background-color: #fff3e0;
     color: #e65100;
@@ -2103,6 +2110,165 @@ td.department {
     margin-top: 20px;
     flex-wrap: wrap;
 }
+
+/* ===== DATE PICKER GESTOR ===== */
+.date-picker-group-gestor {
+    display: flex;
+    gap: 15px;
+    align-items: flex-end;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+.date-picker-wrapper-gestor {
+    flex: 1;
+    min-width: 200px;
+    position: relative;
+}
+
+.date-picker-wrapper-gestor label {
+    display: block;
+    color: #555;
+    font-weight: 600;
+    margin-bottom: 8px;
+    font-size: 14px;
+}
+
+.date-picker-input-gestor {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #ddd;
+    border-radius: 6px;
+    font-size: 16px;
+    cursor: pointer;
+    background: white;
+    transition: border-color 0.3s ease;
+}
+
+.date-picker-input-gestor:hover {
+    border-color: #0597F2;
+}
+
+.date-picker-input-gestor:focus {
+    outline: none;
+    border-color: #0597F2;
+    box-shadow: 0 0 0 3px rgba(5, 151, 242, 0.1);
+}
+
+/* Dropdown Calendar Styles para Gestor */
+.calendar-dropdown-gestor {
+    display: none;
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;
+    background: white;
+    border: 2px solid #0597F2;
+    border-radius: 8px;
+    padding: 15px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+    z-index: 100;
+    min-width: 280px;
+    animation: slideDownGestor 0.2s ease;
+}
+
+.calendar-dropdown-gestor.active {
+    display: block;
+}
+
+@keyframes slideDownGestor {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.dropdown-header-gestor {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.dropdown-header-gestor button {
+    background: #0597F2;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background 0.2s ease;
+}
+
+.dropdown-header-gestor button:hover {
+    background: #0478c7;
+}
+
+.dropdown-header-gestor h3 {
+    color: #333;
+    font-size: 14px;
+    flex: 1;
+    text-align: center;
+    margin: 0;
+}
+
+.dropdown-months-gestor {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 6px;
+}
+
+.dropdown-month-btn-gestor {
+    padding: 8px;
+    border: 2px solid #ddd;
+    background: white;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 600;
+    color: #555;
+    transition: all 0.2s ease;
+}
+
+.dropdown-month-btn-gestor:hover {
+    border-color: #0597F2;
+    color: #0597F2;
+}
+
+.dropdown-month-btn-gestor.active {
+    background: #0597F2;
+    color: white;
+    border-color: #0597F2;
+}
+
+.filter-btn-gestor {
+    padding: 12px 24px;
+    background: #0597F2;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    align-self: flex-end;
+}
+
+.filter-btn-gestor:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(5, 151, 242, 0.3);
+    background: #0478c7;
+}
+
+.filter-btn-gestor:active {
+    transform: translateY(0);
+}
+
+/* ===== FIM DATE PICKER GESTOR ===== */
 
 .chart-canvas-wrapper {
     flex: 1;

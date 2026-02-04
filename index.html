@@ -492,24 +492,24 @@
                                     <h2>Visão meus Colaboradores</h2>
 
                                     <div class="gestor-section">
-                                        <div class="section-title">Ocorrências e não Conformidades da Equipe</div>
+                                        <div class="section-title">Semanas Não Conformes Pendentes</div>
 
+                                        <!-- 🚩 FEATURE FLAG: tabelaOcorrenciasSimplificada -->
                                         <div class="team-table-container">
                                             <table class="team-table">
                                                 <thead>
                                                     <tr>
-                                                        <th>Data</th>
                                                         <th>Colaborador</th>
-                                                        <th>Tipo</th>
-                                                        <th>Descrição</th>
-                                                        <th>Gravidade</th>
+                                                        <th>Semana</th>
                                                         <th>Status</th>
+                                                        <th>Justificativa</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody id="teamTableBody">
                                                 </tbody>
                                             </table>
                                         </div>
+                                        <!-- 🚩 FIM FEATURE FLAG -->
                                     </div>
                                 </div>
                             </div>
@@ -589,24 +589,24 @@
                                     <!-- Seção Equipe -->
                                     <h2>Visão da Equipe</h2>
                                     <div class="gestor-section">
-                                        <div class="section-title">Ocorrências e não Conformidades da Equipe</div>
+                                        <div class="section-title">Semanas Não Conformes Pendentes</div>
 
+                                        <!-- 🚩 FEATURE FLAG: tabelaOcorrenciasSimplificada -->
                                         <div class="team-table-container">
                                             <table class="team-table">
                                                 <thead>
                                                     <tr>
-                                                        <th>Data</th>
                                                         <th>Colaborador</th>
-                                                        <th>Tipo</th>
-                                                        <th>Descrição</th>
-                                                        <th>Gravidade</th>
+                                                        <th>Semana</th>
                                                         <th>Status</th>
+                                                        <th>Justificativa</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody id="teamTableBodyRh">
                                                 </tbody>
                                             </table>
                                         </div>
+                                        <!-- 🚩 FIM FEATURE FLAG -->
                                     </div>
 
                                     <!-- Análise Consolidada movida aqui (somente RH) -->
@@ -668,6 +668,52 @@
                             <!-- Relatórios Gestor -->
                             <div id="relatorios-gestor" class="page-view">
                                 <div class="section-title">Relatórios - Evolução da Equipe</div>
+
+                                <!-- Filtro de Período -->
+                                <div class="adherence-card">
+                                    <div class="section-title">Filtrar Período de Análise</div>
+                                    <div class="date-picker-group-gestor">
+                                        <div class="date-picker-wrapper-gestor">
+                                            <label for="startDateGestor">Data Inicial</label>
+                                            <input 
+                                                type="text" 
+                                                id="startDateGestor" 
+                                                class="date-picker-input-gestor" 
+                                                placeholder="Selecione mês-ano"
+                                                readonly
+                                            >
+                                            <div class="calendar-dropdown-gestor" id="calendarStartGestor">
+                                                <div class="dropdown-header-gestor">
+                                                    <button class="prev-year-btn-gestor" data-picker="startGestor">&lt;</button>
+                                                    <h3 class="year-display-gestor" data-picker="startGestor"></h3>
+                                                    <button class="next-year-btn-gestor" data-picker="startGestor">&gt;</button>
+                                                </div>
+                                                <div class="dropdown-months-gestor" id="monthsStartGestor"></div>
+                                            </div>
+                                        </div>
+
+                                        <div class="date-picker-wrapper-gestor">
+                                            <label for="endDateGestor">Data Final</label>
+                                            <input 
+                                                type="text" 
+                                                id="endDateGestor" 
+                                                class="date-picker-input-gestor" 
+                                                placeholder="Selecione mês-ano"
+                                                readonly
+                                            >
+                                            <div class="calendar-dropdown-gestor" id="calendarEndGestor">
+                                                <div class="dropdown-header-gestor">
+                                                    <button class="prev-year-btn-gestor" data-picker="endGestor">&lt;</button>
+                                                    <h3 class="year-display-gestor" data-picker="endGestor"></h3>
+                                                    <button class="next-year-btn-gestor" data-picker="endGestor">&gt;</button>
+                                                </div>
+                                                <div class="dropdown-months-gestor" id="monthsEndGestor"></div>
+                                            </div>
+                                        </div>
+
+                                        <button class="filter-btn-gestor" id="filterBtnGestor">Aplicar Filtro</button>
+                                    </div>
+                                </div>
 
                                 <!-- Estatísticas da Equipe -->
                                 <div class="adherence-card">

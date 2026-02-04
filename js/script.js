@@ -23,6 +23,7 @@ const featureFlags = {
     // Funcionalidades Específicas
     dashboardPresencaSemanal: false,        // Cards de presença semanal (4 cards: presença, sede, home office, dias restantes)
     conformidadeFormatoSimplificado: true,  // Novo formato X/5 com farol verde (true = novo formato | false = formato antigo 3x2)
+    tabelaOcorrenciasSimplificada: true,   // Tabela simplificada: Colaborador | Semana | Status | Justificativa (apenas não conformes)
     calendarioFerias: false,                // Calendário de seleção de férias
     graficosGestor: true,                   // Gráficos no dashboard do gestor
     justificacaoSemanal: true,              // Sistema de justificação semanal
@@ -528,7 +529,178 @@ document.addEventListener('DOMContentLoaded', () => {
     if (isFeatureEnabled('calendarioFerias')) {
         generateCalendar();
     }
+
+    // Inicializar Date Picker do Gestor
+    initGestorDatePicker();
 });
+
+
+// ===============================
+// DATE PICKER GESTOR - RELATÓRIOS
+// ===============================
+const MONTHS_GESTOR = [
+    'Janeiro', 'Fevereiro', 'Março', 'Abril',
+    'Maio', 'Junho', 'Julho', 'Agosto',
+    'Setembro', 'Outubro', 'Novembro', 'Dezembro'
+];
+
+const MONTH_ABBREVIATIONS_GESTOR = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
+
+const pickersGestor = {
+    startGestor: {
+        input: null,
+        calendar: null,
+        selectedMonth: null,
+        selectedYear: null,
+        currentYear: new Date().getFullYear()
+    },
+    endGestor: {
+        input: null,
+        calendar: null,
+        selectedMonth: null,
+        selectedYear: null,
+        currentYear: new Date().getFullYear()
+    }
+};
+
+// Inicializar Date Picker do Gestor
+function initGestorDatePicker() {
+    // Verificar se os elementos existem
+    const startInput = document.getElementById('startDateGestor');
+    const endInput = document.getElementById('endDateGestor');
+    
+    if (!startInput || !endInput) {
+        return; // Elementos não encontrados, sair silenciosamente
+    }
+
+    pickersGestor.startGestor.input = startInput;
+    pickersGestor.startGestor.calendar = document.getElementById('calendarStartGestor');
+    pickersGestor.endGestor.input = endInput;
+    pickersGestor.endGestor.calendar = document.getElementById('calendarEndGestor');
+
+    // Event listeners para abrir calendários
+    pickersGestor.startGestor.input.addEventListener('click', () => toggleCalendarGestor('startGestor'));
+    pickersGestor.endGestor.input.addEventListener('click', () => toggleCalendarGestor('endGestor'));
+
+    // Event listeners para navegação de anos
+    document.querySelectorAll('.prev-year-btn-gestor').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const picker = e.target.dataset.picker;
+            changeYearGestor(picker, -1);
+        });
+    });
+
+    document.querySelectorAll('.next-year-btn-gestor').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const picker = e.target.dataset.picker;
+            changeYearGestor(picker, 1);
+        });
+    });
+
+    // Botão Aplicar Filtro
+    const filterBtn = document.getElementById('filterBtnGestor');
+    if (filterBtn) {
+        filterBtn.addEventListener('click', () => {
+            const startValue = pickersGestor.startGestor.input.value || 'Não selecionado';
+            const endValue = pickersGestor.endGestor.input.value || 'Não selecionado';
+            
+            console.log('Filtro aplicado:', { inicio: startValue, fim: endValue });
+            alert(`Período selecionado:\nInício: ${startValue}\nFim: ${endValue}\n\n(Aqui você pode aplicar o filtro nos dados)`);
+        });
+    }
+
+    // Fechar calendário ao clicar fora
+    document.addEventListener('click', (e) => {
+        if (!e.target.closest('.date-picker-wrapper-gestor')) {
+            closeCalendarGestor('startGestor');
+            closeCalendarGestor('endGestor');
+        }
+    });
+
+    // Renderizar calendários
+    renderCalendarGestor('startGestor');
+    renderCalendarGestor('endGestor');
+}
+
+function toggleCalendarGestor(pickerName) {
+    const calendar = pickersGestor[pickerName].calendar;
+    
+    // Fechar o outro calendário
+    const otherPicker = pickerName === 'startGestor' ? 'endGestor' : 'startGestor';
+    closeCalendarGestor(otherPicker);
+
+    // Carregar seleção anterior se existir
+    const input = pickersGestor[pickerName].input;
+    if (input.value) {
+        const parts = input.value.split('/');
+        const monthIndex = MONTH_ABBREVIATIONS_GESTOR.indexOf(parts[0]);
+        pickersGestor[pickerName].selectedMonth = monthIndex;
+        pickersGestor[pickerName].selectedYear = parseInt(parts[1]);
+        pickersGestor[pickerName].currentYear = pickersGestor[pickerName].selectedYear;
+    }
+
+    // Alternar classe ativa
+    calendar.classList.toggle('active');
+    renderCalendarGestor(pickerName);
+}
+
+function closeCalendarGestor(pickerName) {
+    if (pickersGestor[pickerName] && pickersGestor[pickerName].calendar) {
+        pickersGestor[pickerName].calendar.classList.remove('active');
+    }
+}
+
+function renderCalendarGestor(pickerName) {
+    const picker = pickersGestor[pickerName];
+    if (!picker || !picker.calendar) return;
+
+    const yearDisplay = picker.calendar.querySelector('.year-display-gestor');
+    const monthsContainer = picker.calendar.querySelector('.dropdown-months-gestor');
+
+    if (!yearDisplay || !monthsContainer) return;
+
+    yearDisplay.textContent = picker.currentYear;
+    monthsContainer.innerHTML = '';
+
+    MONTHS_GESTOR.forEach((month, index) => {
+        const btn = document.createElement('button');
+        btn.className = 'dropdown-month-btn-gestor';
+        btn.textContent = MONTH_ABBREVIATIONS_GESTOR[index];
+
+        if (picker.selectedMonth === index && picker.selectedYear === picker.currentYear) {
+            btn.classList.add('active');
+        }
+
+        btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            picker.selectedMonth = index;
+            picker.selectedYear = picker.currentYear;
+            confirmSelectionGestor(pickerName);
+        });
+
+        monthsContainer.appendChild(btn);
+    });
+}
+
+function changeYearGestor(pickerName, direction) {
+    pickersGestor[pickerName].currentYear += direction;
+    renderCalendarGestor(pickerName);
+}
+
+function confirmSelectionGestor(pickerName) {
+    const picker = pickersGestor[pickerName];
+    if (picker.selectedMonth !== null && picker.selectedYear !== null) {
+        const formattedDate = `${MONTH_ABBREVIATIONS_GESTOR[picker.selectedMonth]}/${picker.selectedYear}`;
+        picker.input.value = formattedDate;
+        closeCalendarGestor(pickerName);
+    }
+}
+
+// ===============================
+// FIM DATE PICKER GESTOR
+// ===============================
 
 
 // ===============================
@@ -805,6 +977,34 @@ const mockOcorrenciasEquipe = [
         descricao: "Chegada \u00e0s 10:15",
         gravidade: "BAIXA",
         status: "EM AN\u00c1LISE"
+    }
+];
+
+// \ud83d\udea9 DADOS SIMPLIFICADOS: Semanas n\u00e3o conformes com justificativa pendente
+const mockSemanasNaoConformesSimplificado = [
+    {
+        colaborador: "Maria Santos",
+        semana: "JAN 3",
+        status: "N\u00e3o Conforme",
+        justificativa: "Pendente"
+    },
+    {
+        colaborador: "Maria Santos",
+        semana: "JAN 4",
+        status: "N\u00e3o Conforme",
+        justificativa: "Pendente"
+    },
+    {
+        colaborador: "Pedro Alves",
+        semana: "JAN 2",
+        status: "N\u00e3o Conforme",
+        justificativa: "Pendente"
+    },
+    {
+        colaborador: "Carlos Silva",
+        semana: "FEV 1",
+        status: "N\u00e3o Conforme",
+        justificativa: "Pendente"
     }
 ];
 
@@ -1454,7 +1654,31 @@ async function toggleGestoresExpansion(departamento, data, rowIndex) {
 
 
 
-// Função para renderizar tabela de Ocorrências e não Conformidades
+// Função para renderizar tabela simplificada de Semanas Não Conformes
+function renderTabelaSemanasNaoConformes(data) {
+    const tbody = document.getElementById('teamTableBody');
+    const tbodyRh = document.getElementById('teamTableBodyRh');
+    
+    if (!tbody && !tbodyRh) return;
+    
+    let html = '';
+    
+    data.forEach(item => {
+        html += `
+            <tr>
+                <td class="department">${item.colaborador}</td>
+                <td class="department">${item.semana}</td>
+                <td><span class="badge badge-nao-conforme">Não Conforme</span></td>
+                <td><span class="badge badge-pendente">${item.justificativa}</span></td>
+            </tr>
+        `;
+    });
+    
+    if (tbody) tbody.innerHTML = html;
+    if (tbodyRh) tbodyRh.innerHTML = html;
+}
+
+// Função para renderizar tabela de Ocorrências (formato antigo)
 function renderOcorrenciasEquipe(data) {
     // Renderiza na tabela do Gestor
     const tbody = document.getElementById('teamTableBody');
@@ -1526,7 +1750,13 @@ renderRelatorioEmpresa(mockRelatorioEmpresa);
 renderRelatorioAderenciaAreas(mockRelatorioAderenciaAreas);
 renderRelatorioJustificativas(mockRelatorioJustificativas);
 renderRelatorioStatusJustificativas(mockRelatorioStatusJustificativas);
-renderOcorrenciasEquipe(mockOcorrenciasEquipe);
+
+// 🚩 Renderiza tabela simplificada ou completa baseado na Feature Flag
+if (isFeatureEnabled('tabelaOcorrenciasSimplificada')) {
+    renderTabelaSemanasNaoConformes(mockSemanasNaoConformesSimplificado);
+} else {
+    renderOcorrenciasEquipe(mockOcorrenciasEquipe);
+}
 
 // Renderiza KPIs e análise consolidada na aba Relatórios
 function renderRelatorioKPIs(data, gestoresPorDept) {
