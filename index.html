@@ -156,7 +156,9 @@
                         <div class="section-title">Aderência Semanal</div>
                         <div class="status-badge status-conformidade" id="statusBadge">Em conformidade</div>
 
-                        <div class="adherence-grid">
+                        <!-- 🚩 FEATURE FLAG: dashboardPresencaSemanal -->
+                        <!-- Cards de presença semanal - controlado por Feature Flag -->
+                        <div class="adherence-grid" id="dashboard-presenca-semanal-cards">
                             <div class="adherence-item">
                                 <div class="adherence-label">Presença Semanal</div>
                                 <div class="adherence-value" id="presencaValue">4 dias</div>
@@ -178,25 +180,28 @@
                                 <div class="adherence-value" id="diasRestantesValue">1 dia</div>
                             </div>
                         </div>
+                        <!-- 🚩 FIM FEATURE FLAG: dashboardPresencaSemanal -->
 
-                        <!-- Conformidade 3x2 -->
+                        <!-- 🚩 FEATURE FLAG: conformidadeFormatoSimplificado -->
+                        <!-- Conformidade X/5 com barra de progresso -->
                         <div class="conformidade-section">
-                            <div class="conformidade-title">Conformidade 3x2 (3 Presenciais + 2 Remotos)</div>
+                            <div class="conformidade-title">Dias Presenciais</div>
                             <div class="conformidade-bars">
                                 <div class="conformidade-item">
                                     <div class="conformidade-label">
-                                        <span class="conformidade-text">Dias Presenciais</span>
+                                        <span class="conformidade-text">Progresso Semanal</span>
+                                        <span class="farol-icon-inline" id="farolIconInline">✅</span>
                                     </div>
                                     <div class="conformidade-progress">
                                         <div class="progress-bar">
-                                            <div class="progress-fill presenciais-fill" style="width: 67%;"></div>
+                                            <div class="progress-fill presenciais-fill" id="progressFill" style="width: 60%;"></div>
                                         </div>
-                                        <span class="conformidade-counter" id="presenciaisCount">2/3</span>
+                                        <span class="conformidade-counter" id="presenciaisCount">3/5</span>
                                     </div>
                                 </div>
-
                             </div>
                         </div>
+                        <!-- 🚩 FIM FEATURE FLAG -->
 
                         <div class="status-section">
                             <div class="status-container" id="statusContainer">
@@ -422,51 +427,52 @@
                                             conformidade
                                         </div>
 
-                                        <div class="adherence-grid">
-                                            <div class="adherence-item">
-                                                <div class="adherence-label">Presença Semanal</div>
-                                                <div class="adherence-value" id="presencaValueGestor">4 dias</div>
-                                                <div class="adherence-note" id="presencaNoteGestor"></div>
-                                            </div>
-
-                                            <div class="adherence-item">
-                                                <div class="adherence-label">Dias na Sede</div>
-                                                <div class="adherence-value" id="sedeValueGestor">2 dias</div>
-                                            </div>
-
-                                            <div class="adherence-item">
-                                                <div class="adherence-label">Dias em Home Office</div>
-                                                <div class="adherence-value" id="homeofficeValueGestor">2 dias</div>
-                                            </div>
-
-                                            <div class="adherence-item">
-                                                <div class="adherence-label">Dias restantes na semana</div>
-                                                <div class="adherence-value" id="diasRestantesValueGestor">1 dia</div>
-                                            </div>
+                                    <!-- 🚩 FEATURE FLAG: dashboardPresencaSemanal -->
+                                    <!-- Cards de presença semanal GESTOR - controlado por Feature Flag -->
+                                    <div class="adherence-grid" id="dashboard-presenca-semanal-cards-gestor">
+                                        <div class="adherence-item">
+                                            <div class="adherence-label">Presença Semanal</div>
+                                            <div class="adherence-value" id="presencaValueGestor">4 dias</div>
+                                            <div class="adherence-note" id="presencaNoteGestor"></div>
                                         </div>
 
-                                        <!-- Conformidade 3x2 -->
+                                        <div class="adherence-item">
+                                            <div class="adherence-label">Dias na Sede</div>
+                                            <div class="adherence-value" id="sedeValueGestor">2 dias</div>
+                                        </div>
+
+                                        <div class="adherence-item">
+                                            <div class="adherence-label">Dias em Home Office</div>
+                                            <div class="adherence-value" id="homeofficeValueGestor">2 dias</div>
+                                        </div>
+
+                                        <div class="adherence-item">
+                                            <div class="adherence-label">Dias restantes na semana</div>
+                                            <div class="adherence-value" id="diasRestantesValueGestor">1 dia</div>
+                                        </div>
+                                    </div>
+                                    <!-- 🚩 FIM FEATURE FLAG: dashboardPresencaSemanal -->
+
+                                        <!-- 🚩 FEATURE FLAG: conformidadeFormatoSimplificado -->
+                                        <!-- Conformidade X/5 com barra de progresso GESTOR -->
                                         <div class="conformidade-section">
-                                            <div class="conformidade-title">Conformidade 3x2 (3 Presenciais + 2 Remotos)
-                                            </div>
+                                            <div class="conformidade-title">Dias Presenciais</div>
                                             <div class="conformidade-bars">
                                                 <div class="conformidade-item">
                                                     <div class="conformidade-label">
-                                                        <span class="conformidade-text">Dias Presenciais</span>
+                                                        <span class="conformidade-text">Progresso Semanal</span>
+                                                        <span class="farol-icon-inline" id="farolIconInlineGestor">✅</span>
                                                     </div>
                                                     <div class="conformidade-progress">
                                                         <div class="progress-bar">
-                                                            <div class="progress-fill presenciais-fill"
-                                                                style="width: 67%;">
-                                                            </div>
+                                                            <div class="progress-fill presenciais-fill" id="progressFillGestor" style="width: 60%;"></div>
                                                         </div>
-                                                        <span class="conformidade-counter"
-                                                            id="presenciaisCountGestor">2/3</span>
+                                                        <span class="conformidade-counter" id="presenciaisCountGestor">3/5</span>
                                                     </div>
                                                 </div>
-
                                             </div>
                                         </div>
+                                        <!-- 🚩 FIM FEATURE FLAG -->
 
                                         <div class="status-section">
                                             <div class="status-container" id="statusContainerGestor">
@@ -520,51 +526,52 @@
                                         <div class="status-badge status-conformidade" id="statusBadgeRh">Em conformidade
                                         </div>
 
-                                        <div class="adherence-grid">
-                                            <div class="adherence-item">
-                                                <div class="adherence-label">Presença Semanal</div>
-                                                <div class="adherence-value" id="presencaValueRh">4 dias</div>
-                                                <div class="adherence-note" id="presencaNoteRh"></div>
-                                            </div>
-
-                                            <div class="adherence-item">
-                                                <div class="adherence-label">Dias na Sede</div>
-                                                <div class="adherence-value" id="sedeValueRh">2 dias</div>
-                                            </div>
-
-                                            <div class="adherence-item">
-                                                <div class="adherence-label">Dias em Home Office</div>
-                                                <div class="adherence-value" id="homeofficeValueRh">2 dias</div>
-                                            </div>
-
-                                            <div class="adherence-item">
-                                                <div class="adherence-label">Dias restantes na semana</div>
-                                                <div class="adherence-value" id="diasRestantesValueRh">1 dia</div>
-                                            </div>
+                                    <!-- 🚩 FEATURE FLAG: dashboardPresencaSemanal -->
+                                    <!-- Cards de presença semanal RH - controlado por Feature Flag -->
+                                    <div class="adherence-grid" id="dashboard-presenca-semanal-cards-rh">
+                                        <div class="adherence-item">
+                                            <div class="adherence-label">Presença Semanal</div>
+                                            <div class="adherence-value" id="presencaValueRh">4 dias</div>
+                                            <div class="adherence-note" id="presencaNoteRh"></div>
                                         </div>
 
-                                        <!-- Conformidade 3x2 -->
+                                        <div class="adherence-item">
+                                            <div class="adherence-label">Dias na Sede</div>
+                                            <div class="adherence-value" id="sedeValueRh">2 dias</div>
+                                        </div>
+
+                                        <div class="adherence-item">
+                                            <div class="adherence-label">Dias em Home Office</div>
+                                            <div class="adherence-value" id="homeofficeValueRh">2 dias</div>
+                                        </div>
+
+                                        <div class="adherence-item">
+                                            <div class="adherence-label">Dias restantes na semana</div>
+                                            <div class="adherence-value" id="diasRestantesValueRh">1 dia</div>
+                                        </div>
+                                    </div>
+                                    <!-- 🚩 FIM FEATURE FLAG: dashboardPresencaSemanal -->
+
+                                        <!-- 🚩 FEATURE FLAG: conformidadeFormatoSimplificado -->
+                                        <!-- Conformidade X/5 com barra de progresso RH -->
                                         <div class="conformidade-section">
-                                            <div class="conformidade-title">Conformidade 3x2 (3 Presenciais + 2 Remotos)
-                                            </div>
+                                            <div class="conformidade-title">Dias Presenciais</div>
                                             <div class="conformidade-bars">
                                                 <div class="conformidade-item">
                                                     <div class="conformidade-label">
-                                                        <span class="conformidade-text">Dias Presenciais</span>
+                                                        <span class="conformidade-text">Progresso Semanal</span>
+                                                        <span class="farol-icon-inline" id="farolIconInlineRh">✅</span>
                                                     </div>
                                                     <div class="conformidade-progress">
                                                         <div class="progress-bar">
-                                                            <div class="progress-fill presenciais-fill"
-                                                                style="width: 67%;">
-                                                            </div>
+                                                            <div class="progress-fill presenciais-fill" id="progressFillRh" style="width: 60%;"></div>
                                                         </div>
-                                                        <span class="conformidade-counter"
-                                                            id="presenciaisCountRh">2/3</span>
+                                                        <span class="conformidade-counter" id="presenciaisCountRh">3/5</span>
                                                     </div>
                                                 </div>
-
                                             </div>
                                         </div>
+                                        <!-- 🚩 FIM FEATURE FLAG -->
 
                                         <div class="status-section">
                                             <div class="status-container" id="statusContainerRh">

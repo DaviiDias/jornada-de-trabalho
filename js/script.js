@@ -1,3 +1,143 @@
+// ===============================
+// FEATURE FLAGS - Sistema de Controle de Funcionalidades
+// ===============================
+// Use estas flags para ativar/desativar funcionalidades sem remover código
+// true = ativo | false = desativado
+const featureFlags = {
+    // Menu Colaborador
+    menuPresenca: false,                    // Controle de presença do colaborador
+    menuHistorico: false,                   // Histórico de presença individual
+    menuJustificativas: false,              // Sistema de justificativas
+    menuHistoricoJustificativa: false,      // Histórico de justificativas
+    menuEspelhoFalta: false,                // Espelho de falta justificada
+    menuFerias: false,                      // Solicitação de férias
+    
+    // Menu Gestor
+    menuGestorHistorico: true,              // Histórico da equipe (gestor)
+    menuGestorRelatorios: true,             // Relatórios do gestor
+    
+    // Menu RH
+    menuRhAderencia: true,                  // Painel de aderência RH
+    menuRhRelatorios: true,                 // Relatórios RH
+    
+    // Funcionalidades Específicas
+    dashboardPresencaSemanal: false,        // Cards de presença semanal (4 cards: presença, sede, home office, dias restantes)
+    conformidadeFormatoSimplificado: true,  // Novo formato X/5 com farol verde (true = novo formato | false = formato antigo 3x2)
+    calendarioFerias: false,                // Calendário de seleção de férias
+    graficosGestor: true,                   // Gráficos no dashboard do gestor
+    justificacaoSemanal: true,              // Sistema de justificação semanal
+    alertasPendencias: true,                // Alertas de pendências no calendário
+    analiseConsolidada: true,               // Análise consolidada no RH
+    
+    // Relatórios e Dashboards
+    relatorioAderenciaAreas: true,          // Relatório de aderência por diretoria
+    relatorioJustificativas: true,          // Relatório de justificativas
+    relatorioStatusJustificativas: true,    // Status de justificativas por gestor
+    dashboardKPIs: true,                    // KPIs no dashboard RH
+    
+    // Funcionalidades Avançadas
+    expansaoGestores: true,                 // Expansão de gestores nas tabelas
+    filtroColaborador: true,                // Filtro de seleção de colaborador
+    datepicker: true,                       // Seletor de datas avançado
+};
+
+// Função auxiliar para verificar se uma feature está ativa
+function isFeatureEnabled(featureName) {
+    return featureFlags[featureName] === true;
+}
+
+// Função para aplicar as flags de visibilidade no DOM
+function applyFeatureFlags() {
+    // Menu Colaborador
+    const menuPresenca = document.querySelector('.role-employee .nav-item [data-page="presenca"]')?.closest('.nav-item');
+    const menuHistorico = document.querySelector('.role-employee .nav-item [data-page="historico-presenca"]')?.closest('.nav-item');
+    const menuJustificativas = document.querySelector('.role-employee .nav-item [data-page="justificativas"]')?.closest('.nav-item');
+    const menuHistoricoJust = document.querySelector('.role-employee .nav-item [data-page="historico-justificativa"]')?.closest('.nav-item');
+    const menuEspelhoFalta = document.querySelector('.role-employee .nav-item [data-page="falta-justificada"]')?.closest('.nav-item');
+    const menuFerias = document.querySelector('.role-employee .nav-item [data-page="ferias"]')?.closest('.nav-item');
+    
+    if (menuPresenca) menuPresenca.style.display = isFeatureEnabled('menuPresenca') ? 'block' : 'none';
+    if (menuHistorico) menuHistorico.style.display = isFeatureEnabled('menuHistorico') ? 'block' : 'none';
+    if (menuJustificativas) menuJustificativas.style.display = isFeatureEnabled('menuJustificativas') ? 'block' : 'none';
+    if (menuHistoricoJust) menuHistoricoJust.style.display = isFeatureEnabled('menuHistoricoJustificativa') ? 'block' : 'none';
+    if (menuEspelhoFalta) menuEspelhoFalta.style.display = isFeatureEnabled('menuEspelhoFalta') ? 'block' : 'none';
+    if (menuFerias) menuFerias.style.display = isFeatureEnabled('menuFerias') ? 'block' : 'none';
+    
+    // Dashboard - Cards de Presença Semanal (Colaborador, Gestor e RH)
+    const dashboardPresencaCards = document.getElementById('dashboard-presenca-semanal-cards');
+    const dashboardPresencaCardsGestor = document.getElementById('dashboard-presenca-semanal-cards-gestor');
+    const dashboardPresencaCardsRh = document.getElementById('dashboard-presenca-semanal-cards-rh');
+    
+    if (dashboardPresencaCards) {
+        dashboardPresencaCards.style.display = isFeatureEnabled('dashboardPresencaSemanal') ? 'grid' : 'none';
+    }
+    if (dashboardPresencaCardsGestor) {
+        dashboardPresencaCardsGestor.style.display = isFeatureEnabled('dashboardPresencaSemanal') ? 'grid' : 'none';
+    }
+    if (dashboardPresencaCardsRh) {
+        dashboardPresencaCardsRh.style.display = isFeatureEnabled('dashboardPresencaSemanal') ? 'grid' : 'none';
+    }
+    
+    // Lógica do Farol de Conformidade X/5
+    if (isFeatureEnabled('conformidadeFormatoSimplificado')) {
+        atualizarFarolConformidade();
+    }
+    
+    console.log('✅ Feature Flags aplicadas com sucesso!');
+    console.log('📊 Status das funcionalidades:', featureFlags);
+}
+
+// Função para atualizar o farol de conformidade (X >= 3 = verde)
+function atualizarFarolConformidade() {
+    const farolConfigs = [
+        { 
+            countId: 'presenciaisCount', 
+            farolId: 'farolIconInline',
+            progressId: 'progressFill'
+        },
+        { 
+            countId: 'presenciaisCountGestor', 
+            farolId: 'farolIconInlineGestor',
+            progressId: 'progressFillGestor'
+        },
+        { 
+            countId: 'presenciaisCountRh', 
+            farolId: 'farolIconInlineRh',
+            progressId: 'progressFillRh'
+        }
+    ];
+    
+    farolConfigs.forEach(config => {
+        const countElement = document.getElementById(config.countId);
+        const farolElement = document.getElementById(config.farolId);
+        const progressElement = document.getElementById(config.progressId);
+        
+        if (countElement && farolElement) {
+            // Extrai o número antes da barra (ex: "3/5" -> 3)
+            const countText = countElement.textContent;
+            const diasPresenciais = parseInt(countText.split('/')[0]) || 0;
+            const diasMax = 5;
+            const porcentagem = (diasPresenciais / diasMax) * 100;
+            
+            // Atualiza a barra de progresso
+            if (progressElement) {
+                progressElement.style.width = porcentagem + '%';
+            }
+            
+            // Atualiza o farol
+            if (diasPresenciais >= 3) {
+                // ✅ VERDE - Conformidade
+                farolElement.classList.remove('nao-conformidade');
+                farolElement.textContent = '✅';
+            } else {
+                // ❌ VERMELHO - Não conformidade  
+                farolElement.classList.add('nao-conformidade');
+                farolElement.textContent = '❌';
+            }
+        }
+    });
+}
+
 let colaboradorSelecionado = null;
 
 const pageNames = {
@@ -369,6 +509,9 @@ profileSelect.addEventListener('change', applyProfileMenu);
 
 // Quando a página carregar
 document.addEventListener('DOMContentLoaded', () => {
+    // Aplicar feature flags primeiro
+    applyFeatureFlags();
+    
     // mantém o que você já tinha
     if (typeof initHistoricoPresenca === 'function') {
         initHistoricoPresenca();
@@ -380,6 +523,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // aplica o perfil corretamente ao abrir a página
     applyProfileMenu();
+    
+    // Inicializa calendário se a feature estiver ativa
+    if (isFeatureEnabled('calendarioFerias')) {
+        generateCalendar();
+    }
 });
 
 

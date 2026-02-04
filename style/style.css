@@ -369,6 +369,75 @@ body {
     letter-spacing: 0.5px;
 }
 
+/* 🚩 NOVO FORMATO SIMPLIFICADO X/5 */
+.conformidade-simplificada {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    padding: 20px;
+    background: white;
+    border-radius: 8px;
+    border: 2px solid var(--neutral-stroke-rest);
+}
+
+.conformidade-valor {
+    display: flex;
+    align-items: baseline;
+    gap: 4px;
+    font-size: 48px;
+    font-weight: 700;
+    color: var(--alpargatas-blue);
+}
+
+.dias-count {
+    color: var(--alpargatas-blue);
+}
+
+.separador {
+    color: #605E5C;
+    font-size: 36px;
+    margin: 0 4px;
+}
+
+.dias-max {
+    color: #605E5C;
+    font-size: 36px;
+}
+
+.farol-status {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 20px;
+    background: #DFF6DD;
+    border: 2px solid #107C10;
+    border-radius: 8px;
+}
+
+.farol-status.nao-conformidade {
+    background: #FDE7E9;
+    border-color: #C50F1F;
+}
+
+.farol-icon {
+    font-size: 24px;
+}
+
+.farol-text {
+    font-size: 14px;
+    font-weight: 600;
+    color: #107C10;
+}
+
+.farol-status.nao-conformidade .farol-text {
+    color: #C50F1F;
+}
+.farol-status.nao-conformidade .farol-icon::before {
+    content: '❌';
+}
+
+/* FORMATO ANTIGO 3x2 (mantido para compatibilidade) */
 .conformidade-bars {
     display: flex;
     flex-direction: column;
@@ -388,6 +457,17 @@ body {
     font-size: 14px;
     font-weight: 500;
     color: #333;
+}
+
+/* Farol inline ao lado do título */
+.farol-icon-inline {
+    font-size: 18px;
+    margin-left: 8px;
+    transition: all 0.3s ease;
+}
+
+.farol-icon-inline.nao-conformidade {
+    filter: grayscale(100%);
 }
 
 .conformidade-icon {
@@ -1779,6 +1859,28 @@ td.department {
     .conformidade-section {
         padding: 16px;
         margin-bottom: 16px;
+    }
+    
+    /* Conformidade Simplificada Mobile */
+    .conformidade-simplificada {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 16px;
+        padding: 16px;
+    }
+    
+    .conformidade-valor {
+        font-size: 36px;
+    }
+    
+    .separador, .dias-max {
+        font-size: 28px;
+    }
+    
+    .farol-status {
+        width: 100%;
+        justify-content: center;
     }
 
     .nav-text {
