@@ -2945,13 +2945,28 @@ function desenharGraficoComparativo() {
 
         ctx.fillRect(x - (barWidth / 2), y, barWidth, barHeight);
 
-        // Label com nome
+        // Label com nome e percentual
         ctx.fillStyle = '#323130';
         ctx.font = 'bold 12px Arial';
         ctx.fillText(colab.aderencia + '%', x, y - 10);
 
+        // Renderizar nome - rotacionar em mobile
         ctx.font = '11px Arial';
-        ctx.fillText(colab.nome, x, canvas.height - padding + 20);
+        ctx.fillStyle = '#323130';
+        
+        if (canvas.width < 600) {
+            // Mobile: rotacionar nome em 45 graus para melhor legibilidade
+            ctx.save();
+            ctx.translate(x, canvas.height - padding + 5);
+            ctx.rotate(-Math.PI / 4); // -45 graus
+            ctx.textAlign = 'right';
+            ctx.fillText(colab.nome, 0, 0);
+            ctx.restore();
+        } else {
+            // Desktop: nome horizontal
+            ctx.textAlign = 'center';
+            ctx.fillText(colab.nome, x, canvas.height - padding + 20);
+        }
     });
 }
 
