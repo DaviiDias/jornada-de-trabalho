@@ -983,50 +983,44 @@ const mockRelatorioAderenciaAreas = [
     {
         diretoria: "TI",
         colaboradores: 80,
-        aderencia: 91,
-        ausencias: 42,
-        percentualJustificadas: 95,
-        gestoresQueJustificaram: 100
+        aderenciaLiquida: 91,
+        aderenciaPosJustificativas: 95,
+        pendencias: 42
     },
     {
         diretoria: "Comercial",
         colaboradores: 120,
-        aderencia: 76,
-        ausencias: 98,
-        percentualJustificadas: 78,
-        gestoresQueJustificaram: 72
+        aderenciaLiquida: 76,
+        aderenciaPosJustificativas: 78,
+        pendencias: 98
     },
     {
         diretoria: "RH",
         colaboradores: 40,
-        aderencia: 88,
-        ausencias: 18,
-        percentualJustificadas: 100,
-        gestoresQueJustificaram: 85
+        aderenciaLiquida: 88,
+        aderenciaPosJustificativas: 100,
+        pendencias: 18
     },
     {
         diretoria: "Operações",
         colaboradores: 180,
-        aderencia: 84,
-        ausencias: 160,
-        percentualJustificadas: 86,
-        gestoresQueJustificaram: 80
+        aderenciaLiquida: 84,
+        aderenciaPosJustificativas: 86,
+        pendencias: 160
     },
     {
         diretoria: "Financeiro",
         colaboradores: 60,
-        aderencia: 82,
-        ausencias: 52,
-        percentualJustificadas: 90,
-        gestoresQueJustificaram: 70
+        aderenciaLiquida: 82,
+        aderenciaPosJustificativas: 90,
+        pendencias: 52
     },
     {
         diretoria: "Jurídico",
         colaboradores: 30,
-        aderencia: 87,
-        ausencias: 25,
-        percentualJustificadas: 92,
-        gestoresQueJustificaram: 88
+        aderenciaLiquida: 87,
+        aderenciaPosJustificativas: 92,
+        pendencias: 25
     }
 ];
 
@@ -1338,9 +1332,8 @@ function getWeeksOfMonth(year, month) {
 // Modal removida - funcionalidade descontinuada
 
 function getAderenciaClass(percent) {
-    if (percent > 85) return 'excellent';
-    if (percent >= 61) return 'good';
-    if (percent >= 50) return 'attention';
+    if (percent === 100) return 'excellent';
+    if (percent >= 90) return 'good';
     return 'critical';
 }
 
@@ -1377,20 +1370,20 @@ function renderRelatorioAderenciaAreas(data) {
     
     // Calcular totais
     let totalColaboradores = 0;
-    let totalAusencias = 0;
-    let totalJustificadas = 0;
-    let totalGestoresJustificaram = 0;
+    let totalPendencias = 0;
+    let totalAderenciaLiquida = 0;
+    let totalAderenciaPosJustificativas = 0;
     
     data.forEach(area => {
         totalColaboradores += area.colaboradores;
-        totalAusencias += area.ausencias;
-        totalJustificadas += area.percentualJustificadas;
-        totalGestoresJustificaram += area.gestoresQueJustificaram;
+        totalPendencias += area.pendencias;
+        totalAderenciaLiquida += area.aderenciaLiquida;
+        totalAderenciaPosJustificativas += area.aderenciaPosJustificativas;
     });
     
     // Calcular médias para as colunas de percentual
-    const mediajustificadas = Math.round(totalJustificadas / data.length);
-    const mediaGestoresJustificaram = Math.round(totalGestoresJustificaram / data.length);
+    const mediaAderenciaLiquida = Math.round(totalAderenciaLiquida / data.length);
+    const mediaAderenciaPosJustificativas = Math.round(totalAderenciaPosJustificativas / data.length);
     
     // Adicionar linha de TOTAL no início
     const trTotal = document.createElement('tr');
@@ -1408,24 +1401,21 @@ function renderRelatorioAderenciaAreas(data) {
     cellTotalColaboradores.textContent = totalColaboradores;
     trTotal.appendChild(cellTotalColaboradores);
     
-    const cellTotalAderencia = document.createElement('td');
-    const aderenciaGeral = totalColaboradores > 0 ? 
-        Math.round((totalColaboradores * 100) / totalColaboradores) : 0;
-    cellTotalAderencia.className = 'gestor-data excellent';
-    cellTotalAderencia.innerHTML = `<span class="percent">85%</span> 💎`;
-    trTotal.appendChild(cellTotalAderencia);
+    const cellTotalAderenciaLiquida = document.createElement('td');
+    const totalLiquidaClass = getAderenciaClass(mediaAderenciaLiquida);
+    cellTotalAderenciaLiquida.className = `gestor-data ${totalLiquidaClass}`;
+    cellTotalAderenciaLiquida.innerHTML = `<span class="percent">${mediaAderenciaLiquida}%</span>`;
+    trTotal.appendChild(cellTotalAderenciaLiquida);
     
-    const cellTotalAusencias = document.createElement('td');
-    cellTotalAusencias.textContent = totalAusencias;
-    trTotal.appendChild(cellTotalAusencias);
+    const cellTotalAderenciaPosJustificativas = document.createElement('td');
+    const totalPosClass = getAderenciaClass(mediaAderenciaPosJustificativas);
+    cellTotalAderenciaPosJustificativas.className = `gestor-data ${totalPosClass}`;
+    cellTotalAderenciaPosJustificativas.innerHTML = `<span class="percent">${mediaAderenciaPosJustificativas}%</span>`;
+    trTotal.appendChild(cellTotalAderenciaPosJustificativas);
     
-    const cellTotalJustificadas = document.createElement('td');
-    cellTotalJustificadas.textContent = mediajustificadas + '%';
-    trTotal.appendChild(cellTotalJustificadas);
-    
-    const cellTotalGestores = document.createElement('td');
-    cellTotalGestores.textContent = mediaGestoresJustificaram + '%';
-    trTotal.appendChild(cellTotalGestores);
+    const cellTotalPendencias = document.createElement('td');
+    cellTotalPendencias.textContent = totalPendencias;
+    trTotal.appendChild(cellTotalPendencias);
     
     // Preparada linha de TOTAL (será adicionada ao final)
     
@@ -1434,7 +1424,8 @@ function renderRelatorioAderenciaAreas(data) {
         const tr = document.createElement('tr');
         
         // Determinar classe de cor baseado na aderência
-        const aderenciaClass = getAderenciaClass(area.aderencia);
+        const aderenciaLiquidaClass = getAderenciaClass(area.aderenciaLiquida);
+        const aderenciaPosClass = getAderenciaClass(area.aderenciaPosJustificativas);
         
         // Célula Diretoria
         const cellDiretoria = document.createElement('td');
@@ -1447,29 +1438,22 @@ function renderRelatorioAderenciaAreas(data) {
         cellColaboradores.textContent = area.colaboradores;
         tr.appendChild(cellColaboradores);
         
-        // Célula Aderência (%)
-        const cellAderencia = document.createElement('td');
-        cellAderencia.className = `gestor-data ${aderenciaClass}`;
-        cellAderencia.innerHTML = `<span class="percent">${area.aderencia}%</span>`;
-        if (area.aderencia > 85) {
-            cellAderencia.innerHTML += ' 💎';
-        }
-        tr.appendChild(cellAderencia);
+        // Célula Aderência Líquida
+        const cellAderenciaLiquida = document.createElement('td');
+        cellAderenciaLiquida.className = `gestor-data ${aderenciaLiquidaClass}`;
+        cellAderenciaLiquida.innerHTML = `<span class="percent">${area.aderenciaLiquida}%</span>`;
+        tr.appendChild(cellAderenciaLiquida);
         
-        // Célula Ausências
-        const cellAusencias = document.createElement('td');
-        cellAusencias.textContent = area.ausencias;
-        tr.appendChild(cellAusencias);
+        // Célula Aderência Após Justificativas
+        const cellAderenciaPos = document.createElement('td');
+        cellAderenciaPos.className = `gestor-data ${aderenciaPosClass}`;
+        cellAderenciaPos.innerHTML = `<span class="percent">${area.aderenciaPosJustificativas}%</span>`;
+        tr.appendChild(cellAderenciaPos);
         
-        // Célula % Justificadas
-        const cellJustificadas = document.createElement('td');
-        cellJustificadas.textContent = area.percentualJustificadas + '%';
-        tr.appendChild(cellJustificadas);
-        
-        // Célula % Gestores que justificaram
-        const cellGestores = document.createElement('td');
-        cellGestores.textContent = area.gestoresQueJustificaram + '%';
-        tr.appendChild(cellGestores);
+        // Célula Pendências
+        const cellPendencias = document.createElement('td');
+        cellPendencias.textContent = area.pendencias;
+        tr.appendChild(cellPendencias);
         
         tbody.appendChild(tr);
     });
@@ -1561,9 +1545,6 @@ function renderRelatorioStatusJustificativas(data) {
     const percentualClass = getAderenciaClass(percentualTotalJustificadas);
     cellTotalPercentual.className = `gestor-data ${percentualClass}`;
     cellTotalPercentual.innerHTML = `<span class="percent">${percentualTotalJustificadas}%</span>`;
-    if (percentualTotalJustificadas > 85) {
-        cellTotalPercentual.innerHTML += ' 💎';
-    }
     trTotal.appendChild(cellTotalPercentual);
     
     const cellTotalPendentes = document.createElement('td');
@@ -1604,9 +1585,6 @@ function renderRelatorioStatusJustificativas(data) {
         const cellPercentual = document.createElement('td');
         cellPercentual.className = `gestor-data ${percentualClass}`;
         cellPercentual.innerHTML = `<span class="percent">${gestor.percentualJustificadas}%</span>`;
-        if (gestor.percentualJustificadas > 85) {
-            cellPercentual.innerHTML += ' 💎';
-        }
         tr.appendChild(cellPercentual);
         
         // Célula Pendentes de Análise
@@ -1669,13 +1647,12 @@ function renderRelatorioEmpresa(data) {
 
         area.valores.forEach(valor => {
             const cls = getAderenciaClass(valor);
-            const diamond = valor > 85 ? '<span class="diamond">💎</span>' : '';
             
             const td = document.createElement('td');
             td.className = cls;
             td.innerHTML = `
                 <span class="percent">
-                    ${valor}%${diamond}
+                    ${valor}%
                 </span>
             `;
             tr.appendChild(td);
@@ -1754,13 +1731,12 @@ async function toggleGestoresExpansion(departamento, data, rowIndex) {
                 // Célula de contribuição por período
                 gestor.contribuicao.forEach(valor => {
                     const cls = getAderenciaClass(valor);
-                    const diamond = valor > 85 ? '<span class="diamond">💎</span>' : '';
                     
                     const td = document.createElement('td');
                     td.className = `${cls} gestor-data`;
                     td.innerHTML = `
                         <span class="percent">
-                            ${valor}%${diamond}
+                            ${valor}%
                         </span>
                     `;
                     gestorRow.appendChild(td);

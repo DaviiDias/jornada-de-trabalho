@@ -194,7 +194,8 @@
                                     </div>
                                     <div class="conformidade-progress">
                                         <div class="progress-bar">
-                                            <div class="progress-fill presenciais-fill" id="progressFill" style="width: 60%;"></div>
+                                            <div class="progress-fill presenciais-fill" id="progressFill"
+                                                style="width: 60%;"></div>
                                         </div>
                                         <span class="conformidade-counter" id="presenciaisCount">3/5</span>
                                     </div>
@@ -273,17 +274,14 @@
 
                         <div class="legend">
                             <div class="legend-item">
-                                <div class="color-box excellent"></div> > 85% 💎
+                                <div class="color-box excellent"></div> 100%
                             </div>
                             <div class="legend-item">
-                                <div class="color-box good"></div> 61 – 84%
-                            </div>
-                            <div class="legend-item">
-                                <div class="color-box attention"></div> 50 – 60%
+                                <div class="color-box good"></div> >= 90%
                             </div>
                             <div class="legend-item">
                                 <div class="color-box critical"></div>
-                                < 50% </div>
+                                < 90% </div>
                             </div>
                         </div>
                     </div>
@@ -295,127 +293,124 @@
 
 
                         <div class="adherence-card">
-                            <div class="section-title">Relatório de Aderência por Diretoria</div>
-                            <p class="subtitle">
-                                Período Atual - Outubro/2025 a Janeiro/2026
-                            </p>
-
-                            <div class="table-container">
-                                <table id="relatorioAderenciaTable">
-                                    <thead>
-                                        <tr>
-                                            <th class="department">Diretoria</th>
-                                            <th>Colaboradores</th>
-                                            <th>Aderência (%)</th>
-                                            <th>Ausências</th>
-                                            <th>% Justificadas</th>
-                                            <th>% Gestores que justificaram</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="relatorioAderenciaTableBody"></tbody>
-                                </table>
-                            </div>
-
-                            <div class="legend">
-                                <div class="legend-item">
-                                    <div class="color-box excellent"></div> > 85% 💎
-                                </div>
-                                <div class="legend-item">
-                                    <div class="color-box good"></div> 61 – 84%
-                                </div>
-                                <div class="legend-item">
-                                    <div class="color-box attention"></div> 50 – 60%
-                                </div>
-                                <div class="legend-item">
-                                    <div class="color-box critical"></div>
-                                    < 50% </div>
-                                </div>
-                            </div>
-
                             <div class="adherence-card">
-                                <div class="section-title">Relatório de Justificativas de Ausência</div>
+                                <div class="section-title">Relatório de Aderência por Diretoria</div>
                                 <p class="subtitle">
-                                    Quantitativo por Tipo de Justificativa
+                                    Período Atual - Outubro/2025 a Janeiro/2026
                                 </p>
 
                                 <div class="table-container">
-                                    <table id="relatorioJustificativasTable">
+                                    <table id="relatorioAderenciaTable">
                                         <thead>
                                             <tr>
-                                                <th class="department">Tipo de Justificativa</th>
-                                                <th>Qtde. de Ocorrências</th>
-                                                <th>% sobre Total</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody id="relatorioJustificativasTableBody"></tbody>
-                                    </table>
-                                </div>
-                            </div>
-
-                            <div class="adherence-card">
-                                <div class="section-title">Relatório de Status das Justificativas por Gestor</div>
-                                <p class="subtitle">
-                                    Análise de Conformidade nas Justificativas de Ausência
-                                </p>
-
-                                <div class="table-container">
-                                    <table id="relatorioStatusJustificativasTable">
-                                        <thead>
-                                            <tr>
-                                                <th class="department">Gestor</th>
-                                                <th>Diretoria</th>
-                                                <th>Total de Ausências</th>
-                                                <th>Justificadas</th>
+                                                <th class="department">Diretoria</th>
+                                                <th>Colaboradores</th>
+                                                <th>Aderência (%)</th>
+                                                <th>Ausências</th>
                                                 <th>% Justificadas</th>
-                                                <th>Pendentes de Análise</th>
+                                                <th>% Gestores que justificaram</th>
                                             </tr>
                                         </thead>
-                                        <tbody id="relatorioStatusJustificativasTableBody"></tbody>
+                                        <tbody id="relatorioAderenciaTableBody"></tbody>
                                     </table>
                                 </div>
 
                                 <div class="legend">
                                     <div class="legend-item">
-                                        <div class="color-box excellent"></div> > 85% 💎
+                                        <div class="color-box excellent"></div> 100%
                                     </div>
                                     <div class="legend-item">
-                                        <div class="color-box good"></div> 61 – 84%
-                                    </div>
-                                    <div class="legend-item">
-                                        <div class="color-box attention"></div> 50 – 60%
+                                        <div class="color-box good"></div> >= 90%
                                     </div>
                                     <div class="legend-item">
                                         <div class="color-box critical"></div>
-                                        < 50% </div>
+                                        < 90% </div>
+                                    </div>
+                                </div>
+                                <div class="adherence-card">
+                                    <div class="section-title">Relatório de Justificativas de Ausência</div>
+                                    <p class="subtitle">
+                                        Quantitativo por Tipo de Justificativa
+                                    </p>
+
+                                    <div class="table-container">
+                                        <table id="relatorioJustificativasTable">
+                                            <thead>
+                                                <tr>
+                                                    <th class="department">Tipo de Justificativa</th>
+                                                    <th>Qtde. de Ocorrências</th>
+                                                    <th>% sobre Total</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="relatorioJustificativasTableBody"></tbody>
+                                        </table>
                                     </div>
                                 </div>
 
-                                <!-- Análise Consolidada movida para a página Dashboard RH (dashboard-rh) -->
-
                                 <div class="adherence-card">
-                                    <div class="chart-card">
-                                        <h3 class="chart-title">Evolução de Aderência por Área - Últimos 6 Meses</h3>
-                                        <p class="chart-subtitle">Comparação entre áreas da ALPA SEDE</p>
+                                    <div class="section-title">Relatório de Status das Justificativas por Gestor</div>
+                                    <p class="subtitle">
+                                        Análise de Conformidade nas Justificativas de Ausência
+                                    </p>
 
-                                        <div class="chart-areas-wrapper">
-                                            <div class="chart-canvas-wrapper">
-                                                <div class="chart-canvas-container">
-                                                    <canvas id="graficoAreasChart"></canvas>
+                                    <div class="table-container">
+                                        <table id="relatorioStatusJustificativasTable">
+                                            <thead>
+                                                <tr>
+                                                    <th class="department">Gestor</th>
+                                                    <th>Diretoria</th>
+                                                    <th>Total de Ausências</th>
+                                                    <th>Justificadas</th>
+                                                    <th>% Justificadas</th>
+                                                    <th>Pendentes de Análise</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="relatorioStatusJustificativasTableBody"></tbody>
+                                        </table>
+                                    </div>
+
+                                    <div class="legend">
+                                        <div class="legend-item">
+                                            <div class="color-box excellent"></div> > 85% 💎
+                                        </div>
+                                        <div class="legend-item">
+                                            <div class="color-box good"></div> 61 – 84%
+                                        </div>
+                                        <div class="legend-item">
+                                            <div class="color-box attention"></div> 50 – 60%
+                                        </div>
+                                        <div class="legend-item">
+                                            <div class="color-box critical"></div>
+                                            < 50% </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Análise Consolidada movida para a página Dashboard RH (dashboard-rh) -->
+
+                                    <div class="adherence-card">
+                                        <div class="chart-card">
+                                            <h3 class="chart-title">Evolução de Aderência por Área - Últimos 6 Meses
+                                            </h3>
+                                            <p class="chart-subtitle">Comparação entre áreas da ALPA SEDE</p>
+
+                                            <div class="chart-areas-wrapper">
+                                                <div class="chart-canvas-wrapper">
+                                                    <div class="chart-canvas-container">
+                                                        <canvas id="graficoAreasChart"></canvas>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="chart-legend">
-                                                <div class="chart-legend-title">Áreas</div>
-                                                <div id="checkboxesAreas" class="checkboxes-container">
-                                                    <!-- Checkboxes serão inseridos aqui pelo JS -->
+                                                <div class="chart-legend">
+                                                    <div class="chart-legend-title">Áreas</div>
+                                                    <div id="checkboxesAreas" class="checkboxes-container">
+                                                        <!-- Checkboxes serão inseridos aqui pelo JS -->
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-
                                 </div>
                             </div>
 
-                            <!-- Dashboard Gestor -->
                             <div id="dashboard-gestor" class="page-view">
                                 <div class="dashboard-gestor-container">
                                     <!-- Seção Pessoal -->
@@ -424,34 +419,33 @@
                                     <div class="adherence-card">
                                         <div class="section-title">Aderência Semanal</div>
                                         <div class="status-badge status-conformidade" id="statusBadgeGestor">Em
-                                            conformidade
-                                        </div>
+                                            conformidade</div>
 
-                                    <!-- 🚩 FEATURE FLAG: dashboardPresencaSemanal -->
-                                    <!-- Cards de presença semanal GESTOR - controlado por Feature Flag -->
-                                    <div class="adherence-grid" id="dashboard-presenca-semanal-cards-gestor">
-                                        <div class="adherence-item">
-                                            <div class="adherence-label">Presença Semanal</div>
-                                            <div class="adherence-value" id="presencaValueGestor">4 dias</div>
-                                            <div class="adherence-note" id="presencaNoteGestor"></div>
-                                        </div>
+                                        <!-- 🚩 FEATURE FLAG: dashboardPresencaSemanal -->
+                                        <!-- Cards de presença semanal GESTOR - controlado por Feature Flag -->
+                                        <div class="adherence-grid" id="dashboard-presenca-semanal-cards-gestor">
+                                            <div class="adherence-item">
+                                                <div class="adherence-label">Presença Semanal</div>
+                                                <div class="adherence-value" id="presencaValueGestor">4 dias</div>
+                                                <div class="adherence-note" id="presencaNoteGestor"></div>
+                                            </div>
 
-                                        <div class="adherence-item">
-                                            <div class="adherence-label">Dias na Sede</div>
-                                            <div class="adherence-value" id="sedeValueGestor">2 dias</div>
-                                        </div>
+                                            <div class="adherence-item">
+                                                <div class="adherence-label">Dias na Sede</div>
+                                                <div class="adherence-value" id="sedeValueGestor">2 dias</div>
+                                            </div>
 
-                                        <div class="adherence-item">
-                                            <div class="adherence-label">Dias em Home Office</div>
-                                            <div class="adherence-value" id="homeofficeValueGestor">2 dias</div>
-                                        </div>
+                                            <div class="adherence-item">
+                                                <div class="adherence-label">Dias em Home Office</div>
+                                                <div class="adherence-value" id="homeofficeValueGestor">2 dias</div>
+                                            </div>
 
-                                        <div class="adherence-item">
-                                            <div class="adherence-label">Dias restantes na semana</div>
-                                            <div class="adherence-value" id="diasRestantesValueGestor">1 dia</div>
+                                            <div class="adherence-item">
+                                                <div class="adherence-label">Dias restantes na semana</div>
+                                                <div class="adherence-value" id="diasRestantesValueGestor">1 dia</div>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <!-- 🚩 FIM FEATURE FLAG: dashboardPresencaSemanal -->
+                                        <!-- 🚩 FIM FEATURE FLAG: dashboardPresencaSemanal -->
 
                                         <!-- 🚩 FEATURE FLAG: conformidadeFormatoSimplificado -->
                                         <!-- Conformidade X/5 com barra de progresso GESTOR -->
@@ -461,13 +455,16 @@
                                                 <div class="conformidade-item">
                                                     <div class="conformidade-label">
                                                         <span class="conformidade-text">Progresso Semanal</span>
-                                                        <span class="farol-icon-inline" id="farolIconInlineGestor">✅</span>
+                                                        <span class="farol-icon-inline"
+                                                            id="farolIconInlineGestor">✅</span>
                                                     </div>
                                                     <div class="conformidade-progress">
                                                         <div class="progress-bar">
-                                                            <div class="progress-fill presenciais-fill" id="progressFillGestor" style="width: 60%;"></div>
+                                                            <div class="progress-fill presenciais-fill"
+                                                                id="progressFillGestor" style="width: 60%;"></div>
                                                         </div>
-                                                        <span class="conformidade-counter" id="presenciaisCountGestor">3/5</span>
+                                                        <span class="conformidade-counter"
+                                                            id="presenciaisCountGestor">3/5</span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -479,14 +476,11 @@
                                                 <div class="status-message" id="statusMessageGestor">
                                                     <span class="status-icon">💡</span>
                                                     <span id="statusTextGestor">Você tem opção de escolha dos dias para
-                                                        garantir
-                                                        a
-                                                        conformidade</span>
+                                                        garantir a conformidade</span>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-
 
                                     <!-- Seção Equipe -->
                                     <h2>Visão meus Colaboradores</h2>
@@ -505,8 +499,7 @@
                                                         <th>Justificativa</th>
                                                     </tr>
                                                 </thead>
-                                                <tbody id="teamTableBody">
-                                                </tbody>
+                                                <tbody id="teamTableBody"></tbody>
                                             </table>
                                         </div>
                                         <!-- 🚩 FIM FEATURE FLAG -->
@@ -518,7 +511,6 @@
                             <div id="dashboard-rh" class="page-view">
                                 <div class="dashboard-rh-container">
                                     <!-- Seção Pessoal -->
-
                                     <div class="section-title">Dashboard Principal</div>
                                     <h2>Visão Pessoal</h2>
                                     <div class="adherence-card">
@@ -526,31 +518,31 @@
                                         <div class="status-badge status-conformidade" id="statusBadgeRh">Em conformidade
                                         </div>
 
-                                    <!-- 🚩 FEATURE FLAG: dashboardPresencaSemanal -->
-                                    <!-- Cards de presença semanal RH - controlado por Feature Flag -->
-                                    <div class="adherence-grid" id="dashboard-presenca-semanal-cards-rh">
-                                        <div class="adherence-item">
-                                            <div class="adherence-label">Presença Semanal</div>
-                                            <div class="adherence-value" id="presencaValueRh">4 dias</div>
-                                            <div class="adherence-note" id="presencaNoteRh"></div>
-                                        </div>
+                                        <!-- 🚩 FEATURE FLAG: dashboardPresencaSemanal -->
+                                        <!-- Cards de presença semanal RH - controlado por Feature Flag -->
+                                        <div class="adherence-grid" id="dashboard-presenca-semanal-cards-rh">
+                                            <div class="adherence-item">
+                                                <div class="adherence-label">Presença Semanal</div>
+                                                <div class="adherence-value" id="presencaValueRh">4 dias</div>
+                                                <div class="adherence-note" id="presencaNoteRh"></div>
+                                            </div>
 
-                                        <div class="adherence-item">
-                                            <div class="adherence-label">Dias na Sede</div>
-                                            <div class="adherence-value" id="sedeValueRh">2 dias</div>
-                                        </div>
+                                            <div class="adherence-item">
+                                                <div class="adherence-label">Dias na Sede</div>
+                                                <div class="adherence-value" id="sedeValueRh">2 dias</div>
+                                            </div>
 
-                                        <div class="adherence-item">
-                                            <div class="adherence-label">Dias em Home Office</div>
-                                            <div class="adherence-value" id="homeofficeValueRh">2 dias</div>
-                                        </div>
+                                            <div class="adherence-item">
+                                                <div class="adherence-label">Dias em Home Office</div>
+                                                <div class="adherence-value" id="homeofficeValueRh">2 dias</div>
+                                            </div>
 
-                                        <div class="adherence-item">
-                                            <div class="adherence-label">Dias restantes na semana</div>
-                                            <div class="adherence-value" id="diasRestantesValueRh">1 dia</div>
+                                            <div class="adherence-item">
+                                                <div class="adherence-label">Dias restantes na semana</div>
+                                                <div class="adherence-value" id="diasRestantesValueRh">1 dia</div>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <!-- 🚩 FIM FEATURE FLAG: dashboardPresencaSemanal -->
+                                        <!-- 🚩 FIM FEATURE FLAG: dashboardPresencaSemanal -->
 
                                         <!-- 🚩 FEATURE FLAG: conformidadeFormatoSimplificado -->
                                         <!-- Conformidade X/5 com barra de progresso RH -->
@@ -564,9 +556,11 @@
                                                     </div>
                                                     <div class="conformidade-progress">
                                                         <div class="progress-bar">
-                                                            <div class="progress-fill presenciais-fill" id="progressFillRh" style="width: 60%;"></div>
+                                                            <div class="progress-fill presenciais-fill"
+                                                                id="progressFillRh" style="width: 60%;"></div>
                                                         </div>
-                                                        <span class="conformidade-counter" id="presenciaisCountRh">3/5</span>
+                                                        <span class="conformidade-counter"
+                                                            id="presenciaisCountRh">3/5</span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -578,13 +572,11 @@
                                                 <div class="status-message" id="statusMessageRh">
                                                     <span class="status-icon">💡</span>
                                                     <span id="statusTextRh">Você tem opção de escolha dos dias para
-                                                        garantir a
-                                                        conformidade</span>
+                                                        garantir a conformidade</span>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-
 
                                     <!-- Seção Equipe -->
                                     <h2>Visão da Equipe</h2>
@@ -602,8 +594,7 @@
                                                         <th>Justificativa</th>
                                                     </tr>
                                                 </thead>
-                                                <tbody id="teamTableBodyRh">
-                                                </tbody>
+                                                <tbody id="teamTableBodyRh"></tbody>
                                             </table>
                                         </div>
                                         <!-- 🚩 FIM FEATURE FLAG -->
@@ -615,18 +606,6 @@
                                         <div class="section-title">Análise Consolidada</div>
                                         <div class="kpi-summary" id="kpiSummaryRh">
                                             <div class="kpi-grid">
-                                                <!-- Linha 1 -->
-                                                <!-- <div class="kpi-card large">
-                                        <div class="kpi-label">Gestores  regulares</div>
-                                        <div class="kpi-value small" id="kpiGestoresRegularesListaRh">-</div>
-                                        <div class="kpi-note">Top 5 gestores por média</div>
-                                    </div>
-                                    <div class="kpi-card small">
-                                        <div class="kpi-label">Porcentagem Gestores regulares</div>
-                                        <div class="kpi-value" id="kpiGestoresRegularesRh">--%</div>
-                                        <div class="kpi-note">Média ≥85%</div>
-                                    </div> -->
-
                                                 <!-- Linha 2 -->
                                                 <div class="kpi-card large">
                                                     <div class="kpi-label">Ranking Regularidade Gestores</div>
@@ -675,18 +654,15 @@
                                     <div class="date-picker-group-gestor">
                                         <div class="date-picker-wrapper-gestor">
                                             <label for="startDateGestor">Data Inicial</label>
-                                            <input 
-                                                type="text" 
-                                                id="startDateGestor" 
-                                                class="date-picker-input-gestor" 
-                                                placeholder="Selecione mês-ano"
-                                                readonly
-                                            >
+                                            <input type="text" id="startDateGestor" class="date-picker-input-gestor"
+                                                placeholder="Selecione mês-ano" readonly>
                                             <div class="calendar-dropdown-gestor" id="calendarStartGestor">
                                                 <div class="dropdown-header-gestor">
-                                                    <button class="prev-year-btn-gestor" data-picker="startGestor">&lt;</button>
+                                                    <button class="prev-year-btn-gestor"
+                                                        data-picker="startGestor">&lt;</button>
                                                     <h3 class="year-display-gestor" data-picker="startGestor"></h3>
-                                                    <button class="next-year-btn-gestor" data-picker="startGestor">&gt;</button>
+                                                    <button class="next-year-btn-gestor"
+                                                        data-picker="startGestor">&gt;</button>
                                                 </div>
                                                 <div class="dropdown-months-gestor" id="monthsStartGestor"></div>
                                             </div>
@@ -694,18 +670,15 @@
 
                                         <div class="date-picker-wrapper-gestor">
                                             <label for="endDateGestor">Data Final</label>
-                                            <input 
-                                                type="text" 
-                                                id="endDateGestor" 
-                                                class="date-picker-input-gestor" 
-                                                placeholder="Selecione mês-ano"
-                                                readonly
-                                            >
+                                            <input type="text" id="endDateGestor" class="date-picker-input-gestor"
+                                                placeholder="Selecione mês-ano" readonly>
                                             <div class="calendar-dropdown-gestor" id="calendarEndGestor">
                                                 <div class="dropdown-header-gestor">
-                                                    <button class="prev-year-btn-gestor" data-picker="endGestor">&lt;</button>
+                                                    <button class="prev-year-btn-gestor"
+                                                        data-picker="endGestor">&lt;</button>
                                                     <h3 class="year-display-gestor" data-picker="endGestor"></h3>
-                                                    <button class="next-year-btn-gestor" data-picker="endGestor">&gt;</button>
+                                                    <button class="next-year-btn-gestor"
+                                                        data-picker="endGestor">&gt;</button>
                                                 </div>
                                                 <div class="dropdown-months-gestor" id="monthsEndGestor"></div>
                                             </div>
@@ -764,8 +737,6 @@
                                         <canvas id="comparativoChart"></canvas>
                                     </div>
                                 </div>
-
-
                             </div>
 
                             <!-- Minhas Justificativas -->
@@ -780,7 +751,6 @@
                                         <h3>Justificativas Rápidas</h3>
                                         <p class="subtitle">Selecione um tipo predefinido ou descreva sua justificativa
                                         </p>
-
                                         <div class="justification-grid" id="justificationGrid"></div>
                                     </div>
 
@@ -831,7 +801,6 @@
                                         <h3>Motivos Comuns</h3>
                                         <p class="subtitle">Escolha um dos motivos pré-aprovados ou descreva seu caso
                                         </p>
-
                                         <div class="absence-reasons" id="absenceReasons"></div>
                                     </div>
 
@@ -860,8 +829,7 @@
                                         <div class="form-group">
                                             <label for="absenceDocument">Documentação</label>
                                             <p class="form-hint">Para ausências médicas, anexe comprovante (atestado,
-                                                recibo,
-                                                etc)</p>
+                                                recibo, etc)</p>
                                             <div class="file-upload">
                                                 <input type="file" id="absenceDocument" class="form-control">
                                                 <span class="upload-text">Clique ou arraste um arquivo</span>
@@ -897,9 +865,6 @@
                                 </div>
                             </div>
                         </div>
-
-
-                    </div>
         </main>
     </div>
 
