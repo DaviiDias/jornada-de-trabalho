@@ -1106,30 +1106,30 @@ const mockOcorrenciasEquipe = [
     }
 ];
 
-// \ud83d\udea9 DADOS SIMPLIFICADOS: Semanas n\u00e3o conformes com justificativa pendente
+// 🚩 DADOS SIMPLIFICADOS: Semanas não conformes com justificativa pendente
 const mockSemanasNaoConformesSimplificado = [
     {
         colaborador: "Maria Santos",
-        semana: "JAN 3",
-        status: "N\u00e3o Conforme",
+        semana: "06 jan - 12 jan",
+        status: "Não Conforme",
         justificativa: "Pendente"
     },
     {
         colaborador: "Maria Santos",
-        semana: "JAN 4",
-        status: "N\u00e3o Conforme",
+        semana: "13 jan - 19 jan",
+        status: "Não Conforme",
         justificativa: "Pendente"
     },
     {
         colaborador: "Pedro Alves",
-        semana: "JAN 2",
-        status: "N\u00e3o Conforme",
+        semana: "30 dez - 05 jan",
+        status: "Não Conforme",
         justificativa: "Pendente"
     },
     {
         colaborador: "Carlos Silva",
-        semana: "FEV 1",
-        status: "N\u00e3o Conforme",
+        semana: "27 jan - 02 fev",
+        status: "Não Conforme",
         justificativa: "Pendente"
     }
 ];
