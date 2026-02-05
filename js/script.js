@@ -2093,8 +2093,8 @@ function showDetail(s, cardElement) {
                     txt = 'Ausente';
                 }
 
-                // ✅ Não mostrar ícone "J" se semana estiver em conformidade ou já justificada
-                const podeJustificar = !weekOk && !s.justificada && (d.status === 'ausente' || d.status === 'remoto') && !d.justificado;
+                // ✅ Não mostrar ícone "J" se a semana já tiver 3+ dias presenciais OU se a semana já foi justificada
+                const podeJustificar = !s.justificada && presenciais < 3 && (d.status === 'ausente' || d.status === 'remoto') && !d.justificado;
 
                 return `
                     <div class="day-card">
