@@ -2936,11 +2936,11 @@ function desenharGraficoComparativo() {
 
         // Cor baseada em performance
         if (colab.aderencia >= 85) {
-            ctx.fillStyle = '#107c10'; // Verde
+            ctx.fillStyle = '#3b82f6'; // Azul (excellent)
         } else if (colab.aderencia >= 70) {
-            ctx.fillStyle = '#4BB2F2'; // Azul claro
+            ctx.fillStyle = '#f59e0b'; // Amarelo/Laranja (good)
         } else {
-            ctx.fillStyle = '#d13438'; // Vermelho
+            ctx.fillStyle = '#ef4444'; // Vermelho (critical)
         }
 
         ctx.fillRect(x - (barWidth / 2), y, barWidth, barHeight);
