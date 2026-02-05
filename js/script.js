@@ -2817,10 +2817,30 @@ function desenharGraficoEvolucao() {
     ctx.font = '12px Arial';
     ctx.textAlign = 'center';
 
-    // Labels X (meses)
+    // Labels X (meses) - com responsividade para mobile
+    const isMobile = canvas.width < 600;
+    
     meses.forEach((mes, i) => {
         const x = padding + (i * stepX);
-        ctx.fillText(mes, x, canvas.height - padding + 20);
+        
+        if (isMobile) {
+            // Mobile: rotacionar labels em 45 graus e exibir apenas alguns
+            // Exibe 1 a cada 2 labels se houver muitos meses
+            const mostrarTodos = meses.length <= 6;
+            const deveExibir = mostrarTodos || (i % 2 === 0);
+            
+            if (deveExibir) {
+                ctx.save();
+                ctx.translate(x, canvas.height - padding + 5);
+                ctx.rotate(-Math.PI / 4); // -45 graus
+                ctx.textAlign = 'right';
+                ctx.fillText(mes, 0, 0);
+                ctx.restore();
+            }
+        } else {
+            // Desktop: labels horizontais normais
+            ctx.fillText(mes, x, canvas.height - padding + 20);
+        }
     });
 
     // Labels Y (porcentagem)
@@ -3162,12 +3182,28 @@ function desenharGraficoAreas() {
     const stepX = width / (meses.length - 1);
     const stepY = height / maxValor;
 
-    // Labels X
+    // Labels X (meses) - com responsividade para mobile
     ctx.fillStyle = '#605e5c';
     ctx.font = '12px Arial';
     ctx.textAlign = 'center';
+    
+    const isMobile = canvas.width < 600;
+    
     meses.forEach((mes, i) => {
-        ctx.fillText(mes, padding + (i * stepX), canvas.height - padding + 20);
+        const x = padding + (i * stepX);
+        
+        if (isMobile) {
+            // Mobile: rotacionar labels em 45 graus
+            ctx.save();
+            ctx.translate(x, canvas.height - padding + 5);
+            ctx.rotate(-Math.PI / 4); // -45 graus
+            ctx.textAlign = 'right';
+            ctx.fillText(mes, 0, 0);
+            ctx.restore();
+        } else {
+            // Desktop: labels horizontais normais
+            ctx.fillText(mes, x, canvas.height - padding + 20);
+        }
     });
 
     // Labels Y
