@@ -302,142 +302,105 @@
                             </table>
                         </div>
 
-                        <div class="legend">
-                            <div class="legend-item">
-                                <div class="color-box excellent"></div> 100%
-                            </div>
-                            <div class="legend-item">
-                                <div class="color-box good"></div> >= 90%
-                            </div>
-                            <div class="legend-item">
-                                <div class="color-box critical"></div>
-                                < 90% </div>
-                            </div>
+                        <div class="legend" id="legendAderenciaPainel"></div>
+                    </div>
+                </div>
+
+                <!-- Relatorios page RH -->
+                <div id="relatorios" class="page-view">
+                    <div class="section-title">Relatórios</div>
+
+                    <div class="adherence-card">
+                        <div class="section-title">Relatório de Aderência por Diretoria</div>
+                        <p class="subtitle">
+                            Período Atual - Outubro/2025 a Janeiro/2026
+                        </p>
+
+                        <div class="table-container">
+                            <table id="relatorioAderenciaTable">
+                                <thead>
+                                    <tr>
+                                        <th class="department">BU/Área</th>
+                                        <th>Colaboradores</th>
+                                        <th>Aderência Líquida</th>
+                                        <th>Aderência Após Justificativas</th>
+                                        <th>Pendências</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="relatorioAderenciaTableBody"></tbody>
+                            </table>
+                        </div>
+
+                        <div class="legend" id="legendRelatorioAderencia"></div>
+                    </div>
+
+                    <div class="adherence-card">
+                        <div class="section-title">Relatório de Justificativas de Ausência</div>
+                        <p class="subtitle">
+                            Quantitativo por Tipo de Justificativa
+                        </p>
+
+                        <div class="table-container">
+                            <table id="relatorioJustificativasTable">
+                                <thead>
+                                    <tr>
+                                        <th class="department">Tipo de Justificativa</th>
+                                        <th>Qtde. de Ocorrências</th>
+                                        <th>% sobre Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="relatorioJustificativasTableBody"></tbody>
+                            </table>
                         </div>
                     </div>
 
-                    <!-- Relatorios page RH -->
-                    <div id="relatorios" class="page-view">
-                        <div class="section-title">Relatórios</div>
+                    <div class="adherence-card">
+                        <div class="section-title">Relatório de Status das Justificativas por Gestor</div>
+                        <p class="subtitle">
+                            Análise de Conformidade nas Justificativas de Ausência
+                        </p>
 
+                        <div class="table-container">
+                            <table id="relatorioStatusJustificativasTable">
+                                <thead>
+                                    <tr>
+                                        <th class="department">Gestor</th>
+                                        <th>BU/Área</th>
+                                        <th>Total de Ausências</th>
+                                        <th>Justificadas</th>
+                                        <th>% Justificadas</th>
+                                        <th>Pendentes de Análise</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="relatorioStatusJustificativasTableBody"></tbody>
+                            </table>
+                        </div>
 
+                        <div class="legend" id="legendRelatorioStatus"></div>
+                    </div>
 
-                        <div class="adherence-card">
-                            <div class="adherence-card">
-                                <div class="section-title">Relatório de Aderência por Diretoria</div>
-                                <p class="subtitle">
-                                    Período Atual - Outubro/2025 a Janeiro/2026
-                                </p>
+                    <div class="adherence-card">
+                        <div class="chart-card">
+                            <h3 class="chart-title">Evolução de Aderência por Área - Últimos 6 Meses
+                            </h3>
+                            <p class="chart-subtitle">Comparação entre áreas da ALPA SEDE</p>
 
-                                <div class="table-container">
-                                    <table id="relatorioAderenciaTable">
-                                        <thead>
-                                            <tr>
-                                                <th class="department">BU/Área</th>
-                                                <th>Colaboradores</th>
-                                                <th>Aderência Líquida</th>
-                                                <th>Aderência Após Justificativas</th>
-                                                <th>Pendências</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody id="relatorioAderenciaTableBody"></tbody>
-                                    </table>
-                                </div>
-
-                                    <div class="legend">
-                                        <div class="legend-item">
-                                            <div class="color-box excellent"></div> 100%
-                                        </div>
-                                        <div class="legend-item">
-                                            <div class="color-box good"></div> >= 90%
-                                        </div>
-                                        <div class="legend-item">
-                                            <div class="color-box critical"></div>
-                                            < 90% 
-                                        </div>
+                            <div class="chart-areas-wrapper">
+                                <div class="chart-canvas-wrapper">
+                                    <div class="chart-canvas-container">
+                                        <canvas id="graficoAreasChart"></canvas>
                                     </div>
                                 </div>
-                                <div class="adherence-card">
-                                    <div class="section-title">Relatório de Justificativas de Ausência</div>
-                                    <p class="subtitle">
-                                        Quantitativo por Tipo de Justificativa
-                                    </p>
-
-                                    <div class="table-container">
-                                        <table id="relatorioJustificativasTable">
-                                            <thead>
-                                                <tr>
-                                                    <th class="department">Tipo de Justificativa</th>
-                                                    <th>Qtde. de Ocorrências</th>
-                                                    <th>% sobre Total</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody id="relatorioJustificativasTableBody"></tbody>
-                                        </table>
-                                    </div>
-                                </div>
-
-                                <div class="adherence-card">
-                                    <div class="section-title">Relatório de Status das Justificativas por Gestor</div>
-                                    <p class="subtitle">
-                                        Análise de Conformidade nas Justificativas de Ausência
-                                    </p>
-
-                                    <div class="table-container">
-                                        <table id="relatorioStatusJustificativasTable">
-                                            <thead>
-                                                <tr>
-                                                    <th class="department">Gestor</th>
-                                                    <th>BU/Área</th>
-                                                    <th>Total de Ausências</th>
-                                                    <th>Justificadas</th>
-                                                    <th>% Justificadas</th>
-                                                    <th>Pendentes de Análise</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody id="relatorioStatusJustificativasTableBody"></tbody>
-                                        </table>
-                                    </div>
-
-                                   <div class="legend">
-                                        <div class="legend-item">
-                                            <div class="color-box excellent"></div> 100%
-                                        </div>
-                                        <div class="legend-item">
-                                            <div class="color-box good"></div> >= 90%
-                                        </div>
-                                        <div class="legend-item">
-                                            <div class="color-box critical"></div>
-                                            < 90% 
-                                        </div>
-                                    </div>
-                                    </div>
-
-                                    <!-- Análise Consolidada movida para a página Dashboard RH (dashboard-rh) -->
-
-                                    <div class="adherence-card">
-                                        <div class="chart-card">
-                                            <h3 class="chart-title">Evolução de Aderência por Área - Últimos 6 Meses
-                                            </h3>
-                                            <p class="chart-subtitle">Comparação entre áreas da ALPA SEDE</p>
-
-                                            <div class="chart-areas-wrapper">
-                                                <div class="chart-canvas-wrapper">
-                                                    <div class="chart-canvas-container">
-                                                        <canvas id="graficoAreasChart"></canvas>
-                                                    </div>
-                                                </div>
-                                                <div class="chart-legend">
-                                                    <div class="chart-legend-title">Áreas</div>
-                                                    <div id="checkboxesAreas" class="checkboxes-container">
-                                                        <!-- Checkboxes serão inseridos aqui pelo JS -->
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
+                                <div class="chart-legend">
+                                    <div class="chart-legend-title">Áreas</div>
+                                    <div id="checkboxesAreas" class="checkboxes-container">
+                                        <!-- Checkboxes serão inseridos aqui pelo JS -->
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                    </div>
+                </div>
 
                             <div id="dashboard-gestor" class="page-view">
                                 <div class="dashboard-gestor-container">
@@ -763,17 +726,7 @@
                                     <div style="position: relative; height: 350px;">
                                         <canvas id="comparativoChart"></canvas>
                                     </div>
-                                    <div class="legend" style="margin-top: 20px;">
-                                        <div class="legend-item">
-                                            <div class="color-box excellent"></div> Excelente (≥ 85%)
-                                        </div>
-                                        <div class="legend-item">
-                                            <div class="color-box good"></div> Atenção (70% a 84%)
-                                        </div>
-                                        <div class="legend-item">
-                                            <div class="color-box critical"></div> Crítico (< 70%)
-                                        </div>
-                                    </div>
+                                    <div class="legend" id="comparativoLegenda" style="margin-top: 20px;"></div>
                                 </div>
                             </div>
 

@@ -1709,6 +1709,11 @@ td.department {
     min-width: 140px;
 }
 
+/* Forçar largura consistente para status reprovado */
+.badge.badge-reprovado {
+    min-width: 140px;
+}
+
 .day-card {
     width: 100%;
     max-width: 100%;

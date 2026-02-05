@@ -1113,25 +1113,25 @@ const mockOcorrenciasEquipe = [
 const mockSemanasNaoConformesSimplificado = [
     {
         colaborador: "Maria Santos",
-        semana: "06 jan - 12 jan",
+        semana: "06/01 - 12/01",
         status: "Não Conforme",
         justificativa: "Pendente"
     },
     {
         colaborador: "Maria Santos",
-        semana: "13 jan - 19 jan",
+        semana: "13/01 - 19/01",
         status: "Não Conforme",
         justificativa: "Pendente"
     },
     {
         colaborador: "Pedro Alves",
-        semana: "30 dez - 05 jan",
+        semana: "30/12 - 05/01",
         status: "Não Conforme",
         justificativa: "Pendente"
     },
     {
         colaborador: "Carlos Silva",
-        semana: "27 jan - 02 fev",
+        semana: "27/01 - 02/02",
         status: "Não Conforme",
         justificativa: "Pendente"
     }
@@ -2880,6 +2880,17 @@ function desenharGraficoEvolucao() {
         ctx.arc(x, y, 5, 0, Math.PI * 2);
         ctx.fill();
     });
+
+    // Exibir valores (%) acima dos pontos
+    ctx.fillStyle = '#111827';
+    ctx.font = '12px Arial';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'bottom';
+    dados.forEach((valor, i) => {
+        const x = padding + (i * stepX);
+        const y = canvas.height - padding - (valor * stepY);
+        ctx.fillText(`${valor}%`, x, y - 8);
+    });
 }
 
 // Função para desenhar gráfico comparativo (barras)
@@ -3027,6 +3038,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const relatoriosGestorPage = document.getElementById('relatorios-gestor');
     const relatoriosPage = document.getElementById('relatorios');
     
+    renderLegendas();
+
     if (relatoriosGestorPage && relatoriosGestorPage.classList.contains('active')) {
         setTimeout(() => {
             desenharGraficoEvolucao();
@@ -3052,6 +3065,47 @@ window.addEventListener('resize', () => {
 // ===============================
 // GRÁFICO INTERATIVO DE ÁREAS
 // ===============================
+
+// Legendas (mock para futura API)
+const mockLegendaPadrao = [
+    { className: 'excellent', label: '100%' },
+    { className: 'good', label: '>= 90%' },
+    { className: 'critical', label: '< 90%' }
+];
+
+const legendConfigs = [
+    { id: 'legendAderenciaPainel', items: mockLegendaPadrao },
+    { id: 'legendRelatorioAderencia', items: mockLegendaPadrao },
+    { id: 'legendRelatorioStatus', items: mockLegendaPadrao },
+    { id: 'comparativoLegenda', items: mockLegendaPadrao }
+];
+
+function renderLegend(containerId, items) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+
+    container.innerHTML = '';
+
+    items.forEach(item => {
+        const legendItem = document.createElement('div');
+        legendItem.className = 'legend-item';
+
+        const colorBox = document.createElement('div');
+        colorBox.className = `color-box ${item.className}`;
+
+        const textNode = document.createTextNode(` ${item.label}`);
+
+        legendItem.appendChild(colorBox);
+        legendItem.appendChild(textNode);
+        container.appendChild(legendItem);
+    });
+}
+
+function renderLegendas() {
+    legendConfigs.forEach(config => {
+        renderLegend(config.id, config.items);
+    });
+}
 
 // 🔹 Nome da linha média (empresa)
 const NOME_EMPRESA_CHART = 'ALPA SEDE';
