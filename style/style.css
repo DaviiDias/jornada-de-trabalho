@@ -297,6 +297,7 @@ body {
     background: var(--card-background);
     border-radius: 8px;
     padding: 24px;
+    margin-bottom: 20px;
     box-shadow: var(--elevation-shadow);
 }
 
@@ -1777,7 +1778,7 @@ td.department {
 
     .adherence-card {
         padding: 16px;
-        margin-bottom: 15px;
+        margin-bottom: 20px !important;
     }
 
 
