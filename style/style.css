@@ -2664,6 +2664,17 @@ h1 {
     color: #374151;
 }
 
+.just-daily select {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    padding: 8px 10px;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    margin-bottom: 8px;
+}
+
 .just-daily textarea {
     width: 100%;
     min-height: 70px;
