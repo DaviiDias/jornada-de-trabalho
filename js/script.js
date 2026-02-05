@@ -11,6 +11,7 @@ const featureFlags = {
     menuHistoricoJustificativa: false,      // Histórico de justificativas
     menuEspelhoFalta: false,                // Espelho de falta justificada
     menuFerias: false,                      // Solicitação de férias
+    menuJustificarFalta: true,              // Justificar falta (Colaborador)
     
     // Menu Gestor
     menuGestorHistorico: true,              // Histórico da equipe (gestor)
@@ -56,6 +57,7 @@ function applyFeatureFlags() {
     const menuHistoricoJust = document.querySelector('.role-employee .nav-item [data-page="historico-justificativa"]')?.closest('.nav-item');
     const menuEspelhoFalta = document.querySelector('.role-employee .nav-item [data-page="falta-justificada"]')?.closest('.nav-item');
     const menuFerias = document.querySelector('.role-employee .nav-item [data-page="ferias"]')?.closest('.nav-item');
+    const menuJustificarFalta = document.querySelector('.role-employee .nav-item [data-page="justificar-falta"]')?.closest('.nav-item');
     
     if (menuPresenca) menuPresenca.style.display = isFeatureEnabled('menuPresenca') ? 'block' : 'none';
     if (menuHistorico) menuHistorico.style.display = isFeatureEnabled('menuHistorico') ? 'block' : 'none';
@@ -63,6 +65,7 @@ function applyFeatureFlags() {
     if (menuHistoricoJust) menuHistoricoJust.style.display = isFeatureEnabled('menuHistoricoJustificativa') ? 'block' : 'none';
     if (menuEspelhoFalta) menuEspelhoFalta.style.display = isFeatureEnabled('menuEspelhoFalta') ? 'block' : 'none';
     if (menuFerias) menuFerias.style.display = isFeatureEnabled('menuFerias') ? 'block' : 'none';
+    if (menuJustificarFalta) menuJustificarFalta.style.display = isFeatureEnabled('menuJustificarFalta') ? 'block' : 'none';
     
     // Dashboard - Cards de Presença Semanal (Colaborador, Gestor e RH)
     const dashboardPresencaCards = document.getElementById('dashboard-presenca-semanal-cards');
@@ -3253,3 +3256,475 @@ function desenharLinha(ctx, valores, cor, padding, canvasHeight, stepX, stepY, c
 }
 
 
+
+// ===== JUSTIFICAR FALTA - COLABORADOR =====
+// Dados mockados de justificativas enviadas
+const justificativasEnviadas = [
+    {
+        data: '2026-01-15',
+        tipo: 'Justificado por Questões Médicas',
+        status: 'Aprovada',
+        gestor: 'Maria Santos',
+        observacoes: 'Consulta médica de rotina'
+    },
+    {
+        data: '2026-01-22',
+        tipo: 'Justificado por Trabalho Externo',
+        status: 'Pendente',
+        gestor: 'Maria Santos',
+        observacoes: 'Visita técnica ao cliente'
+    },
+    {
+        data: '2026-01-10',
+        tipo: 'Outros Motivos',
+        status: 'Rejeitada',
+        gestor: 'Maria Santos',
+        observacoes: 'Check-in não registrado - solicitar mais informações'
+    }
+];
+
+// ===== DATE PICKER JUSTIFICAR FALTA =====
+const pickerJustificarData = {
+    input: null,
+    calendar: null,
+    selectedDay: null,
+    selectedMonth: null,
+    selectedYear: null,
+    currentMonth: new Date().getMonth(),
+    currentYear: new Date().getFullYear(),
+    today: new Date()
+};
+
+function initJustificarDataPicker() {
+    pickerJustificarData.input = document.getElementById('justificarData');
+    pickerJustificarData.calendar = document.getElementById('calendarJustificarData');
+    pickerJustificarData.today = new Date();
+    pickerJustificarData.today.setHours(0, 0, 0, 0); // Normalizar para meia-noite
+
+    if (!pickerJustificarData.input || !pickerJustificarData.calendar) return;
+
+    // Abrir calendário ao clicar no input
+    pickerJustificarData.input.addEventListener('click', () => {
+        toggleCalendarJustificarData();
+    });
+
+    // Botões de navegação de mês
+    const prevBtn = pickerJustificarData.calendar.querySelector('.prev-month-btn-gestor');
+    const nextBtn = pickerJustificarData.calendar.querySelector('.next-month-btn-gestor');
+
+    if (prevBtn) {
+        prevBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            changeMonthJustificarData(-1);
+        });
+    }
+
+    if (nextBtn) {
+        nextBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            changeMonthJustificarData(1);
+        });
+    }
+
+    // Fechar calendário ao clicar fora
+    document.addEventListener('click', (e) => {
+        if (!pickerJustificarData.calendar.contains(e.target) && 
+            !pickerJustificarData.input.contains(e.target)) {
+            closeCalendarJustificarData();
+        }
+    });
+
+    renderCalendarJustificarData();
+}
+
+function toggleCalendarJustificarData() {
+    if (pickerJustificarData.calendar.classList.contains('active')) {
+        closeCalendarJustificarData();
+    } else {
+        pickerJustificarData.calendar.classList.add('active');
+        renderCalendarJustificarData();
+    }
+}
+
+function closeCalendarJustificarData() {
+    pickerJustificarData.calendar.classList.remove('active');
+}
+
+function renderCalendarJustificarData() {
+    const monthYearDisplay = pickerJustificarData.calendar.querySelector('.month-year-display-gestor');
+    const daysGrid = pickerJustificarData.calendar.querySelector('.calendar-days-grid');
+
+    if (!monthYearDisplay || !daysGrid) return;
+
+    // Atualizar título do mês/ano
+    const mesNome = MONTHS_GESTOR[pickerJustificarData.currentMonth];
+    monthYearDisplay.textContent = `${mesNome} ${pickerJustificarData.currentYear}`;
+
+    // Limpar grid de dias
+    daysGrid.innerHTML = '';
+
+    // Obter primeiro dia do mês e total de dias
+    const firstDay = new Date(pickerJustificarData.currentYear, pickerJustificarData.currentMonth, 1);
+    const lastDay = new Date(pickerJustificarData.currentYear, pickerJustificarData.currentMonth + 1, 0);
+    const totalDays = lastDay.getDate();
+    const startDayOfWeek = firstDay.getDay();
+
+    // Data de hoje para comparação
+    const today = pickerJustificarData.today;
+    const isCurrentMonth = pickerJustificarData.currentMonth === today.getMonth() && 
+                           pickerJustificarData.currentYear === today.getFullYear();
+    const isFutureMonth = pickerJustificarData.currentYear > today.getFullYear() ||
+                          (pickerJustificarData.currentYear === today.getFullYear() && 
+                           pickerJustificarData.currentMonth > today.getMonth());
+
+    // Adicionar dias vazios antes do início do mês
+    for (let i = 0; i < startDayOfWeek; i++) {
+        const emptyDay = document.createElement('div');
+        emptyDay.className = 'calendar-day-cell empty';
+        daysGrid.appendChild(emptyDay);
+    }
+
+    // Adicionar dias do mês
+    for (let day = 1; day <= totalDays; day++) {
+        const dayCell = document.createElement('div');
+        dayCell.className = 'calendar-day-cell';
+        dayCell.textContent = day;
+
+        const currentDate = new Date(pickerJustificarData.currentYear, pickerJustificarData.currentMonth, day);
+        currentDate.setHours(0, 0, 0, 0);
+
+        // Verificar se é data futura (desabilitar)
+        const isFutureDate = currentDate > today || isFutureMonth;
+
+        if (isFutureDate) {
+            dayCell.classList.add('disabled');
+        } else {
+            // Verificar se é o dia selecionado
+            if (pickerJustificarData.selectedDay === day && 
+                pickerJustificarData.selectedMonth === pickerJustificarData.currentMonth &&
+                pickerJustificarData.selectedYear === pickerJustificarData.currentYear) {
+                dayCell.classList.add('selected');
+            }
+
+            dayCell.addEventListener('click', (e) => {
+                e.stopPropagation();
+                selectDateJustificarData(day);
+            });
+        }
+
+        daysGrid.appendChild(dayCell);
+    }
+
+    // Atualizar estado dos botões de navegação
+    updateNavigationButtons();
+}
+
+function updateNavigationButtons() {
+    const prevBtn = pickerJustificarData.calendar.querySelector('.prev-month-btn-gestor');
+    const nextBtn = pickerJustificarData.calendar.querySelector('.next-month-btn-gestor');
+    const today = pickerJustificarData.today;
+
+    // Desabilitar botão "próximo" se estiver no mês atual
+    const isCurrentMonth = pickerJustificarData.currentMonth === today.getMonth() && 
+                           pickerJustificarData.currentYear === today.getFullYear();
+    
+    if (nextBtn) {
+        if (isCurrentMonth) {
+            nextBtn.disabled = true;
+            nextBtn.style.opacity = '0.3';
+            nextBtn.style.cursor = 'not-allowed';
+        } else {
+            nextBtn.disabled = false;
+            nextBtn.style.opacity = '1';
+            nextBtn.style.cursor = 'pointer';
+        }
+    }
+}
+
+function changeMonthJustificarData(direction) {
+    const today = pickerJustificarData.today;
+    
+    pickerJustificarData.currentMonth += direction;
+    
+    if (pickerJustificarData.currentMonth > 11) {
+        pickerJustificarData.currentMonth = 0;
+        pickerJustificarData.currentYear++;
+    } else if (pickerJustificarData.currentMonth < 0) {
+        pickerJustificarData.currentMonth = 11;
+        pickerJustificarData.currentYear--;
+    }
+
+    // Não permitir navegar para meses futuros
+    const isFutureMonth = pickerJustificarData.currentYear > today.getFullYear() ||
+                          (pickerJustificarData.currentYear === today.getFullYear() && 
+                           pickerJustificarData.currentMonth > today.getMonth());
+    
+    if (isFutureMonth) {
+        // Voltar para o mês atual
+        pickerJustificarData.currentMonth = today.getMonth();
+        pickerJustificarData.currentYear = today.getFullYear();
+        return;
+    }
+
+    renderCalendarJustificarData();
+}
+
+function selectDateJustificarData(day) {
+    pickerJustificarData.selectedDay = day;
+    pickerJustificarData.selectedMonth = pickerJustificarData.currentMonth;
+    pickerJustificarData.selectedYear = pickerJustificarData.currentYear;
+
+    // Formatar para exibição: "05/Fevereiro/2026"
+    const diaFormatado = String(day).padStart(2, '0');
+    const mesNome = MONTHS_GESTOR[pickerJustificarData.currentMonth];
+    pickerJustificarData.input.value = `${diaFormatado}/${mesNome}/${pickerJustificarData.currentYear}`;
+    
+    // Armazenar a data no formato ISO para uso no formulário (YYYY-MM-DD)
+    const ano = pickerJustificarData.currentYear;
+    const mes = String(pickerJustificarData.currentMonth + 1).padStart(2, '0');
+    const dia = String(day).padStart(2, '0');
+    pickerJustificarData.input.dataset.isoDate = `${ano}-${mes}-${dia}`;
+
+    renderCalendarJustificarData();
+    closeCalendarJustificarData();
+}
+
+// Controla a exibição do campo de explicação baseado no tipo selecionado
+document.addEventListener('DOMContentLoaded', () => {
+    // Inicializar calendário de data para Justificar Falta
+    initJustificarDataPicker();
+
+    const justificarTipo = document.getElementById('justificarTipo');
+    const explicacaoGroup = document.getElementById('justificarExplicacaoGroup');
+    const explicacaoLabel = document.getElementById('justificarExplicacaoLabel');
+    const explicacaoHint = document.getElementById('justificarExplicacaoHint');
+    const explicacaoTextarea = document.getElementById('justificarExplicacao');
+
+    if (justificarTipo && explicacaoGroup) {
+        justificarTipo.addEventListener('change', function() {
+            const tipoSelecionado = this.value;
+
+            if (tipoSelecionado === '') {
+                explicacaoGroup.style.display = 'none';
+                explicacaoTextarea.required = false;
+            } else if (tipoSelecionado === 'nao-justificado') {
+                explicacaoGroup.style.display = 'block';
+                explicacaoLabel.innerHTML = 'Qual a medida adotada? <span style="color: red;">*</span>';
+                explicacaoHint.textContent = 'Descreva as ações que você tomou ou pretende tomar.';
+                explicacaoTextarea.placeholder = 'Ex: Registro realizado manualmente, Ajuste de ponto solicitado, etc.';
+                explicacaoTextarea.required = true;
+            } else if (tipoSelecionado === 'trabalho-externo') {
+                explicacaoGroup.style.display = 'block';
+                explicacaoLabel.innerHTML = 'Explique o motivo <span style="color: red;">*</span>';
+                explicacaoHint.textContent = 'Ex: viagem, visita técnica, ronda';
+                explicacaoTextarea.placeholder = 'Ex: Visita técnica ao cliente ABC, Reunião externa com fornecedor, etc.';
+                explicacaoTextarea.required = true;
+            } else if (tipoSelecionado === 'questoes-medicas') {
+                explicacaoGroup.style.display = 'block';
+                explicacaoLabel.innerHTML = 'Explique o motivo <span style="color: red;">*</span>';
+                explicacaoHint.textContent = 'Descreva o motivo da ausência médica';
+                explicacaoTextarea.placeholder = 'Ex: Consulta médica de rotina, Exames laboratoriais, Atendimento emergencial, etc.';
+                explicacaoTextarea.required = true;
+            } else if (tipoSelecionado === 'outros-motivos') {
+                explicacaoGroup.style.display = 'block';
+                explicacaoLabel.innerHTML = 'Explique o motivo <span style="color: red;">*</span>';
+                explicacaoHint.textContent = 'Ex: check-in não registrado; férias ou folga reprogramada';
+                explicacaoTextarea.placeholder = 'Ex: Check-in não registrado devido a problema técnico, Folga reprogramada por acordo com gestor, etc.';
+                explicacaoTextarea.required = true;
+            }
+        });
+    }
+
+    // Enviar justificativa
+    const submitBtn = document.getElementById('submitJustificarFalta');
+    if (submitBtn) {
+        submitBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+
+            const dataInput = document.getElementById('justificarData');
+            const data = dataInput.dataset.isoDate || dataInput.value; // Usar a data ISO armazenada
+            const tipo = document.getElementById('justificarTipo').value;
+            const explicacao = document.getElementById('justificarExplicacao').value;
+            const anexo = document.getElementById('justificarAnexo').files[0];
+
+            // Validações
+            if (!data) {
+                alert('Por favor, selecione a data da ausência.');
+                return;
+            }
+
+            if (!tipo) {
+                alert('Por favor, selecione o tipo de justificativa.');
+                return;
+            }
+
+            if (explicacao.trim() === '' && tipo !== '') {
+                alert('Por favor, preencha a explicação.');
+                return;
+            }
+
+            // Adicionar justificativa enviada à lista
+            const tipoTexto = {
+                'nao-justificado': 'Não Justificado',
+                'trabalho-externo': 'Justificado por Trabalho Externo',
+                'questoes-medicas': 'Justificado por Questões Médicas',
+                'outros-motivos': 'Outros Motivos'
+            };
+
+            const novaJustificativa = {
+                data: data,
+                tipo: tipoTexto[tipo],
+                status: 'Pendente',
+                gestor: 'Maria Santos',
+                observacoes: explicacao
+            };
+
+            justificativasEnviadas.unshift(novaJustificativa);
+            popularTabelaJustificativasEnviadas();
+
+            // Limpar formulário
+            dataInput.value = '';
+            dataInput.dataset.isoDate = '';
+            pickerJustificarData.selectedDay = null;
+            pickerJustificarData.selectedMonth = null;
+            pickerJustificarData.selectedYear = null;
+            document.getElementById('justificarTipo').value = '';
+            document.getElementById('justificarExplicacao').value = '';
+            document.getElementById('justificarExplicacaoGroup').style.display = 'none';
+            document.getElementById('justificarAnexo').value = '';
+
+            alert('Justificativa enviada com sucesso! Seu gestor será notificado.');
+        });
+    }
+
+    // Botão cancelar
+    const cancelBtn = document.getElementById('cancelJustificarFalta');
+    if (cancelBtn) {
+        cancelBtn.addEventListener('click', function() {
+            // Limpar formulário
+            const dataInput = document.getElementById('justificarData');
+            dataInput.value = '';
+            dataInput.dataset.isoDate = '';
+            pickerJustificarData.selectedDay = null;
+            pickerJustificarData.selectedMonth = null;
+            pickerJustificarData.selectedYear = null;
+            document.getElementById('justificarTipo').value = '';
+            document.getElementById('justificarExplicacao').value = '';
+            document.getElementById('justificarExplicacaoGroup').style.display = 'none';
+            document.getElementById('justificarAnexo').value = '';
+        });
+    }
+
+    // Popular tabela de justificativas enviadas
+    popularTabelaJustificativasEnviadas();
+    
+    // Popular tabela de justificativas no dashboard
+    popularTabelaJustificativasDashboard();
+});
+
+// Função para popular a tabela de justificativas enviadas
+function popularTabelaJustificativasEnviadas() {
+    const tbody = document.getElementById('justificativasEnviadasTableBody');
+    if (!tbody) return;
+
+    tbody.innerHTML = '';
+
+    if (justificativasEnviadas.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; padding: 20px; color: #666;">Nenhuma justificativa enviada ainda.</td></tr>';
+        return;
+    }
+
+    justificativasEnviadas.forEach(just => {
+        const tr = document.createElement('tr');
+
+        // Formatar data - suporta tanto formato ISO (2026-01-15) quanto string normal
+        let dataFormatada;
+        try {
+            // Tenta criar a data com 'T00:00:00' para evitar problemas de timezone
+            const dataObj = just.data.includes('-') 
+                ? new Date(just.data + 'T00:00:00') 
+                : new Date(just.data);
+            dataFormatada = dataObj.toLocaleDateString('pt-BR');
+        } catch (e) {
+            dataFormatada = just.data; // Fallback para o valor original
+        }
+
+        // Badge de status
+        let statusBadge = '';
+        if (just.status === 'Aprovada') {
+            statusBadge = '<span class="status-badge" style="background: #107c10; color: white; padding: 4px 12px; border-radius: 12px; font-size: 12px;">✓ Aprovada</span>';
+        } else if (just.status === 'Pendente') {
+            statusBadge = '<span class="status-badge" style="background: #ffa500; color: white; padding: 4px 12px; border-radius: 12px; font-size: 12px;">⏳ Pendente</span>';
+        } else if (just.status === 'Rejeitada') {
+            statusBadge = '<span class="status-badge" style="background: #d13438; color: white; padding: 4px 12px; border-radius: 12px; font-size: 12px;">✗ Rejeitada</span>';
+        }
+
+        tr.innerHTML = `
+            <td>${dataFormatada}</td>
+            <td>${just.tipo}</td>
+            <td>${statusBadge}</td>
+            <td>${just.gestor}</td>
+            <td>${just.observacoes}</td>
+        `;
+
+        tbody.appendChild(tr);
+    });
+}
+
+// Função para popular a tabela de justificativas no dashboard (sem emojis e com cores uniformes)
+function popularTabelaJustificativasDashboard() {
+    const tbody = document.getElementById('justificativasTableBodyDashboard');
+    if (!tbody) return;
+
+    tbody.innerHTML = '';
+
+    if (justificativasEnviadas.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; padding: 20px; color: #666;">Nenhuma justificativa enviada ainda.</td></tr>';
+        return;
+    }
+
+    // Mostrar apenas as 5 mais recentes
+    const justificativasRecentes = justificativasEnviadas.slice(0, 5);
+
+    justificativasRecentes.forEach(just => {
+        const tr = document.createElement('tr');
+
+        // Formatar data
+        let dataFormatada;
+        try {
+            const dataObj = just.data.includes('-') 
+                ? new Date(just.data + 'T00:00:00') 
+                : new Date(just.data);
+            dataFormatada = dataObj.toLocaleDateString('pt-BR');
+        } catch (e) {
+            dataFormatada = just.data;
+        }
+
+        // Badge de status sem emoji, usando cores do padrão gestor
+        const statusTexto = just.status;
+        let statusClass = 'badge';
+        if (just.status === 'Aprovada') {
+            statusClass = 'badge badge-aprovado';
+        } else if (just.status === 'Pendente') {
+            statusClass = 'badge badge-pendente';
+        } else if (just.status === 'Rejeitada') {
+            statusClass = 'badge badge-reprovado';
+        }
+        const statusBadge = `<span class="${statusClass}">${statusTexto}</span>`;
+
+        // Truncar observações se muito longo
+        const obsTexto = just.observacoes.length > 80 
+            ? `<span class="obs-text" title="${just.observacoes}">${just.observacoes}</span>`
+            : just.observacoes;
+
+        tr.innerHTML = `
+            <td>${dataFormatada}</td>
+            <td>${just.tipo}</td>
+            <td>${statusBadge}</td>
+            <td>${just.gestor}</td>
+            <td>${obsTexto}</td>
+        `;
+
+        tbody.appendChild(tr);
+    });
+}

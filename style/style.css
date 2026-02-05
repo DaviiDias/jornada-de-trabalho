@@ -1013,6 +1013,39 @@ td.department {
     background-color: #0052a3;
 }
 
+/* Botões secundários */
+.btn-secondary {
+    padding: 10px 24px;
+    background-color: #f0f0f0;
+    color: #323130;
+    border: 1px solid #d1d1d1;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.btn-secondary:hover {
+    background-color: #e0e0e0;
+}
+
+/* Container de ações do formulário */
+.form-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 24px;
+    align-items: center;
+}
+
+/* Hints de formulário */
+.form-hint {
+    font-size: 12px;
+    color: #666;
+    margin-top: 4px;
+    font-style: italic;
+}
+
 /* ===== HISTÓRICO DE PRESENÇA ===== */
 .historico-container {
     background: var(--card-background);
@@ -1043,6 +1076,7 @@ td.department {
 
 .badge-aprovado {
     background-color: #198754;
+    color: #fff;
 }
 
 .badge-pendente {
@@ -1052,6 +1086,11 @@ td.department {
 
 .badge-reprovado {
     background-color: #dc3545;
+    color: #fff;
+    min-width: 140px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
 }
 
 
@@ -2983,5 +3022,398 @@ h1 {
 
     .chart-card {
         padding: 12px;
+    }
+}
+
+
+/* ===== JUSTIFICAR FALTA - COLABORADOR ===== */
+#justificar-falta .adherence-card {
+    margin-bottom: 24px;
+}
+
+#justificar-falta .section-title {
+    margin-bottom: 8px;
+}
+
+#justificar-falta .subtitle {
+    color: #605e5c;
+    font-size: 14px;
+    margin-bottom: 24px;
+    line-height: 1.5;
+}
+
+/* Formulário de Justificativa */
+.justification-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.form-group label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #323130;
+}
+
+.form-group .form-control {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #d1d1d1;
+    border-radius: 4px;
+    font-size: 14px;
+    font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Roboto', sans-serif;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.form-group .form-control:focus {
+    outline: none;
+    border-color: var(--alpargatas-blue);
+    box-shadow: 0 0 0 2px rgba(5, 151, 242, 0.1);
+}
+
+.form-group .form-control:read-only {
+    background-color: #f5f5f5;
+    cursor: not-allowed;
+}
+
+/* Campo de exibição apenas (não editável) */
+.form-control-display {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #d1d1d1;
+    border-radius: 4px;
+    font-size: 14px;
+    font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Roboto', sans-serif;
+    background-color: #f5f5f5;
+    color: #605e5c;
+    cursor: text;
+    user-select: none;
+    pointer-events: none;
+}
+
+.form-group select.form-control {
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23605e5c' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    padding-right: 36px;
+}
+
+.form-group select.form-control:not(:disabled) {
+    cursor: pointer !important;
+}
+
+.form-group select.form-control option:disabled {
+    color: #999;
+}
+
+.form-group textarea.form-control {
+    resize: vertical;
+    min-height: 100px;
+    line-height: 1.5;
+}
+
+/* Date picker na página Justificar Falta */
+#justificar-falta .date-picker-wrapper-gestor {
+    position: relative;
+    width: 100%;
+}
+
+#justificar-falta .date-picker-input-gestor {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #d1d1d1;
+    border-radius: 4px;
+    font-size: 14px;
+    background-color: white;
+    cursor: pointer;
+    user-select: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+#justificar-falta .date-picker-input-gestor:hover {
+    border-color: var(--alpargatas-blue);
+}
+
+#justificar-falta .date-picker-input-gestor:focus {
+    outline: none;
+    border-color: var(--alpargatas-blue);
+    box-shadow: 0 0 0 2px rgba(5, 151, 242, 0.1);
+}
+
+#justificar-falta .calendar-dropdown-gestor {
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0;
+    width: 100%;
+    max-width: 320px;
+    z-index: 1000;
+    background: white;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    border-radius: 8px;
+}
+
+/* Calendário completo com dias */
+.calendar-full {
+    padding: 16px;
+}
+
+.calendar-full .dropdown-header-gestor {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0;
+}
+
+.calendar-days-header {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 4px;
+    margin-bottom: 8px;
+    margin-top: 12px;
+}
+
+.calendar-days-header div {
+    text-align: center;
+    font-size: 12px;
+    font-weight: 600;
+    color: #605e5c;
+    padding: 8px 4px;
+}
+
+.calendar-days-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 4px;
+}
+
+.calendar-day-cell {
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    color: #323130;
+}
+
+.calendar-day-cell:not(.empty):not(.disabled):hover {
+    background-color: #f0f8ff;
+    color: var(--alpargatas-blue);
+}
+
+.calendar-day-cell.selected {
+    background-color: var(--alpargatas-blue);
+    color: white;
+    font-weight: 600;
+}
+
+.calendar-day-cell.disabled {
+    color: #c8c6c4;
+    cursor: not-allowed;
+    text-decoration: line-through;
+}
+
+.calendar-day-cell.empty {
+    cursor: default;
+}
+
+.month-year-display-gestor {
+    font-size: 14px;
+    font-weight: 600;
+    color: #323130;
+    margin: 0;
+    text-align: center;
+    flex: 1;
+}
+
+.prev-month-btn-gestor,
+.next-month-btn-gestor {
+    width: 32px;
+    height: 32px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    font-size: 16px;
+    color: #605e5c;
+    border-radius: 4px;
+    transition: background-color 0.2s ease;
+}
+
+.prev-month-btn-gestor:hover:not(:disabled),
+.next-month-btn-gestor:hover:not(:disabled) {
+    background-color: #f0f0f0;
+}
+
+/* Upload de arquivo */
+.file-upload {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+}
+
+.file-upload input[type="file"] {
+    position: absolute;
+    opacity: 0;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+}
+
+.file-upload .upload-text {
+    display: block;
+    padding: 32px 16px;
+    border: 2px dashed #d1d1d1;
+    border-radius: 4px;
+    text-align: center;
+    color: #605e5c;
+    font-size: 14px;
+    background-color: #fafafa;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.file-upload:hover .upload-text {
+    border-color: var(--alpargatas-blue);
+    background-color: #f0f8ff;
+    color: var(--alpargatas-blue);
+}
+
+/* Ações do formulário */
+.form-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 8px;
+    padding-top: 8px;
+}
+
+/* Tabela de justificativas enviadas */
+#justificar-falta .team-table-container {
+    margin-top: 16px;
+}
+
+#justificar-falta .team-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+#justificar-falta .team-table thead {
+    background-color: #f5f5f5;
+}
+
+#justificar-falta .team-table th {
+    padding: 12px 16px;
+    text-align: left;
+    font-size: 13px;
+    font-weight: 600;
+    color: #323130;
+    border-bottom: 2px solid #d1d1d1;
+}
+
+#justificar-falta .team-table td {
+    padding: 12px 16px;
+    font-size: 14px;
+    color: #323130;
+    border-bottom: 1px solid #edebe9;
+}
+
+#justificar-falta .team-table tbody tr {
+    transition: background-color 0.2s ease;
+}
+
+#justificar-falta .team-table tbody tr:hover {
+    background-color: #f9f9f9;
+}
+
+/* Limitar tamanho da coluna de observações */
+.obs-column {
+    max-width: 300px;
+}
+
+.obs-text {
+    max-width: 300px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    display: block;
+}
+
+.obs-text:hover {
+    white-space: normal;
+    overflow: visible;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    #justificar-falta .form-actions {
+        flex-direction: column;
+    }
+
+    #justificar-falta .btn-solicitar,
+    #justificar-falta .btn-secondary {
+        width: 100%;
+    }
+
+    #justificar-falta .team-table-container {
+        overflow-x: auto;
+    }
+
+    #justificar-falta .team-table {
+        min-width: 600px;
+    }
+}
+
+@media (max-width: 480px) {
+    #justificar-falta .adherence-card {
+        padding: 16px;
+    }
+
+    #justificar-falta .section-title {
+        font-size: 18px;
+    }
+
+    #justificar-falta .subtitle {
+        font-size: 13px;
+    }
+
+    #justificar-falta .form-group label {
+        font-size: 13px;
+    }
+
+    #justificar-falta .form-group .form-control {
+        font-size: 13px;
+        padding: 8px 10px;
+    }
+
+    #justificar-falta .calendar-dropdown-gestor {
+        max-width: 100%;
+        left: 0;
+        right: 0;
+    }
+
+    .calendar-full {
+        padding: 12px;
+    }
+
+    .calendar-days-header div {
+        font-size: 11px;
+        padding: 6px 2px;
+    }
+
+    .calendar-day-cell {
+        font-size: 13px;
+    }
+
+    .month-year-display-gestor {
+        font-size: 13px;
     }
 }
