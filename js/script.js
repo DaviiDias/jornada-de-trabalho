@@ -2045,23 +2045,28 @@ function getStatusSemana(presCount, justificada = false) {
 function showDetail(s, cardElement) {
     const content = document.getElementById('detail-content');
     
-    // ✅ Usa a mesma lógica de contagem: presenciais + justificados
-    const presenciais = s.dias.filter(d => d.status === 'presencial' || d.justificado).length;
+    // ✅ Separa presenciais naturais de justificados
+    const presenciaisNaturais = s.dias.filter(d => d.status === 'presencial').length;
+    const diasJustificados = s.dias.filter(d => d.justificado).length;
+    const presenciais = presenciaisNaturais + diasJustificados;
     const isRequiredSemanal = presenciais < 3;
     
-    // ✅ Semana está OK se tem 3 ou mais dias presenciais/justificados
-    const weekOk = presenciais >= 3;
+    // ✅ Verifica se a semana está OK (com 3+ presenciais NATURAIS, não justificadas)
+    const weekOk = presenciaisNaturais >= 3;
     
     // ✅ Calcula status e cor para exibição
     let statusDisplay, corDisplay;
-    if (weekOk) {
+    if (presenciaisNaturais >= 3) {
         statusDisplay = 'Em conformidade';
         corDisplay = 'var(--verde)';
+    } else if (presenciais >= 3) {
+        statusDisplay = 'Ausência Justificada';
+        corDisplay = 'var(--amarelo)';
     } else if (s.justificada) {
-        statusDisplay = 'Inconformidade justificada';
-        corDisplay = 'var(--azul)';
+        statusDisplay = 'Ausência Justificada';
+        corDisplay = 'var(--amarelo)';
     } else {
-        statusDisplay = 'Inconformidade';
+        statusDisplay = 'Não conformidade';
         corDisplay = 'var(--vermelho)';
     }
 
@@ -2317,27 +2322,36 @@ function renderOverview(dados) {
 
     dados.semanas.forEach(s => {
 
-        // ✅ CONTADOR: dias presenciais + dias justificados contam como presenciais
-        const presenciais = s.dias.filter(d => d.status === 'presencial' || d.justificado).length;
+        // ✅ CONTADOR: separa presenciais naturais de justificados
+        const presenciaisNaturais = s.dias.filter(d => d.status === 'presencial').length;
+        const diasJustificados = s.dias.filter(d => d.justificado).length;
+        const presenciais = presenciaisNaturais + diasJustificados;
         const remotos = s.dias.filter(d => d.status === 'remoto' && !d.justificado).length;
         const ausentes = s.dias.filter(d => d.status === 'ausente' && !d.justificado).length;
 
         // ✅ REGRA DE CONFORMIDADE
         let statusSemana;
 
-        if (presenciais >= 3) {
-            // Se tem 3 ou mais dias presenciais/justificados, está em conformidade
+        if (presenciaisNaturais >= 3) {
+            // Se tem 3 ou mais dias presenciais naturais, está em conformidade
             statusSemana = {
                 class: 'week-ok',
                 label: 'Em conformidade',
                 cor: 'var(--verde)'
             };
-        } else if (s.justificada) {
-            // Se não tem 3 dias presenciais mas tem justificativa, mostra azul
+        } else if (presenciais >= 3) {
+            // Se tem menos presenciais naturais mas justificativas completam até 3
             statusSemana = {
                 class: 'week-justificada',
-                label: 'Inconformidade justificada',
-                cor: 'var(--azul)'
+                label: 'Ausência Justificada',
+                cor: 'var(--amarelo)'
+            };
+        } else if (s.justificada) {
+            // Se não tem 3 dias presenciais mas tem justificativa de semana inteira
+            statusSemana = {
+                class: 'week-justificada',
+                label: 'Ausência Justificada',
+                cor: 'var(--amarelo)'
             };
         } else if (ausentes > 0 || remotos > 2 || presenciais < 3) {
             statusSemana = {

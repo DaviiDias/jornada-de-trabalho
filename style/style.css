@@ -2488,20 +2488,24 @@ h1 {
 }
 
 .week-justificada {
-    border-color: var(--azul);
-    background: rgba(0, 120, 255, 0.12);
+    border-color: var(--amarelo);
+    background: var(--amarelo-claro);
+}
+
+.week-justificada .week-count {
+    color: var(--amarelo);
 }
 
 .status-justificado {
-    background: var(--azul);
-    color: #fff;
+    background: var(--amarelo-claro);
+    color: var(--amarelo);
 }
 
 
 .week-justificado {
-    background: var(--azul-claro);
-    color: var(--azul);
-    border-color: var(--azul);
+    background: var(--amarelo-claro);
+    color: var(--amarelo);
+    border-color: var(--amarelo);
 }
 
 .week-count {
