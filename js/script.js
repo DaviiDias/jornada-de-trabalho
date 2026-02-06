@@ -27,7 +27,7 @@ const featureFlags = {
     tabelaOcorrenciasSimplificada: true,   // Tabela simplificada: Colaborador | Semana | Status | Justificativa (apenas não conformes)
     calendarioFerias: false,                // Calendário de seleção de férias
     graficosGestor: true,                   // Gráficos no dashboard do gestor
-    justificacaoSemanal: false,             // Sistema de justificação semanal
+    justificacaoSemanal: true,              // Sistema de justificação semanal
     alertasPendencias: true,                // Alertas de pendências no calendário
     analiseConsolidada: true,               // Análise consolidada no RH
     
@@ -2398,6 +2398,7 @@ function showDetail(s, cardElement) {
     const ausentesNaoJustificados = s.dias.filter(d => d.status === 'ausente' && !isDiaJustificado(d)).length;
     const hasAusenciaNaoJustificada = ausentesNaoJustificados > 0;
     const isRequiredSemanal = presenciaisEquivalentes < 3 || remotosNaoJustificados > 2 || hasAusenciaNaoJustificada;
+    const weekJustificada = s.justificada && !hasAusenciaNaoJustificada;
     
     // ✅ Verifica se a semana está OK (com 3+ presenciais NATURAIS, não justificadas)
     const weekOk = presenciaisNaturais >= 3;
@@ -2423,7 +2424,7 @@ function showDetail(s, cardElement) {
         corDisplay = 'var(--vermelho)';
     }
 
-    const temAcaoDiaria = s.dias.some(d =>
+    const temAcaoDiaria = !weekJustificada && s.dias.some(d =>
         (d.status === 'ausente' || d.status === 'remoto')
         && !isDiaJustificado(d)
         && (presenciaisEquivalentes < 3 || remotosNaoJustificados > 2 || d.status === 'ausente')
@@ -2453,7 +2454,8 @@ function showDetail(s, cardElement) {
                 }
 
                 // ✅ Não mostrar ícone "J" se a semana já tiver 3+ dias presenciais OU se a semana já foi justificada
-                const podeJustificar = (d.status === 'ausente' || d.status === 'remoto')
+                const podeJustificar = !weekJustificada
+                    && (d.status === 'ausente' || d.status === 'remoto')
                     && !isDiaJustificado(d)
                     && (presenciaisEquivalentes < 3 || remotosNaoJustificados > 2 || d.status === 'ausente');
 
@@ -2487,8 +2489,22 @@ function showDetail(s, cardElement) {
                 ${isFeatureEnabled('justificacaoSemanal') ? `
                     <div class="just-weekly">
                         <strong>Justificativa geral da semana (obrigatória)</strong>
-                        <textarea id="weekly-textarea"
-                            placeholder="Explique o motivo da não conformidade semanal"></textarea>
+                        <div class="form-group" style="margin:12px 0 0;">
+                            <label>Tipo de Justificativa <span style="color: red;">*</span></label>
+                            <select class="form-control" id="weekly-type" required>
+                                <option value="" disabled selected>Selecione...</option>
+                                <option value="nao-justificado">Não Justificado</option>
+                                <option value="trabalho-externo">Trabalho Externo</option>
+                                <option value="questoes-medicas">Questões Médicas</option>
+                                <option value="outros-motivos">Outros Motivos</option>
+                            </select>
+                        </div>
+                        <div class="form-group" id="weekly-explain-group" style="display:none;">
+                            <label id="weekly-explain-label">Explique o motivo <span style="color: red;">*</span></label>
+                            <textarea class="form-control textarea" id="weekly-textarea" rows="3"
+                                placeholder="Descreva os detalhes da justificativa..."></textarea>
+                            <p class="form-hint" id="weekly-explain-hint"></p>
+                        </div>
                     </div>
 
                     <button id="submit-btn" class="submit-btn">
@@ -2503,10 +2519,14 @@ function showDetail(s, cardElement) {
     content.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
     // ⚠️ IMPORTANTE: se não exige justificativa ou já foi justificada, PARA AQUI
-    if (!isRequiredSemanal || (s.justificada && !hasAusenciaNaoJustificada)) return;
+    if (!isRequiredSemanal || weekJustificada) return;
 
     const submitBtn = document.getElementById('submit-btn');
+    const weeklyType = document.getElementById('weekly-type');
     const weeklyTextarea = document.getElementById('weekly-textarea');
+    const weeklyExplainGroup = document.getElementById('weekly-explain-group');
+    const weeklyExplainLabel = document.getElementById('weekly-explain-label');
+    const weeklyExplainHint = document.getElementById('weekly-explain-hint');
     const dailyFieldsContainer = document.getElementById('daily-fields');
 
     if (!dailyFieldsContainer) {
@@ -2760,6 +2780,41 @@ function showDetail(s, cardElement) {
         return;
     }
 
+    if (weeklyType && weeklyExplainGroup && weeklyExplainLabel && weeklyExplainHint) {
+        weeklyType.addEventListener('change', () => {
+            const tipoSelecionado = weeklyType.value;
+
+            if (!tipoSelecionado) {
+                weeklyExplainGroup.style.display = 'none';
+                weeklyTextarea.required = false;
+                return;
+            }
+
+            weeklyExplainGroup.style.display = 'block';
+            weeklyTextarea.required = true;
+
+            if (tipoSelecionado === 'nao-justificado') {
+                weeklyExplainLabel.innerHTML = 'Qual a medida adotada? <span style="color: red;">*</span>';
+                weeklyExplainHint.textContent = 'Descreva as acoes que voce tomou ou pretende tomar.';
+                weeklyTextarea.placeholder = 'Ex: Registro realizado manualmente, Ajuste de ponto solicitado, etc.';
+                return;
+            }
+
+            weeklyExplainLabel.innerHTML = 'Explique o motivo <span style="color: red;">*</span>';
+
+            if (tipoSelecionado === 'trabalho-externo') {
+                weeklyExplainHint.textContent = 'Ex: viagem, visita tecnica, ronda';
+                weeklyTextarea.placeholder = 'Ex: Visita tecnica ao cliente ABC, Reuniao externa com fornecedor, etc.';
+            } else if (tipoSelecionado === 'questoes-medicas') {
+                weeklyExplainHint.textContent = 'Descreva o motivo da ausencia medica';
+                weeklyTextarea.placeholder = 'Ex: Consulta medica de rotina, Exames laboratoriais, Atendimento emergencial, etc.';
+            } else if (tipoSelecionado === 'outros-motivos') {
+                weeklyExplainHint.textContent = 'Ex: check-in nao registrado; ferias ou folga reprogramada';
+                weeklyTextarea.placeholder = 'Ex: Check-in nao registrado devido a problema tecnico, Folga reprogramada por acordo com gestor, etc.';
+            }
+        });
+    }
+
     submitBtn.addEventListener('click', () => {
         submitBtn.disabled = true;
         submitBtn.textContent = 'Salvando...';
@@ -2775,12 +2830,27 @@ function showDetail(s, cardElement) {
             }
         });
 
+        if (weeklyType && !weeklyType.value) {
+            alert('Por favor, selecione o tipo de justificativa semanal.');
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'Salvar justificativas desta semana';
+            return;
+        }
+
+        if (weeklyTextarea && !weeklyTextarea.value.trim()) {
+            alert('Por favor, preencha a justificativa semanal.');
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'Salvar justificativas desta semana';
+            return;
+        }
+
         const payload = {
             colaborador: dadosApiMock.colaborador,
             semana: s.num,
             periodo: s.periodo,
             justificativasDiarias,
-            justificativaSemanal: weeklyTextarea.value.trim()
+            justificativaSemanal: weeklyTextarea.value.trim(),
+            justificativaSemanalTipo: weeklyType ? weeklyType.value : ''
         };
 
         console.log('Enviando para o servidor:', payload);
@@ -2791,8 +2861,19 @@ function showDetail(s, cardElement) {
             if (semanaObj) {
                 // Se houver justificativa semanal, marca a semana como justificada
                 if (weeklyTextarea.value.trim()) {
-                    semanaObj.justificacaoSemanal = weeklyTextarea.value.trim();
+                    const justificativaSemanalTexto = weeklyTextarea.value.trim();
+                    semanaObj.justificacaoSemanal = justificativaSemanalTexto;
+                    semanaObj.justificacaoSemanalTipo = weeklyType ? weeklyType.value : '';
                     semanaObj.justificada = true;
+
+                    semanaObj.dias.forEach(dia => {
+                        const isAusente = dia.status === 'ausente';
+
+                        if (isAusente && !isDiaJustificado(dia)) {
+                            dia.justificado = true;
+                            dia.justificacao = justificativaSemanalTexto;
+                        }
+                    });
                 } else {
                     // Se houver justificativas diárias, marca como justificadas
                     justificativasDiarias.forEach(jd => {
