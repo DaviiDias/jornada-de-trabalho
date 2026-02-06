@@ -27,7 +27,7 @@ const featureFlags = {
     tabelaOcorrenciasSimplificada: true,   // Tabela simplificada: Colaborador | Semana | Status | Justificativa (apenas não conformes)
     calendarioFerias: false,                // Calendário de seleção de férias
     graficosGestor: true,                   // Gráficos no dashboard do gestor
-    justificacaoSemanal: true,              // Sistema de justificação semanal
+    justificacaoSemanal: false,             // Sistema de justificação semanal
     alertasPendencias: true,                // Alertas de pendências no calendário
     analiseConsolidada: true,               // Análise consolidada no RH
     
@@ -454,7 +454,7 @@ let colaboradorSelecionado = null;
 const pageNames = {
     dashboard: 'Dashboard Principal',
     presenca: 'Controle de Presença',
-    'historico-presenca': 'Histórico Mensal de Presença',
+    'historico-presenca': 'Justificativas colaboradores',
     justificativas: 'Minhas Justificativas',
     ferias: 'Solicitar Férias',
     'falta-justificada': 'Solicitar Falta Justificada',
@@ -1542,7 +1542,7 @@ const dadosApiMock = {
             justificada: true,
             justificacaoSemanal: "Problemas operacionais resolvidos",
             dias: [
-                { dia: "Seg", data: "12/01", status: "remoto", justificacao: null },
+                { dia: "Seg", data: "12/01", status: "ausente", justificacao: null, justificacaoColaborador: "Atestado medico enviado" },
                 { dia: "Ter", data: "13/01", status: "presencial", justificacao: null },
                 { dia: "Qua", data: "14/01", status: "ausente", justificado: true, justificacao: "Trabalho externo" },
                 { dia: "Qui", data: "15/01", status: "remoto", justificacao: null },
@@ -1555,9 +1555,9 @@ const dadosApiMock = {
             justificada: false,
             justificacaoSemanal: null,
             dias: [
-                { dia: "Seg", data: "05/01", status: "ausente", justificacao: null },
-                { dia: "Ter", data: "06/01", status: "remoto", justificacao: null },
-                { dia: "Qua", data: "07/01", status: "ausente", justificacao: null },
+                { dia: "Seg", data: "05/01", status: "ausente", justificacao: null, justificacaoColaborador: "Atestado medico enviado" },
+                { dia: "Ter", data: "06/01", status: "remoto", justificacao: null, justificacaoColaborador: "Reuniao externa com fornecedor" },
+                { dia: "Qua", data: "07/01", status: "ausente", justificacao: null, justificacaoColaborador: "Consulta medica reagendada" },
                 { dia: "Qui", data: "08/01", status: "remoto", justificacao: null },
                 { dia: "Sex", data: "09/01", status: "ausente", justificacao: null }
             ]
@@ -2382,27 +2382,39 @@ function getStatusSemana(presCount, justificada = false) {
     };
 }
 
+function isDiaJustificado(dia) {
+    return dia.justificado === true || dia.decisaoGestor === 'deferido';
+}
+
 
 function showDetail(s, cardElement) {
     const content = document.getElementById('detail-content');
     
-    // ✅ Separa presenciais naturais de justificados
+    // ✅ Presenciais naturais e equivalentes (justificados contam)
     const presenciaisNaturais = s.dias.filter(d => d.status === 'presencial').length;
-    const diasJustificados = s.dias.filter(d => d.justificado).length;
-    const presenciais = presenciaisNaturais + diasJustificados;
-    const isRequiredSemanal = presenciais < 3;
+    const diasJustificados = s.dias.filter(d => isDiaJustificado(d)).length;
+    const presenciaisEquivalentes = presenciaisNaturais + diasJustificados;
+    const remotosNaoJustificados = s.dias.filter(d => d.status === 'remoto' && !isDiaJustificado(d)).length;
+    const ausentesNaoJustificados = s.dias.filter(d => d.status === 'ausente' && !isDiaJustificado(d)).length;
+    const hasAusenciaNaoJustificada = ausentesNaoJustificados > 0;
+    const isRequiredSemanal = presenciaisEquivalentes < 3 || remotosNaoJustificados > 2 || hasAusenciaNaoJustificada;
     
     // ✅ Verifica se a semana está OK (com 3+ presenciais NATURAIS, não justificadas)
     const weekOk = presenciaisNaturais >= 3;
     
     // ✅ Calcula status e cor para exibição
     let statusDisplay, corDisplay;
-    if (presenciaisNaturais >= 3) {
-        statusDisplay = 'Em conformidade';
-        corDisplay = 'var(--verde)';
-    } else if (presenciais >= 3) {
-        statusDisplay = 'Ausência Justificada';
-        corDisplay = 'var(--amarelo)';
+    if (hasAusenciaNaoJustificada) {
+        statusDisplay = 'Não conformidade';
+        corDisplay = 'var(--vermelho)';
+    } else if (presenciaisEquivalentes >= 3 && remotosNaoJustificados <= 2 && ausentesNaoJustificados === 0) {
+        if (diasJustificados > 0) {
+            statusDisplay = 'Ausência Justificada';
+            corDisplay = 'var(--amarelo)';
+        } else {
+            statusDisplay = 'Em conformidade';
+            corDisplay = 'var(--verde)';
+        }
     } else if (s.justificada) {
         statusDisplay = 'Ausência Justificada';
         corDisplay = 'var(--amarelo)';
@@ -2411,16 +2423,22 @@ function showDetail(s, cardElement) {
         corDisplay = 'var(--vermelho)';
     }
 
+    const temAcaoDiaria = s.dias.some(d =>
+        (d.status === 'ausente' || d.status === 'remoto')
+        && !isDiaJustificado(d)
+        && (presenciaisEquivalentes < 3 || remotosNaoJustificados > 2 || d.status === 'ausente')
+    );
+
     content.innerHTML = `
         <h3 style="margin:0 0 20px; text-align:center; color:${corDisplay}">
-            Semana ${s.num} – ${s.periodo} (${presenciais} presenciais)
+            Semana ${s.num} – ${s.periodo} (${presenciaisEquivalentes} presenciais)
         </h3>
 
         <div class="days-grid">
             ${s.dias.map(d => {
                 let cls = '', txt = '';
 
-                if (d.justificado) {
+                if (isDiaJustificado(d)) {
                     cls = 'status-justificado';
                     txt = 'Justificado';
                 } else if (d.status === 'presencial') {
@@ -2435,7 +2453,9 @@ function showDetail(s, cardElement) {
                 }
 
                 // ✅ Não mostrar ícone "J" se a semana já tiver 3+ dias presenciais OU se a semana já foi justificada
-                const podeJustificar = !s.justificada && presenciais < 3 && (d.status === 'ausente' || d.status === 'remoto') && !d.justificado;
+                const podeJustificar = (d.status === 'ausente' || d.status === 'remoto')
+                    && !isDiaJustificado(d)
+                    && (presenciaisEquivalentes < 3 || remotosNaoJustificados > 2 || d.status === 'ausente');
 
                 return `
                     <div class="day-card">
@@ -2446,7 +2466,9 @@ function showDetail(s, cardElement) {
                             <div class="just-icon"
                                 data-dia="${d.dia}"
                                 data-data="${d.data}"
-                                data-tipo="${txt}">
+                                data-tipo="${txt}"
+                                data-just-colaborador="${(d.justificacaoColaborador || '').replace(/"/g, '&quot;')}"
+                                data-just-anexo="${(d.justificacaoAnexo || '').replace(/"/g, '&quot;')}">
                                 J
                             </div>
                         ` : ``}
@@ -2455,22 +2477,24 @@ function showDetail(s, cardElement) {
             }).join('')}
         </div>
 
-        ${isRequiredSemanal && !s.justificada ? `
+        ${isRequiredSemanal && temAcaoDiaria ? `
             <div class="justifications-panel">
                 <strong>Justificativas</strong><br>
-                <small>Clique no ícone "J" nos dias para adicionar ou remover justificativa diária.</small>
+                <small>Clique no ícone "J" nos dias para aprovar, negar ou criar justificativa diária.</small>
 
                 <div id="daily-fields" style="margin:16px 0;"></div>
 
-                <div class="just-weekly">
-                    <strong>Justificativa geral da semana (obrigatória)</strong>
-                    <textarea id="weekly-textarea"
-                        placeholder="Explique o motivo da não conformidade semanal"></textarea>
-                </div>
+                ${isFeatureEnabled('justificacaoSemanal') ? `
+                    <div class="just-weekly">
+                        <strong>Justificativa geral da semana (obrigatória)</strong>
+                        <textarea id="weekly-textarea"
+                            placeholder="Explique o motivo da não conformidade semanal"></textarea>
+                    </div>
 
-                <button id="submit-btn" class="submit-btn">
-                    Salvar justificativas desta semana
-                </button>
+                    <button id="submit-btn" class="submit-btn">
+                        Salvar justificativas desta semana
+                    </button>
+                ` : ''}
             </div>
         ` : ``}
     `;
@@ -2479,11 +2503,15 @@ function showDetail(s, cardElement) {
     content.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
     // ⚠️ IMPORTANTE: se não exige justificativa ou já foi justificada, PARA AQUI
-    if (!isRequiredSemanal || s.justificada) return;
+    if (!isRequiredSemanal || (s.justificada && !hasAusenciaNaoJustificada)) return;
 
     const submitBtn = document.getElementById('submit-btn');
     const weeklyTextarea = document.getElementById('weekly-textarea');
     const dailyFieldsContainer = document.getElementById('daily-fields');
+
+    if (!dailyFieldsContainer) {
+        return;
+    }
 
     document.querySelectorAll('.just-icon').forEach(icon => {
         icon.addEventListener('click', function (e) {
@@ -2492,6 +2520,16 @@ function showDetail(s, cardElement) {
             const dia = this.dataset.dia;
             const data = this.dataset.data;
             const tipo = this.dataset.tipo;
+            const justColaborador = this.dataset.justColaborador || '';
+            const justAnexo = this.dataset.justAnexo || '';
+            const hasJustColaborador = justColaborador.trim().length > 0;
+            const justColaboradorSafe = justColaborador
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;');
+            const justAnexoSafe = justAnexo
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;');
+            const hasAnexo = justAnexoSafe.trim().length > 0;
 
             const existing = dailyFieldsContainer.querySelector(
                 `[data-dia="${dia}"]`
@@ -2503,78 +2541,68 @@ function showDetail(s, cardElement) {
                 return;
             }
 
-            dailyFieldsContainer.insertAdjacentHTML('beforeend', `
-                <div class="just-daily" data-dia="${dia}">
-                    <strong>${dia} (${data}) – ${tipo}</strong>
-
-                    <strong>Tipo</strong>
-                    <select class="form-control daily-type">
-                        <option value="" selected disabled>Selecione o tipo</option>
-                        <option value="trabalho">Trabalho externo</option>
-                        <option value="nao">Não Justificado</option>
-                        <option value="outro">Outros</option>
-                    </select>
-
-                    <textarea class="daily-textarea" style="display:none"></textarea>
-
-                    <button class="daily-submit submit-btn"
-                        style="display:none; margin-top:8px;">
-                        Enviar
-                    </button>
-                </div>
-            `);
+            if (hasJustColaborador) {
+                dailyFieldsContainer.insertAdjacentHTML('beforeend', `
+                    <div class="just-daily" data-dia="${dia}" data-has-colab="1">
+                        <strong>${dia} (${data}) – ${tipo}</strong>
+                        <p style="margin:8px 0; font-size:12px; color:#666;">Justificativa do colaborador:</p>
+                        <div class="daily-text-display" style="background:#f5f7fa; border:1px solid #e6e8eb; border-radius:6px; padding:10px; font-size:13px; color:#333;">${justColaboradorSafe}</div>
+                        ${hasAnexo ? `<p style=\"margin:8px 0 0; font-size:12px; color:#666;\">Documento: <span style=\"color:#323130; font-weight:600;\">${justAnexoSafe}</span></p>` : ''}
+                        <div class="daily-override-section" style="display:none;">
+                            <p style="margin:12px 0 6px; font-size:12px; color:#666;">Justificativa do gestor:</p>
+                            <textarea class="daily-override-text" placeholder="Escreva nova justificativa"></textarea>
+                        </div>
+                        <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:8px;">
+                            <button class="daily-approve submit-btn">Aprovar</button>
+                            <button class="daily-override submit-btn" data-step="show" style="background:#fff3cd; color:#8a6d3b;">Escrever nova justificativa</button>
+                        </div>
+                    </div>
+                `);
+            } else {
+                dailyFieldsContainer.insertAdjacentHTML('beforeend', `
+                    <div class="just-daily" data-dia="${dia}" data-has-colab="0">
+                        <strong>${dia} (${data}) – ${tipo}</strong>
+                        <div class="form-group" style="margin:12px 0 0;">
+                            <label>Tipo de Justificativa <span style="color: red;">*</span></label>
+                            <select class="form-control manager-just-type" required>
+                                <option value="" disabled selected>Selecione...</option>
+                                <option value="nao-justificado">Não Justificado</option>
+                                <option value="trabalho-externo">Justificado por Trabalho Externo</option>
+                                <option value="questoes-medicas">Justificado por Questões Médicas</option>
+                                <option value="outros-motivos">Outros Motivos</option>
+                            </select>
+                        </div>
+                        <div class="form-group manager-just-explain" style="display:none;">
+                            <label class="manager-just-label">Explique o motivo <span style="color: red;">*</span></label>
+                            <textarea class="form-control textarea manager-just-text" rows="3"
+                                placeholder="Descreva os detalhes da justificativa..."></textarea>
+                            <p class="form-hint manager-just-hint"></p>
+                        </div>
+                        <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:8px;">
+                            <button class="daily-save submit-btn">Salvar justificativa</button>
+                            <button class="daily-cancel submit-btn" style="background:#f8d7da; color:#842029;">Cancelar</button>
+                        </div>
+                    </div>
+                `);
+            }
 
             this.classList.add('active');
 
             const block = dailyFieldsContainer.querySelector(
                 `[data-dia="${dia}"]`
             );
-            const select = block.querySelector('.daily-type');
-            const textarea = block.querySelector('.daily-textarea');
-            const sendBtn = block.querySelector('.daily-submit');
+            const overrideTextarea = block.querySelector('.daily-override-text');
             const iconRef = this; // ✅ Salva a referência do icon
 
-            select.addEventListener('change', () => {
-                textarea.style.display = 'block';
-                sendBtn.style.display = 'inline-block';
-
-                if (select.value === 'trabalho') {
-                    textarea.placeholder = 'Digite a Justificativa ...';
-                } else if (select.value === 'nao') {
-                    textarea.placeholder = 'Digite a Medida Aplicada ...';
-                } else {
-                    textarea.placeholder = 'Digite os Detalhes ...';
-                }
-            });
-
-            sendBtn.addEventListener('click', ev => {
-                ev.stopPropagation();
-                const textareaValue = textarea.value.trim();
-                
-                if (!textareaValue) {
-                    alert('Preencha o texto antes de enviar!');
-                    return;
-                }
-                
-                // ✅ Atualiza o dia nos dados mockados
-                const diaObj = s.dias.find(d => d.dia === dia);
-                if (diaObj) {
-                    diaObj.justificacao = textareaValue;
-                    diaObj.justificado = true;
-                }
-                
-                alert('Justificativa enviada com sucesso!');
-                
-                // Remove o campo de justificativa após enviar
+            const finalizeDecision = (actionLabel) => {
+                alert(actionLabel);
                 block.remove();
                 iconRef.classList.remove('active');
-                
-                // Re-renderiza a visualização
+
                 setTimeout(() => {
                     renderOverview(dadosApiMock);
-                    atualizarResumo(); // ✅ Atualiza o resumo
-                    
-                    // ✅ Clica no card da semana para atualizar instantaneamente
+                    atualizarResumo();
+
                     setTimeout(() => {
                         const weekCard = document.querySelector(`.week-card[data-semana="${s.num}"]`);
                         if (weekCard) {
@@ -2582,9 +2610,155 @@ function showDetail(s, cardElement) {
                         }
                     }, 100);
                 }, 300);
-            });
+            };
+
+            const approveBtn = block.querySelector('.daily-approve');
+            const overrideBtn = block.querySelector('.daily-override');
+            const overrideSection = block.querySelector('.daily-override-section');
+            const saveBtn = block.querySelector('.daily-save');
+            const cancelBtn = block.querySelector('.daily-cancel');
+            const managerTypeSelect = block.querySelector('.manager-just-type');
+            const managerExplainGroup = block.querySelector('.manager-just-explain');
+            const managerExplainLabel = block.querySelector('.manager-just-label');
+            const managerExplainHint = block.querySelector('.manager-just-hint');
+            const managerExplainText = block.querySelector('.manager-just-text');
+
+            if (approveBtn) {
+                approveBtn.addEventListener('click', ev => {
+                    ev.stopPropagation();
+                    const textoColaborador = (justColaborador || '').trim();
+                    if (!textoColaborador) {
+                        alert('Nao ha justificativa do colaborador para aprovar.');
+                        return;
+                    }
+                    const diaObj = s.dias.find(d => d.dia === dia);
+                    if (diaObj) {
+                        diaObj.justificacao = diaObj.justificacaoColaborador || textoColaborador;
+                        diaObj.justificado = true;
+                        diaObj.decisaoGestor = 'deferido';
+                        diaObj.justificacaoGestor = null;
+                    }
+                    finalizeDecision('Justificativa aprovada com sucesso!');
+                });
+            }
+
+            if (overrideBtn) {
+                overrideBtn.addEventListener('click', ev => {
+                    ev.stopPropagation();
+                    if (overrideBtn.dataset.step === 'show') {
+                        if (overrideSection) {
+                            overrideSection.style.display = 'block';
+                        }
+                        overrideBtn.dataset.step = 'save';
+                        overrideBtn.textContent = 'Salvar nova justificativa';
+                        return;
+                    }
+
+                    const texto = overrideTextarea ? overrideTextarea.value.trim() : '';
+                    if (!texto) {
+                        alert('Preencha o texto antes de enviar!');
+                        return;
+                    }
+                    const diaObj = s.dias.find(d => d.dia === dia);
+                    if (diaObj) {
+                        diaObj.justificacao = texto;
+                        diaObj.justificado = true;
+                        diaObj.decisaoGestor = 'deferido';
+                        diaObj.justificacaoGestor = texto;
+                    }
+                    finalizeDecision('Justificativa salva com sucesso!');
+                });
+            }
+
+            if (managerTypeSelect && managerExplainGroup && managerExplainLabel && managerExplainHint && managerExplainText) {
+                managerTypeSelect.addEventListener('change', () => {
+                    const tipoSelecionado = managerTypeSelect.value;
+
+                    if (!tipoSelecionado) {
+                        managerExplainGroup.style.display = 'none';
+                        managerExplainText.required = false;
+                        return;
+                    }
+
+                    managerExplainGroup.style.display = 'block';
+                    managerExplainText.required = true;
+
+                    if (tipoSelecionado === 'nao-justificado') {
+                        managerExplainLabel.innerHTML = 'Qual a medida adotada? <span style="color: red;">*</span>';
+                        managerExplainHint.textContent = 'Descreva as acoes que voce tomou ou pretende tomar.';
+                        managerExplainText.placeholder = 'Ex: Registro realizado manualmente, Ajuste de ponto solicitado, etc.';
+                        return;
+                    }
+
+                    managerExplainLabel.innerHTML = 'Explique o motivo <span style="color: red;">*</span>';
+
+                    if (tipoSelecionado === 'trabalho-externo') {
+                        managerExplainHint.textContent = 'Ex: viagem, visita tecnica, ronda';
+                        managerExplainText.placeholder = 'Ex: Visita tecnica ao cliente ABC, Reuniao externa com fornecedor, etc.';
+                    } else if (tipoSelecionado === 'questoes-medicas') {
+                        managerExplainHint.textContent = 'Descreva o motivo da ausencia medica';
+                        managerExplainText.placeholder = 'Ex: Consulta medica de rotina, Exames laboratoriais, Atendimento emergencial, etc.';
+                    } else if (tipoSelecionado === 'outros-motivos') {
+                        managerExplainHint.textContent = 'Ex: check-in nao registrado; ferias ou folga reprogramada';
+                        managerExplainText.placeholder = 'Ex: Check-in nao registrado devido a problema tecnico, Folga reprogramada por acordo com gestor, etc.';
+                    }
+                });
+            }
+
+            if (saveBtn) {
+                saveBtn.addEventListener('click', ev => {
+                    ev.stopPropagation();
+
+                    const tipoSelecionado = managerTypeSelect ? managerTypeSelect.value : '';
+                    const texto = managerExplainText ? managerExplainText.value.trim() : '';
+
+                    if (!tipoSelecionado) {
+                        alert('Por favor, selecione o tipo de justificativa.');
+                        return;
+                    }
+
+                    if (!texto) {
+                        alert('Por favor, preencha a explicacao.');
+                        return;
+                    }
+
+                    const diaObj = s.dias.find(d => d.dia === dia);
+                    if (diaObj) {
+                        if (tipoSelecionado === 'nao-justificado') {
+                            diaObj.justificacao = null;
+                            diaObj.justificado = false;
+                            diaObj.decisaoGestor = 'indeferido';
+                            diaObj.justificacaoGestor = texto;
+                            diaObj.justificacaoTipoGestor = tipoSelecionado;
+                        } else {
+                            diaObj.justificacao = texto;
+                            diaObj.justificado = true;
+                            diaObj.decisaoGestor = 'deferido';
+                            diaObj.justificacaoGestor = texto;
+                            diaObj.justificacaoTipoGestor = tipoSelecionado;
+                        }
+                    }
+
+                    const sucessoMsg = tipoSelecionado === 'nao-justificado'
+                        ? 'Ausencia marcada como nao justificada.'
+                        : 'Justificativa salva com sucesso!';
+                    finalizeDecision(sucessoMsg);
+                });
+            }
+
+            if (cancelBtn) {
+                cancelBtn.addEventListener('click', ev => {
+                    ev.stopPropagation();
+                    block.remove();
+                    iconRef.classList.remove('active');
+                });
+            }
         });
     });
+
+    if (!submitBtn || !weeklyTextarea) {
+        return;
+    }
 
     submitBtn.addEventListener('click', () => {
         submitBtn.disabled = true;
@@ -2663,38 +2837,43 @@ function renderOverview(dados) {
 
     dados.semanas.forEach(s => {
 
-        // ✅ CONTADOR: separa presenciais naturais de justificados
+        // ✅ CONTADOR: presenciais naturais e equivalentes (justificados contam)
         const presenciaisNaturais = s.dias.filter(d => d.status === 'presencial').length;
-        const diasJustificados = s.dias.filter(d => d.justificado).length;
-        const presenciais = presenciaisNaturais + diasJustificados;
-        const remotos = s.dias.filter(d => d.status === 'remoto' && !d.justificado).length;
-        const ausentes = s.dias.filter(d => d.status === 'ausente' && !d.justificado).length;
+        const diasJustificados = s.dias.filter(d => isDiaJustificado(d)).length;
+        const presenciaisEquivalentes = presenciaisNaturais + diasJustificados;
+        const remotosNaoJustificados = s.dias.filter(d => d.status === 'remoto' && !isDiaJustificado(d)).length;
+        const ausentesNaoJustificados = s.dias.filter(d => d.status === 'ausente' && !isDiaJustificado(d)).length;
 
         // ✅ REGRA DE CONFORMIDADE
         let statusSemana;
 
-        if (presenciaisNaturais >= 3) {
-            // Se tem 3 ou mais dias presenciais naturais, está em conformidade
+        const hasAusenciaNaoJustificada = ausentesNaoJustificados > 0;
+
+        if (hasAusenciaNaoJustificada) {
             statusSemana = {
+                class: 'week-urgente',
+                label: 'Inconformidade',
+                cor: 'var(--vermelho)'
+            };
+        } else if (presenciaisEquivalentes >= 3 && remotosNaoJustificados <= 2 && ausentesNaoJustificados === 0) {
+            // Se atingiu a regra com dias justificados, fica como ausencia justificada
+            statusSemana = diasJustificados > 0 ? {
+                class: 'week-justificada',
+                label: 'Ausência Justificada',
+                cor: 'var(--amarelo)'
+            } : {
                 class: 'week-ok',
                 label: 'Em conformidade',
                 cor: 'var(--verde)'
             };
-        } else if (presenciais >= 3) {
-            // Se tem menos presenciais naturais mas justificativas completam até 3
-            statusSemana = {
-                class: 'week-justificada',
-                label: 'Ausência Justificada',
-                cor: 'var(--amarelo)'
-            };
-        } else if (s.justificada) {
+        } else if (s.justificada && !hasAusenciaNaoJustificada) {
             // Se não tem 3 dias presenciais mas tem justificativa de semana inteira
             statusSemana = {
                 class: 'week-justificada',
                 label: 'Ausência Justificada',
                 cor: 'var(--amarelo)'
             };
-        } else if (ausentes > 0 || remotos > 2 || presenciais < 3) {
+        } else if (remotosNaoJustificados > 2 || presenciaisEquivalentes < 3) {
             statusSemana = {
                 class: 'week-urgente',
                 label: 'Inconformidade',
@@ -2719,14 +2898,14 @@ function renderOverview(dados) {
             </div>
 
             <div class="week-count" style="color:${statusSemana.cor}">
-                ${presenciais}
+                ${presenciaisEquivalentes}
             </div>
 
             <div style="text-align:center; padding:8px; font-size:0.9rem;">
                 ${statusSemana.label}
             </div>
 
-            ${s.justificada ? `<div class="justificado-icon">✓</div>` : ``}
+            ${s.justificada && !hasAusenciaNaoJustificada ? `<div class="justificado-icon">✓</div>` : ``}
         `;
 
         card.addEventListener('click', () => {
@@ -2777,13 +2956,19 @@ function atualizarResumo() {
 
     // ✅ Conta semanas que exigem justificativa: presenciais + justificados < 3 E não foi justificada
     const nc = dados.semanas.filter(s => {
-        const presenciais = s.dias.filter(d => d.status === 'presencial' || d.justificado).length;
-        return presenciais < 3 && !s.justificada;
+        const presenciais = s.dias.filter(d => d.status === 'presencial').length;
+        const diasJustificados = s.dias.filter(d => isDiaJustificado(d)).length;
+        const presenciaisEquivalentes = presenciais + diasJustificados;
+        const remotosNaoJustificados = s.dias.filter(d => d.status === 'remoto' && !isDiaJustificado(d)).length;
+        const ausentesNaoJustificados = s.dias.filter(d => d.status === 'ausente' && !isDiaJustificado(d)).length;
+        return (presenciaisEquivalentes < 3 || remotosNaoJustificados > 2 || ausentesNaoJustificados > 0) && !s.justificada;
     }).length;
 
     // ✅ Total de dias presenciais + justificados
     const total = dados.semanas.reduce((sum, s) => {
-        return sum + s.dias.filter(d => d.status === 'presencial' || d.justificado).length;
+        const presenciais = s.dias.filter(d => d.status === 'presencial').length;
+        const diasJustificados = s.dias.filter(d => isDiaJustificado(d)).length;
+        return sum + presenciais + diasJustificados;
     }, 0);
 
     const nome = colaboradorSelecionado || 'Colaborador não identificado';
@@ -3687,6 +3872,28 @@ const pickerJustificarData = {
     today: new Date()
 };
 
+function formatDayMonthFromIso(dateIso) {
+    if (!dateIso || !dateIso.includes('-')) return '';
+    const [year, month, day] = dateIso.split('-');
+    return `${day}/${month}`;
+}
+
+function storeColaboradorJustificativa(dateIso, justificativaTexto, anexoNome) {
+    const dayMonth = formatDayMonthFromIso(dateIso);
+    if (!dayMonth || !justificativaTexto) return;
+
+    dadosApiMock.semanas.forEach(semana => {
+        semana.dias.forEach(dia => {
+            if (dia.data === dayMonth) {
+                dia.justificacaoColaborador = justificativaTexto;
+                if (anexoNome) {
+                    dia.justificacaoAnexo = anexoNome;
+                }
+            }
+        });
+    });
+}
+
 function initJustificarDataPicker() {
     pickerJustificarData.input = document.getElementById('justificarData');
     pickerJustificarData.calendar = document.getElementById('calendarJustificarData');
@@ -3974,6 +4181,8 @@ document.addEventListener('DOMContentLoaded', () => {
             justificativasEnviadas.unshift(novaJustificativa);
             popularTabelaJustificativasEnviadas();
 
+            storeColaboradorJustificativa(data, explicacao.trim(), anexo ? anexo.name : '');
+
             // Limpar formulário
             dataInput.value = '';
             dataInput.dataset.isoDate = '';
@@ -4111,9 +4320,7 @@ function popularTabelaJustificativasDashboard() {
 
         tr.innerHTML = `
             <td>${dataFormatada}</td>
-            <td>${just.tipo}</td>
             <td>${statusBadge}</td>
-            <td>${just.gestor}</td>
             <td>${obsTexto}</td>
         `;
 
