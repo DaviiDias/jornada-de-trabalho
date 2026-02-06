@@ -2567,8 +2567,8 @@ function showDetail(s, cardElement) {
                             <select class="form-control manager-just-type" required>
                                 <option value="" disabled selected>Selecione...</option>
                                 <option value="nao-justificado">Não Justificado</option>
-                                <option value="trabalho-externo">Justificado por Trabalho Externo</option>
-                                <option value="questoes-medicas">Justificado por Questões Médicas</option>
+                                <option value="trabalho-externo">Trabalho Externo</option>
+                                <option value="questoes-medicas">Questões Médicas</option>
                                 <option value="outros-motivos">Outros Motivos</option>
                             </select>
                         </div>
@@ -3872,6 +3872,24 @@ const pickerJustificarData = {
     today: new Date()
 };
 
+function getPreviousWeekRange(baseDate) {
+    const today = new Date(baseDate.getFullYear(), baseDate.getMonth(), baseDate.getDate());
+    const dayOfWeek = today.getDay() || 7;
+    const mondayThisWeek = new Date(today);
+    mondayThisWeek.setDate(today.getDate() - dayOfWeek + 1);
+
+    const start = new Date(mondayThisWeek);
+    start.setDate(mondayThisWeek.getDate() - 7);
+
+    const end = new Date(start);
+    end.setDate(start.getDate() + 6);
+
+    start.setHours(0, 0, 0, 0);
+    end.setHours(23, 59, 59, 999);
+
+    return { start, end };
+}
+
 function formatDayMonthFromIso(dateIso) {
     if (!dateIso || !dateIso.includes('-')) return '';
     const [year, month, day] = dateIso.split('-');
@@ -3970,11 +3988,9 @@ function renderCalendarJustificarData() {
 
     // Data de hoje para comparação
     const today = pickerJustificarData.today;
-    const isCurrentMonth = pickerJustificarData.currentMonth === today.getMonth() && 
-                           pickerJustificarData.currentYear === today.getFullYear();
-    const isFutureMonth = pickerJustificarData.currentYear > today.getFullYear() ||
-                          (pickerJustificarData.currentYear === today.getFullYear() && 
-                           pickerJustificarData.currentMonth > today.getMonth());
+    const previousWeek = getPreviousWeekRange(today);
+    const allowedMonth = previousWeek.start.getMonth();
+    const allowedYear = previousWeek.start.getFullYear();
 
     // Adicionar dias vazios antes do início do mês
     for (let i = 0; i < startDayOfWeek; i++) {
@@ -3992,10 +4008,10 @@ function renderCalendarJustificarData() {
         const currentDate = new Date(pickerJustificarData.currentYear, pickerJustificarData.currentMonth, day);
         currentDate.setHours(0, 0, 0, 0);
 
-        // Verificar se é data futura (desabilitar)
-        const isFutureDate = currentDate > today || isFutureMonth;
+        // Permitir somente datas da semana anterior
+        const isAllowedDate = currentDate >= previousWeek.start && currentDate <= previousWeek.end;
 
-        if (isFutureDate) {
+        if (!isAllowedDate) {
             dayCell.classList.add('disabled');
         } else {
             // Verificar se é o dia selecionado
@@ -4022,13 +4038,14 @@ function updateNavigationButtons() {
     const prevBtn = pickerJustificarData.calendar.querySelector('.prev-month-btn-gestor');
     const nextBtn = pickerJustificarData.calendar.querySelector('.next-month-btn-gestor');
     const today = pickerJustificarData.today;
-
-    // Desabilitar botão "próximo" se estiver no mês atual
-    const isCurrentMonth = pickerJustificarData.currentMonth === today.getMonth() && 
-                           pickerJustificarData.currentYear === today.getFullYear();
+    const previousWeek = getPreviousWeekRange(today);
+    const allowedMonth = previousWeek.start.getMonth();
+    const allowedYear = previousWeek.start.getFullYear();
+    const isAllowedMonth = pickerJustificarData.currentMonth === allowedMonth &&
+        pickerJustificarData.currentYear === allowedYear;
     
     if (nextBtn) {
-        if (isCurrentMonth) {
+        if (isAllowedMonth) {
             nextBtn.disabled = true;
             nextBtn.style.opacity = '0.3';
             nextBtn.style.cursor = 'not-allowed';
@@ -4038,10 +4055,25 @@ function updateNavigationButtons() {
             nextBtn.style.cursor = 'pointer';
         }
     }
+
+    if (prevBtn) {
+        if (isAllowedMonth) {
+            prevBtn.disabled = true;
+            prevBtn.style.opacity = '0.3';
+            prevBtn.style.cursor = 'not-allowed';
+        } else {
+            prevBtn.disabled = false;
+            prevBtn.style.opacity = '1';
+            prevBtn.style.cursor = 'pointer';
+        }
+    }
 }
 
 function changeMonthJustificarData(direction) {
     const today = pickerJustificarData.today;
+    const previousWeek = getPreviousWeekRange(today);
+    const allowedMonth = previousWeek.start.getMonth();
+    const allowedYear = previousWeek.start.getFullYear();
     
     pickerJustificarData.currentMonth += direction;
     
@@ -4053,15 +4085,13 @@ function changeMonthJustificarData(direction) {
         pickerJustificarData.currentYear--;
     }
 
-    // Não permitir navegar para meses futuros
-    const isFutureMonth = pickerJustificarData.currentYear > today.getFullYear() ||
-                          (pickerJustificarData.currentYear === today.getFullYear() && 
-                           pickerJustificarData.currentMonth > today.getMonth());
+    // Não permitir navegar fora do mês da semana anterior
+    const isNotAllowedMonth = pickerJustificarData.currentYear !== allowedYear ||
+        pickerJustificarData.currentMonth !== allowedMonth;
     
-    if (isFutureMonth) {
-        // Voltar para o mês atual
-        pickerJustificarData.currentMonth = today.getMonth();
-        pickerJustificarData.currentYear = today.getFullYear();
+    if (isNotAllowedMonth) {
+        pickerJustificarData.currentMonth = allowedMonth;
+        pickerJustificarData.currentYear = allowedYear;
         return;
     }
 
@@ -4106,12 +4136,6 @@ document.addEventListener('DOMContentLoaded', () => {
             if (tipoSelecionado === '') {
                 explicacaoGroup.style.display = 'none';
                 explicacaoTextarea.required = false;
-            } else if (tipoSelecionado === 'nao-justificado') {
-                explicacaoGroup.style.display = 'block';
-                explicacaoLabel.innerHTML = 'Qual a medida adotada? <span style="color: red;">*</span>';
-                explicacaoHint.textContent = 'Descreva as ações que você tomou ou pretende tomar.';
-                explicacaoTextarea.placeholder = 'Ex: Registro realizado manualmente, Ajuste de ponto solicitado, etc.';
-                explicacaoTextarea.required = true;
             } else if (tipoSelecionado === 'trabalho-externo') {
                 explicacaoGroup.style.display = 'block';
                 explicacaoLabel.innerHTML = 'Explique o motivo <span style="color: red;">*</span>';
@@ -4164,9 +4188,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Adicionar justificativa enviada à lista
             const tipoTexto = {
-                'nao-justificado': 'Não Justificado',
-                'trabalho-externo': 'Justificado por Trabalho Externo',
-                'questoes-medicas': 'Justificado por Questões Médicas',
+                'trabalho-externo': 'Trabalho Externo',
+                'questoes-medicas': 'Questões Médicas',
                 'outros-motivos': 'Outros Motivos'
             };
 
