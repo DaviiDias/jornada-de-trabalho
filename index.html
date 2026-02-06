@@ -133,6 +133,19 @@
                         </a>
                     </div>
                 </div>
+
+                <!-- Menu Administrador -->
+                <div class="nav-section role-admin">
+                    <div class="nav-section-title">Administrador</div>
+
+                    <div class="nav-item">
+                        <a class="nav-link" data-page="administracao">
+                            <span class="nav-icon"><img src="assets/painel.png" alt="Administracao"
+                                    class="nav-icon-img"></span>
+                            <span class="nav-text">Administracao</span>
+                        </a>
+                    </div>
+                </div>
             </div>
         </nav>
 
@@ -145,6 +158,7 @@
                     <option value="employee">Colaborador</option>
                     <option value="manager">Gestor</option>
                     <option value="hr">RH</option>
+                    <option value="admin">Administrador</option>
                 </select>
 
                 <!-- <span class="page-title" id="currentPage">Dashboard</span> -->
@@ -303,6 +317,71 @@
                         </div>
 
                         <div class="legend" id="legendAderenciaPainel"></div>
+                    </div>
+                </div>
+
+                <!-- Administracao -->
+                <div id="administracao" class="page-view">
+                    <div class="section-title">Administracao do Sistema</div>
+
+                    <div class="admin-grid">
+                        <section class="admin-card admin-flags">
+                            <div class="admin-card-header">
+                                <h2>Feature Flags</h2>
+                                <p class="subtitle">Ative ou desative funcionalidades por cliente.</p>
+                            </div>
+                            <div id="flagsContainer" class="flags-container"></div>
+                        </section>
+
+                        <section class="admin-card admin-access">
+                            <div class="admin-card-header">
+                                <h2>Emails do RH</h2>
+                                <p class="subtitle">Gerencie quem acessa o perfil RH.</p>
+                            </div>
+                            <div class="admin-form-row">
+                                <input type="email" id="rhEmailInput" class="admin-input" placeholder="email@empresa.com">
+                                <button id="addRhEmailBtn" class="admin-btn">Adicionar</button>
+                            </div>
+                            <div id="rhEmailList" class="admin-list"></div>
+                        </section>
+
+                        <section class="admin-card admin-holidays">
+                            <div class="admin-card-header">
+                                <h2>Feriados do Ano</h2>
+                                <p class="subtitle">Cadastre datas para consolidar regras da jornada.</p>
+                            </div>
+                            <div class="admin-form-row">
+                                <input type="date" id="holidayDateInput" class="admin-input">
+                                <input type="text" id="holidayNameInput" class="admin-input" placeholder="Descricao do feriado">
+                                <button id="addHolidayBtn" class="admin-btn">Adicionar</button>
+                            </div>
+                            <div id="holidayList" class="admin-list"></div>
+                        </section>
+
+                        <section class="admin-card admin-charts">
+                            <div class="admin-card-header">
+                                <h2>Distribuicao de Agentes</h2>
+                                <p class="subtitle">Percentual por versao e por sistema operacional.</p>
+                            </div>
+
+                            <div class="pie-grid">
+                                <div class="pie-card">
+                                    <div class="pie-title">Versao do agente</div>
+                                    <div class="pie-canvas-wrap">
+                                        <canvas id="agentVersionChart"></canvas>
+                                    </div>
+                                    <div id="agentVersionLegend" class="pie-legend"></div>
+                                </div>
+
+                                <div class="pie-card">
+                                    <div class="pie-title">Sistema operacional</div>
+                                    <div class="pie-canvas-wrap">
+                                        <canvas id="osVersionChart"></canvas>
+                                    </div>
+                                    <div id="osVersionLegend" class="pie-legend"></div>
+                                </div>
+                            </div>
+                        </section>
                     </div>
                 </div>
 

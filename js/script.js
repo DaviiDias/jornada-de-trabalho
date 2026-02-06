@@ -91,6 +91,313 @@ function applyFeatureFlags() {
     console.log('📊 Status das funcionalidades:', featureFlags);
 }
 
+// ===============================
+// ADMINISTRACAO - DADOS E INTERFACE
+// ===============================
+const adminState = {
+    rhEmails: [
+        'rh@alpargatas.com',
+        'bp@alpargatas.com'
+    ],
+    feriados: [
+        { date: '2026-01-01', name: 'Confraternizacao Universal' },
+        { date: '2026-02-16', name: 'Carnaval' },
+        { date: '2026-04-03', name: 'Paixao de Cristo' },
+        { date: '2026-04-21', name: 'Tiradentes' }
+    ],
+    agentVersions: {
+        labels: ['1.2.10', '1.2.6', '1.2.1', '1.1.0'],
+        values: [55, 20, 15, 10]
+    },
+    osVersions: {
+        labels: ['Windows 10 22H2', 'Windows 10 21H2', 'Windows 11 23H2', 'Windows 11 24H2'],
+        values: [34, 18, 28, 20]
+    }
+};
+
+const adminFlagGroups = [
+    {
+        title: 'Menu Colaborador',
+        flags: [
+            { key: 'menuPresenca', label: 'Menu Presenca', desc: 'Controle de presenca do colaborador.' },
+            { key: 'menuHistorico', label: 'Menu Historico', desc: 'Historico individual do colaborador.' },
+            { key: 'menuJustificativas', label: 'Menu Justificativas', desc: 'Sistema de justificativas.' },
+            { key: 'menuHistoricoJustificativa', label: 'Menu Historico de Justificativas', desc: 'Historico de justificativas.' },
+            { key: 'menuEspelhoFalta', label: 'Menu Espelho de Falta', desc: 'Espelho de falta justificada.' },
+            { key: 'menuFerias', label: 'Menu Ferias', desc: 'Solicitacao de ferias.' },
+            { key: 'menuJustificarFalta', label: 'Menu Justificar Falta', desc: 'Fluxo de justificativa de falta.' }
+        ]
+    },
+    {
+        title: 'Menu Gestor e RH',
+        flags: [
+            { key: 'menuGestorHistorico', label: 'Menu Historico do Gestor', desc: 'Historico da equipe.' },
+            { key: 'menuGestorRelatorios', label: 'Menu Relatorios do Gestor', desc: 'Relatorios do gestor.' },
+            { key: 'menuRhAderencia', label: 'Menu Aderencia RH', desc: 'Painel de aderencia do RH.' },
+            { key: 'menuRhRelatorios', label: 'Menu Relatorios RH', desc: 'Relatorios gerais do RH.' }
+        ]
+    },
+    {
+        title: 'Funcionalidades',
+        flags: [
+            { key: 'dashboardPresencaSemanal', label: 'Dashboard Presenca Semanal', desc: 'Cards de presenca semanal.' },
+            { key: 'conformidadeFormatoSimplificado', label: 'Conformidade Simplificada', desc: 'Formato X/5 com farol.' },
+            { key: 'tabelaOcorrenciasSimplificada', label: 'Tabela de Ocorrencias Simplificada', desc: 'Tabela enxuta para nao conformes.' },
+            { key: 'calendarioFerias', label: 'Calendario de Ferias', desc: 'Calendario para solicitacao.' },
+            { key: 'graficosGestor', label: 'Graficos do Gestor', desc: 'Graficos no dashboard do gestor.' },
+            { key: 'justificacaoSemanal', label: 'Justificacao Semanal', desc: 'Fluxo semanal de justificativas.' },
+            { key: 'alertasPendencias', label: 'Alertas de Pendencias', desc: 'Alertas no calendario.' },
+            { key: 'analiseConsolidada', label: 'Analise Consolidada', desc: 'Analise consolidada no RH.' },
+            { key: 'relatorioAderenciaAreas', label: 'Relatorio de Aderencia por Areas', desc: 'Relatorio por diretoria.' },
+            { key: 'relatorioJustificativas', label: 'Relatorio de Justificativas', desc: 'Relatorio por tipo.' },
+            { key: 'relatorioStatusJustificativas', label: 'Status das Justificativas', desc: 'Status por gestor.' },
+            { key: 'dashboardKPIs', label: 'KPIs do RH', desc: 'KPIs no dashboard do RH.' },
+            { key: 'expansaoGestores', label: 'Expansao de Gestores', desc: 'Expansao de gestores nas tabelas.' },
+            { key: 'filtroColaborador', label: 'Filtro de Colaborador', desc: 'Filtro de colaborador.' },
+            { key: 'datepicker', label: 'Datepicker Avancado', desc: 'Seletor de datas avancado.' }
+        ]
+    }
+];
+
+function renderFeatureFlags() {
+    const container = document.getElementById('flagsContainer');
+    if (!container) return;
+
+    container.innerHTML = '';
+
+    adminFlagGroups.forEach(group => {
+        const groupEl = document.createElement('div');
+        groupEl.className = 'flags-group';
+
+        const titleEl = document.createElement('div');
+        titleEl.className = 'flags-group-title';
+        titleEl.textContent = group.title;
+        groupEl.appendChild(titleEl);
+
+        group.flags.forEach(flag => {
+            const row = document.createElement('div');
+            row.className = 'flag-item';
+
+            const info = document.createElement('div');
+            info.className = 'flag-info';
+
+            const label = document.createElement('div');
+            label.className = 'flag-label';
+            label.textContent = flag.label;
+
+            const desc = document.createElement('div');
+            desc.className = 'flag-desc';
+            desc.textContent = flag.desc;
+
+            info.appendChild(label);
+            info.appendChild(desc);
+
+            const toggle = document.createElement('label');
+            toggle.className = 'flag-toggle';
+
+            const input = document.createElement('input');
+            input.type = 'checkbox';
+            input.checked = isFeatureEnabled(flag.key);
+
+            const slider = document.createElement('span');
+            slider.className = 'flag-slider';
+
+            const status = document.createElement('span');
+            status.className = 'flag-status';
+            status.textContent = input.checked ? 'Ativo' : 'Inativo';
+
+            input.addEventListener('change', () => {
+                featureFlags[flag.key] = input.checked;
+                status.textContent = input.checked ? 'Ativo' : 'Inativo';
+                applyFeatureFlags();
+            });
+
+            toggle.appendChild(input);
+            toggle.appendChild(slider);
+
+            row.appendChild(info);
+            row.appendChild(toggle);
+            row.appendChild(status);
+
+            groupEl.appendChild(row);
+        });
+
+        container.appendChild(groupEl);
+    });
+}
+
+function renderRhEmails() {
+    const list = document.getElementById('rhEmailList');
+    if (!list) return;
+
+    list.innerHTML = '';
+
+    adminState.rhEmails.forEach(email => {
+        const item = document.createElement('div');
+        item.className = 'admin-list-item';
+
+        const text = document.createElement('span');
+        text.textContent = email;
+
+        const remove = document.createElement('button');
+        remove.className = 'admin-btn ghost';
+        remove.textContent = 'Remover';
+        remove.addEventListener('click', () => {
+            adminState.rhEmails = adminState.rhEmails.filter(itemEmail => itemEmail !== email);
+            renderRhEmails();
+        });
+
+        item.appendChild(text);
+        item.appendChild(remove);
+        list.appendChild(item);
+    });
+}
+
+function renderFeriados() {
+    const list = document.getElementById('holidayList');
+    if (!list) return;
+
+    list.innerHTML = '';
+
+    adminState.feriados.forEach(feriado => {
+        const item = document.createElement('div');
+        item.className = 'admin-list-item';
+
+        const text = document.createElement('span');
+        text.textContent = `${formatDateBr(feriado.date)} - ${feriado.name}`;
+
+        const remove = document.createElement('button');
+        remove.className = 'admin-btn ghost';
+        remove.textContent = 'Remover';
+        remove.addEventListener('click', () => {
+            adminState.feriados = adminState.feriados.filter(itemFeriado => itemFeriado !== feriado);
+            renderFeriados();
+        });
+
+        item.appendChild(text);
+        item.appendChild(remove);
+        list.appendChild(item);
+    });
+}
+
+function formatDateBr(dateStr) {
+    if (!dateStr) return '-';
+    const [year, month, day] = dateStr.split('-');
+    return `${day}/${month}/${year}`;
+}
+
+const piePalette = ['#0597F2', '#4BB2F2', '#0052a3', '#00a3a3', '#ffc107', '#ff6b6b', '#6f42c1'];
+
+function renderPieCharts() {
+    drawPieChart('agentVersionChart', 'agentVersionLegend', adminState.agentVersions);
+    drawPieChart('osVersionChart', 'osVersionLegend', adminState.osVersions);
+}
+
+function drawPieChart(canvasId, legendId, data) {
+    const canvas = document.getElementById(canvasId);
+    const legend = document.getElementById(legendId);
+    if (!canvas || !legend) return;
+
+    const ctx = canvas.getContext('2d');
+    const size = Math.min(canvas.parentElement.offsetWidth || 240, 240);
+    canvas.width = size;
+    canvas.height = size;
+
+    const values = data.values || [];
+    const labels = data.labels || [];
+    const total = values.reduce((sum, value) => sum + value, 0);
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    if (total === 0) {
+        ctx.fillStyle = '#6b6b6b';
+        ctx.font = '14px Segoe UI, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText('Sem dados', size / 2, size / 2);
+        legend.innerHTML = '';
+        return;
+    }
+
+    let startAngle = -Math.PI / 2;
+    values.forEach((value, index) => {
+        const sliceAngle = (value / total) * (Math.PI * 2);
+        ctx.beginPath();
+        ctx.moveTo(size / 2, size / 2);
+        ctx.arc(size / 2, size / 2, size / 2 - 8, startAngle, startAngle + sliceAngle);
+        ctx.closePath();
+        ctx.fillStyle = piePalette[index % piePalette.length];
+        ctx.fill();
+        startAngle += sliceAngle;
+    });
+
+    legend.innerHTML = '';
+    labels.forEach((label, index) => {
+        const value = values[index] || 0;
+        const percent = Math.round((value / total) * 100);
+        const item = document.createElement('div');
+        item.className = 'pie-legend-item';
+
+        const swatch = document.createElement('span');
+        swatch.className = 'pie-swatch';
+        swatch.style.backgroundColor = piePalette[index % piePalette.length];
+
+        const text = document.createElement('span');
+        text.textContent = `${label} - ${percent}%`;
+
+        item.appendChild(swatch);
+        item.appendChild(text);
+        legend.appendChild(item);
+    });
+}
+
+function initAdminPage() {
+    const flagsContainer = document.getElementById('flagsContainer');
+    if (!flagsContainer) return;
+
+    renderFeatureFlags();
+    renderRhEmails();
+    renderFeriados();
+    renderPieCharts();
+
+    const addRhEmailBtn = document.getElementById('addRhEmailBtn');
+    const rhEmailInput = document.getElementById('rhEmailInput');
+
+    if (addRhEmailBtn && rhEmailInput) {
+        addRhEmailBtn.addEventListener('click', () => {
+            const email = rhEmailInput.value.trim().toLowerCase();
+            if (!email || !email.includes('@')) {
+                alert('Informe um email valido.');
+                return;
+            }
+            if (!adminState.rhEmails.includes(email)) {
+                adminState.rhEmails.push(email);
+                renderRhEmails();
+            }
+            rhEmailInput.value = '';
+        });
+    }
+
+    const addHolidayBtn = document.getElementById('addHolidayBtn');
+    const holidayDateInput = document.getElementById('holidayDateInput');
+    const holidayNameInput = document.getElementById('holidayNameInput');
+
+    if (addHolidayBtn && holidayDateInput && holidayNameInput) {
+        addHolidayBtn.addEventListener('click', () => {
+            const date = holidayDateInput.value;
+            const name = holidayNameInput.value.trim();
+            if (!date || !name) {
+                alert('Informe data e descricao do feriado.');
+                return;
+            }
+            adminState.feriados.push({ date, name });
+            renderFeriados();
+            holidayDateInput.value = '';
+            holidayNameInput.value = '';
+        });
+    }
+}
+
 // Função para atualizar o farol de conformidade (X >= 3 = verde)
 function atualizarFarolConformidade() {
     const farolConfigs = [
@@ -155,7 +462,8 @@ const pageNames = {
     'dashboard-gestor': 'Dashboard do Gestor',
     'dashboard-rh': 'Dashboard RH',
     conformidade: 'Conformidade',
-    configuracoes: 'Configurações'
+    configuracoes: 'Configurações',
+    administracao: 'Administracao'
 };
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -232,6 +540,16 @@ document.addEventListener('DOMContentLoaded', () => {
                     setTimeout(() => {
                         inicializarGraficoAreas();
                     }, 300);
+                }
+
+                // Renderizar componentes da administracao
+                if (targetPage === 'administracao') {
+                    setTimeout(() => {
+                        renderFeatureFlags();
+                        renderRhEmails();
+                        renderFeriados();
+                        renderPieCharts();
+                    }, 200);
                 }
 
                 // Fechar menu em mobile ao clicar em um link
@@ -502,9 +820,26 @@ function applyProfileMenu() {
     if (topDashboardLink) {
         if (role === 'employee') {
             topDashboardLink.dataset.page = 'dashboard';
+        } else if (role === 'hr') {
+            topDashboardLink.dataset.page = 'dashboard-rh';
+        } else if (role === 'admin') {
+            topDashboardLink.dataset.page = 'administracao';
         } else {
             topDashboardLink.dataset.page = 'dashboard-gestor';
         }
+    }
+
+    const defaultPages = {
+        employee: 'dashboard',
+        manager: 'dashboard-gestor',
+        hr: 'dashboard-rh',
+        admin: 'administracao'
+    };
+
+    const defaultPage = defaultPages[role] || 'dashboard';
+    const defaultLink = document.querySelector(`.nav-link[data-page="${defaultPage}"]`);
+    if (defaultLink && !defaultLink.classList.contains('active')) {
+        defaultLink.click();
     }
 }
 
@@ -527,6 +862,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // aplica o perfil corretamente ao abrir a página
     applyProfileMenu();
+
+    // Inicializar administracao se existir
+    initAdminPage();
     
     // Inicializa calendário se a feature estiver ativa
     if (isFeatureEnabled('calendarioFerias')) {
