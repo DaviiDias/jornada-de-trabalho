@@ -27,6 +27,86 @@ body {
     overflow: hidden;
 }
 
+/* ===== UTILITARIOS ===== */
+.is-hidden {
+    display: none;
+}
+
+.spaced-top {
+    margin-top: 24px;
+}
+
+.section-divider {
+    margin: 24px 0;
+    border: none;
+    border-top: 1px solid #e0e0e0;
+}
+
+.required-asterisk {
+    color: #ff0000;
+}
+
+.conformidade-rule {
+    font-size: 0.85rem;
+    color: #666;
+}
+
+.progress-fill-default {
+    width: 60%;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+}
+
+.stats-card {
+    padding: 20px;
+    border-radius: 8px;
+    background: #f5f5f5;
+}
+
+.stats-label {
+    font-size: 14px;
+    color: #605e5c;
+    font-weight: 500;
+}
+
+.stats-value {
+    font-weight: 700;
+    margin-top: 8px;
+}
+
+.stats-value-large {
+    font-size: 32px;
+}
+
+.stats-value-medium {
+    font-size: 18px;
+}
+
+.stats-value-blue {
+    color: #0597f2;
+}
+
+.stats-value-green {
+    color: #107c10;
+}
+
+.stats-value-red {
+    color: #d13438;
+}
+
+.stats-value-dark {
+    color: #323130;
+}
+
+.chart-canvas-fixed {
+    position: relative;
+    height: 350px;
+}
+
 /* ===== ADMINISTRACAO ===== */
 .admin-grid {
     display: grid;
@@ -798,8 +878,8 @@ body {
 }
 
 .status-atencao {
-    background-color: #ffc107;
-    color: #333;
+    background-color: #ffe7a3;
+    color: #5a4300;
 }
 
 .status-nao-conformidade {

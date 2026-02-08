@@ -1,7 +1,5 @@
-// ===============================
-// FEATURE FLAGS - Sistema de Controle de Funcionalidades
-// ===============================
-// Use estas flags para ativar/desativar funcionalidades sem remover código
+// FEATURE FLAGS 
+// flags para ativar/desativar funcionalidades sem remover código
 // true = ativo | false = desativado
 const featureFlags = {
     // Menu Colaborador
@@ -286,6 +284,178 @@ function formatDateBr(dateStr) {
     return `${day}/${month}/${year}`;
 }
 
+function formatDia(count) {
+    return count === 1 ? '1 dia' : `${count} dias`;
+}
+
+function applyMockDashboardData() {
+    const roleConfigs = [
+        {
+            key: 'employee',
+            ids: {
+                presencaValue: 'presencaValue',
+                presencaNote: 'presencaNote',
+                sedeValue: 'sedeValue',
+                homeofficeValue: 'homeofficeValue',
+                diasRestantesValue: 'diasRestantesValue',
+                presenciaisCount: 'presenciaisCount',
+                regraConformidade: 'regraConformidade'
+            }
+        },
+        {
+            key: 'manager',
+            ids: {
+                presencaValue: 'presencaValueGestor',
+                presencaNote: 'presencaNoteGestor',
+                sedeValue: 'sedeValueGestor',
+                homeofficeValue: 'homeofficeValueGestor',
+                diasRestantesValue: 'diasRestantesValueGestor',
+                presenciaisCount: 'presenciaisCountGestor',
+                regraConformidade: 'regraConformidadeGestor'
+            }
+        },
+        {
+            key: 'hr',
+            ids: {
+                presencaValue: 'presencaValueRh',
+                presencaNote: 'presencaNoteRh',
+                sedeValue: 'sedeValueRh',
+                homeofficeValue: 'homeofficeValueRh',
+                diasRestantesValue: 'diasRestantesValueRh',
+                presenciaisCount: 'presenciaisCountRh',
+                regraConformidade: 'regraConformidadeRh'
+            }
+        }
+    ];
+
+    roleConfigs.forEach(({ key, ids }) => {
+        const presencaData = mockDashboardPresencaSemanal[key];
+        if (presencaData) {
+            const presencaValue = document.getElementById(ids.presencaValue);
+            const presencaNote = document.getElementById(ids.presencaNote);
+            const sedeValue = document.getElementById(ids.sedeValue);
+            const homeofficeValue = document.getElementById(ids.homeofficeValue);
+            const diasRestantesValue = document.getElementById(ids.diasRestantesValue);
+
+            if (presencaValue) presencaValue.textContent = formatDia(presencaData.presencaSemanal);
+            if (presencaNote) presencaNote.textContent = presencaData.nota || '';
+            if (sedeValue) sedeValue.textContent = formatDia(presencaData.diasSede);
+            if (homeofficeValue) homeofficeValue.textContent = formatDia(presencaData.diasHomeOffice);
+            if (diasRestantesValue) diasRestantesValue.textContent = formatDia(presencaData.diasRestantes);
+        }
+
+        const conformidadeData = mockConformidadeSemanal[key];
+        if (conformidadeData) {
+            const presenciaisCount = document.getElementById(ids.presenciaisCount);
+            if (presenciaisCount) {
+                presenciaisCount.textContent = `${conformidadeData.presenciais}/${conformidadeData.total}`;
+            }
+        }
+
+        const regraConformidade = mockRegraConformidade[key];
+        if (regraConformidade) {
+            const regraEl = document.getElementById(ids.regraConformidade);
+            if (regraEl) {
+                regraEl.textContent = `(${regraConformidade})`;
+            }
+        }
+    });
+
+    if (isFeatureEnabled('conformidadeFormatoSimplificado')) {
+        atualizarFarolConformidade();
+    }
+}
+
+function applyMockProfileInfo(role) {
+    const profileSelectEl = document.getElementById('profileSelect');
+    const selectedRole = role || profileSelectEl?.value || 'employee';
+    const profileData = mockUiContent.profiles[selectedRole] || mockUiContent.profiles.employee;
+
+    const profileName = document.getElementById('profileName');
+    const profileAvatar = document.getElementById('profileAvatar');
+
+    if (profileName) profileName.textContent = profileData.name;
+    if (profileAvatar) profileAvatar.textContent = profileData.initials;
+}
+
+function applyMockDashboardStatus() {
+    const statusConfigs = [
+        {
+            key: 'employee',
+            ids: {
+                badge: 'statusBadge',
+                message: 'statusMessage',
+                text: 'statusText',
+                icon: 'statusContainer'
+            }
+        },
+        {
+            key: 'manager',
+            ids: {
+                badge: 'statusBadgeGestor',
+                message: 'statusMessageGestor',
+                text: 'statusTextGestor',
+                icon: 'statusContainerGestor'
+            }
+        },
+        {
+            key: 'hr',
+            ids: {
+                badge: 'statusBadgeRh',
+                message: 'statusMessageRh',
+                text: 'statusTextRh',
+                icon: 'statusContainerRh'
+            }
+        }
+    ];
+
+    statusConfigs.forEach(({ key, ids }) => {
+        const statusData = mockUiContent.dashboardStatus[key];
+        if (!statusData) return;
+
+        const badgeEl = document.getElementById(ids.badge);
+        const messageEl = document.getElementById(ids.message);
+        const textEl = document.getElementById(ids.text);
+        const iconEl = messageEl?.querySelector('.status-icon');
+
+        if (badgeEl) {
+            badgeEl.textContent = statusData.badgeText;
+            badgeEl.className = `status-badge ${statusData.badgeClass}`;
+        }
+
+        if (messageEl) {
+            messageEl.className = `status-message ${statusData.messageClass}`;
+        }
+
+        if (textEl) {
+            textEl.textContent = statusData.messageText;
+        }
+
+        if (iconEl) {
+            iconEl.textContent = statusData.icon;
+        }
+    });
+}
+
+function applyMockPeriodLabels() {
+    const periodoAderenciaPainel = document.getElementById('periodoAderenciaPainel');
+    const periodoRelatorioAderencia = document.getElementById('periodoRelatorioAderencia');
+
+    if (periodoAderenciaPainel) {
+        periodoAderenciaPainel.textContent = mockUiContent.periods.aderenciaPainel;
+    }
+
+    if (periodoRelatorioAderencia) {
+        periodoRelatorioAderencia.textContent = mockUiContent.periods.relatorioAderencia;
+    }
+}
+
+function applyMockUiContent() {
+    applyMockProfileInfo();
+    applyMockDashboardStatus();
+    applyMockPeriodLabels();
+}
+
 const piePalette = ['#0597F2', '#4BB2F2', '#0052a3', '#00a3a3', '#ffc107', '#ff6b6b', '#6f42c1'];
 
 function renderPieCharts() {
@@ -427,8 +597,8 @@ function atualizarFarolConformidade() {
             // Extrai o número antes da barra (ex: "3/5" -> 3)
             const countText = countElement.textContent;
             const diasPresenciais = parseInt(countText.split('/')[0]) || 0;
-            const diasMax = 5;
-            const porcentagem = (diasPresenciais / diasMax) * 100;
+            const diasMax = mockJornadaConfig.totalDiasSemana;
+            const porcentagem = diasMax > 0 ? (diasPresenciais / diasMax) * 100 : 0;
             
             // Atualiza a barra de progresso
             if (progressElement) {
@@ -436,14 +606,14 @@ function atualizarFarolConformidade() {
             }
             
             // Atualiza o farol
-            if (diasPresenciais >= 3) {
+            if (diasPresenciais >= mockJornadaConfig.minPresenciais) {
                 // ✅ VERDE - Conformidade
                 farolElement.classList.remove('nao-conformidade');
                 farolElement.textContent = '✅';
             } else {
-                // ❌ VERMELHO - Não conformidade  
+                // ⚠️ VERMELHO - Não conformidade
                 farolElement.classList.add('nao-conformidade');
-                farolElement.textContent = '❌';
+                farolElement.textContent = '⚠️';
             }
         }
     });
@@ -806,6 +976,8 @@ function applyProfileMenu() {
 
     const role = profileSelect.value;
 
+    applyMockProfileInfo(role);
+
     // Esconde todas as seções do menu
     document.querySelectorAll('.nav-section').forEach(section => {
         section.style.display = 'none';
@@ -850,6 +1022,12 @@ profileSelect.addEventListener('change', applyProfileMenu);
 document.addEventListener('DOMContentLoaded', () => {
     // Aplicar feature flags primeiro
     applyFeatureFlags();
+
+    // Dados mockados para os cards e conformidade semanal
+    applyMockDashboardData();
+
+    // Dados mockados para textos e status do dashboard
+    applyMockUiContent();
     
     // mantém o que você já tinha
     if (typeof initHistoricoPresenca === 'function') {
@@ -1187,6 +1365,90 @@ const mockAttendanceData = {
     ana: {
         '2026-02-09': { hasPending: true }  // exemplo diferente
     }
+};
+
+const mockJornadaConfig = {
+    totalDiasSemana: 5,
+    minPresenciais: 3,
+    maxRemotos: 2
+};
+
+const mockUiContent = {
+    profiles: {
+        employee: { name: 'Luiz Silva', initials: 'LS' },
+        manager: { name: 'Renata Costa', initials: 'RC' },
+        hr: { name: 'Marina Duarte', initials: 'MD' },
+        admin: { name: 'Administrador', initials: 'AD' }
+    },
+    periods: {
+        aderenciaPainel: 'Outubro/2025 a Janeiro/2026',
+        relatorioAderencia: 'Periodo Atual - Outubro/2025 a Janeiro/2026'
+    },
+    dashboardStatus: {
+        employee: {
+            badgeText: 'Em conformidade',
+            badgeClass: 'status-conformidade',
+            messageText: 'Voce tem opcao de escolha dos dias para garantir a conformidade',
+            messageClass: 'conformidade',
+            icon: '💡'
+        },
+        manager: {
+            badgeText: 'Em conformidade',
+            badgeClass: 'status-conformidade',
+            messageText: 'Sem pendencias no seu controle de presenca.',
+            messageClass: 'conformidade',
+            icon: '✅'
+        },
+        hr: {
+            badgeText: 'Em conformidade',
+            badgeClass: 'status-conformidade',
+            messageText: 'Sem pendencias no seu controle de presenca.',
+            messageClass: 'conformidade',
+            icon: '✅'
+        }
+    }
+};
+
+const mockKpiConfig = {
+    metaAderencia: 85,
+    taxaJustificativa: 89,
+    causasTexto: 'Ferias, Atestados Medicos'
+};
+
+const mockDashboardPresencaSemanal = {
+    employee: {
+        presencaSemanal: 4,
+        diasSede: 2,
+        diasHomeOffice: 2,
+        diasRestantes: 1,
+        nota: 'Falta 1 dia presencial para fechar a semana.'
+    },
+    manager: {
+        presencaSemanal: 3,
+        diasSede: 2,
+        diasHomeOffice: 1,
+        diasRestantes: 2,
+        nota: 'Acompanhe sua agenda para completar a meta.'
+    },
+    hr: {
+        presencaSemanal: 5,
+        diasSede: 3,
+        diasHomeOffice: 2,
+        diasRestantes: 0,
+        nota: 'Semana concluida em conformidade.'
+    }
+};
+
+const mockConformidadeSemanal = {
+    employee: { presenciais: 3, total: 5 },
+    manager: { presenciais: 2, total: 5 },
+    hr: { presenciais: 4, total: 5 }
+};
+
+const mockRegraConformidade = {
+    employee: 'Regra: 3x2',
+    manager: 'Regra: 3x2',
+    hr: 'Regra: 3x2'
 };
 
 const mockRelatorioEmpresa = {
@@ -2226,8 +2488,8 @@ function renderRelatorioKPIs(data, gestoresPorDept) {
 
     const aderenciaGeral = totalHc ? Math.round(somaPonderada / totalHc) : 0;
 
-    // Departamentos abaixo da meta (85%)
-    const meta = 85;
+    // Departamentos abaixo da meta (configurada por empresa)
+    const meta = mockKpiConfig.metaAderencia;
     const departamentosAbaixo = data.areas.filter(a => {
         const val = a.valores && a.valores.length > 0 ? a.valores[a.valores.length - 1] : 0;
         return val < meta;
@@ -2248,8 +2510,8 @@ function renderRelatorioKPIs(data, gestoresPorDept) {
 
     const pctGestoresRegulares = totalGestores ? Math.round((gestoresRegulares / totalGestores) * 100) : 0;
 
-    // Taxa de justificativa — usando valor mock/negócio informado
-    const taxaJustificativa = 89; // valor informado na conversa
+    // Taxa de justificativa — usando valor mockado
+    const taxaJustificativa = mockKpiConfig.taxaJustificativa;
 
     // Construir lista de gestores com média e ordenar (desc)
     const gestoresList = [];
@@ -2265,7 +2527,7 @@ function renderRelatorioKPIs(data, gestoresPorDept) {
 
     const topGestores = gestoresList.slice(0, 5);
     const belowSorted = departamentosAbaixo.slice().sort((a, b) => a.valor - b.valor);
-    const causasTexto = 'Férias, Atestados Médicos';
+    const causasTexto = mockKpiConfig.causasTexto;
 
     // Preencher DOM - elementos novos do grid
     const elAder = document.getElementById('kpiAderencia');
@@ -2341,6 +2603,7 @@ function calcularStatusSemana(semana) {
     const presenciais = semana.dias.filter(d => d.status === 'presencial').length;
     const remotos = semana.dias.filter(d => d.status === 'remoto').length;
     const ausencias = semana.dias.filter(d => d.status === 'ausente').length;
+    const { minPresenciais, maxRemotos } = mockJornadaConfig;
 
     // Se houve ausência, é inconformidade
     if (ausencias > 0) {
@@ -2348,7 +2611,7 @@ function calcularStatusSemana(semana) {
     }
 
     // Regra principal
-    if (presenciais >= 3 && remotos <= 2) {
+    if (presenciais >= minPresenciais && remotos <= maxRemotos) {
         return 'verde';
     }
 
@@ -2358,6 +2621,7 @@ function calcularStatusSemana(semana) {
 
 
 function getStatusSemana(presCount, justificada = false) {
+    const { minPresenciais } = mockJornadaConfig;
 
     if (justificada) {
         return {
@@ -2367,7 +2631,7 @@ function getStatusSemana(presCount, justificada = false) {
         };
     }
 
-    if (presCount >= 3) {
+    if (presCount >= minPresenciais) {
         return {
             class: 'week-ok',
             label: 'Em conformidade',
@@ -2389,6 +2653,7 @@ function isDiaJustificado(dia) {
 
 function showDetail(s, cardElement) {
     const content = document.getElementById('detail-content');
+    const { minPresenciais, maxRemotos } = mockJornadaConfig;
     
     // ✅ Presenciais naturais e equivalentes (justificados contam)
     const presenciaisNaturais = s.dias.filter(d => d.status === 'presencial').length;
@@ -2397,18 +2662,18 @@ function showDetail(s, cardElement) {
     const remotosNaoJustificados = s.dias.filter(d => d.status === 'remoto' && !isDiaJustificado(d)).length;
     const ausentesNaoJustificados = s.dias.filter(d => d.status === 'ausente' && !isDiaJustificado(d)).length;
     const hasAusenciaNaoJustificada = ausentesNaoJustificados > 0;
-    const isRequiredSemanal = presenciaisEquivalentes < 3 || remotosNaoJustificados > 2 || hasAusenciaNaoJustificada;
+    const isRequiredSemanal = presenciaisEquivalentes < minPresenciais || remotosNaoJustificados > maxRemotos || hasAusenciaNaoJustificada;
     const weekJustificada = s.justificada && !hasAusenciaNaoJustificada;
     
     // ✅ Verifica se a semana está OK (com 3+ presenciais NATURAIS, não justificadas)
-    const weekOk = presenciaisNaturais >= 3;
+    const weekOk = presenciaisNaturais >= minPresenciais;
     
     // ✅ Calcula status e cor para exibição
     let statusDisplay, corDisplay;
     if (hasAusenciaNaoJustificada) {
         statusDisplay = 'Não conformidade';
         corDisplay = 'var(--vermelho)';
-    } else if (presenciaisEquivalentes >= 3 && remotosNaoJustificados <= 2 && ausentesNaoJustificados === 0) {
+    } else if (presenciaisEquivalentes >= minPresenciais && remotosNaoJustificados <= maxRemotos && ausentesNaoJustificados === 0) {
         if (diasJustificados > 0) {
             statusDisplay = 'Ausência Justificada';
             corDisplay = 'var(--amarelo)';
@@ -2427,7 +2692,7 @@ function showDetail(s, cardElement) {
     const temAcaoDiaria = !weekJustificada && s.dias.some(d =>
         (d.status === 'ausente' || d.status === 'remoto')
         && !isDiaJustificado(d)
-        && (presenciaisEquivalentes < 3 || remotosNaoJustificados > 2 || d.status === 'ausente')
+        && (presenciaisEquivalentes < minPresenciais || remotosNaoJustificados > maxRemotos || d.status === 'ausente')
     );
 
     content.innerHTML = `
@@ -2453,11 +2718,11 @@ function showDetail(s, cardElement) {
                     txt = 'Ausente';
                 }
 
-                // ✅ Não mostrar ícone "J" se a semana já tiver 3+ dias presenciais OU se a semana já foi justificada
+                // ✅ Não mostrar ícone "J" se a semana já tiver o minimo de dias presenciais OU se a semana já foi justificada
                 const podeJustificar = !weekJustificada
                     && (d.status === 'ausente' || d.status === 'remoto')
                     && !isDiaJustificado(d)
-                    && (presenciaisEquivalentes < 3 || remotosNaoJustificados > 2 || d.status === 'ausente');
+                    && (presenciaisEquivalentes < minPresenciais || remotosNaoJustificados > maxRemotos || d.status === 'ausente');
 
                 return `
                     <div class="day-card">
@@ -2887,7 +3152,7 @@ function showDetail(s, cardElement) {
                     // Verifica se há pelo menos 3 dias com justificativa + presenciais
                     const diasJustificados = justificativasDiarias.length;
                     const diasPresenciais = semanaObj.dias.filter(d => d.status === 'presencial').length;
-                    if (diasJustificados + diasPresenciais >= 3) {
+                    if (diasJustificados + diasPresenciais >= mockJornadaConfig.minPresenciais) {
                         semanaObj.justificada = true;
                     }
                 }
@@ -2915,6 +3180,7 @@ function showDetail(s, cardElement) {
 function renderOverview(dados) {
     const overview = document.getElementById('overview');
     overview.innerHTML = '';
+    const { minPresenciais, maxRemotos } = mockJornadaConfig;
 
     dados.semanas.forEach(s => {
 
@@ -2936,7 +3202,7 @@ function renderOverview(dados) {
                 label: 'Inconformidade',
                 cor: 'var(--vermelho)'
             };
-        } else if (presenciaisEquivalentes >= 3 && remotosNaoJustificados <= 2 && ausentesNaoJustificados === 0) {
+        } else if (presenciaisEquivalentes >= minPresenciais && remotosNaoJustificados <= maxRemotos && ausentesNaoJustificados === 0) {
             // Se atingiu a regra com dias justificados, fica como ausencia justificada
             statusSemana = diasJustificados > 0 ? {
                 class: 'week-justificada',
@@ -2954,7 +3220,7 @@ function renderOverview(dados) {
                 label: 'Ausência Justificada',
                 cor: 'var(--amarelo)'
             };
-        } else if (remotosNaoJustificados > 2 || presenciaisEquivalentes < 3) {
+        } else if (remotosNaoJustificados > maxRemotos || presenciaisEquivalentes < minPresenciais) {
             statusSemana = {
                 class: 'week-urgente',
                 label: 'Inconformidade',
@@ -3006,6 +3272,7 @@ function renderOverview(dados) {
 function updateJustificadoStatus(cardElement, s) {
     const dailyFields = document.getElementById('daily-fields');
     const weeklyField = document.querySelector('.just-weekly textarea');
+    const { minPresenciais } = mockJornadaConfig;
 
     const pres = s.dias.filter(d => d.status === 'presencial').length;
     let justifiedDays = 0;
@@ -3023,7 +3290,7 @@ function updateJustificadoStatus(cardElement, s) {
     // 1. Campo semanal tem texto (critério suficiente sozinho)
     // OU
     // 2. Dias presenciais + dias com justificativa preenchida ≥ 3
-    const isJustificado = hasWeeklyContent || (pres + justifiedDays >= 3);
+    const isJustificado = hasWeeklyContent || (pres + justifiedDays >= minPresenciais);
 
     if (isJustificado) {
         cardElement.classList.add('week-justificado');
@@ -3034,6 +3301,7 @@ function updateJustificadoStatus(cardElement, s) {
 
 function atualizarResumo() {
     const dados = dadosApiMock;
+    const { minPresenciais, maxRemotos } = mockJornadaConfig;
 
     // ✅ Conta semanas que exigem justificativa: presenciais + justificados < 3 E não foi justificada
     const nc = dados.semanas.filter(s => {
@@ -3042,7 +3310,7 @@ function atualizarResumo() {
         const presenciaisEquivalentes = presenciais + diasJustificados;
         const remotosNaoJustificados = s.dias.filter(d => d.status === 'remoto' && !isDiaJustificado(d)).length;
         const ausentesNaoJustificados = s.dias.filter(d => d.status === 'ausente' && !isDiaJustificado(d)).length;
-        return (presenciaisEquivalentes < 3 || remotosNaoJustificados > 2 || ausentesNaoJustificados > 0) && !s.justificada;
+        return (presenciaisEquivalentes < minPresenciais || remotosNaoJustificados > maxRemotos || ausentesNaoJustificados > 0) && !s.justificada;
     }).length;
 
     // ✅ Total de dias presenciais + justificados
@@ -3057,8 +3325,8 @@ function atualizarResumo() {
     document.getElementById('resumo').innerHTML = `
         <strong>Resumo (${nome}):</strong><br>
         Semanas que exigem justificativa semanal:
-        <span class="${nc > 0 ? 'alert' : ''}">${nc}</span> de 4<br>
-        Total de dias presenciais (últimas 4 semanas):
+        <span class="${nc > 0 ? 'alert' : ''}">${nc}</span> de ${dados.semanas.length}<br>
+        Total de dias presenciais (ultimas ${dados.semanas.length} semanas):
         <strong>${total}</strong>
     `;
 }

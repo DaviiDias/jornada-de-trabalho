@@ -27,48 +27,48 @@
                             <span class="nav-text">Dashboard</span>
                         </a>
                     </div>
-                    <div class="nav-item" style="display: none;">
+                    <div class="nav-item is-hidden">
                         <a class="nav-link" data-page="presenca">
                             <span class="nav-icon">📍</span>
                             <span class="nav-text">Presença</span>
                         </a>
                     </div>
-                    <div class="nav-item" style="display: none;">
+                    <div class="nav-item is-hidden">
                         <a class="nav-link" data-page="historico-presenca">
                             <span class="nav-icon"><img src="assets/historico.png" alt="Dashboard"
                                     class="nav-icon-img"></span>
                             <span class="nav-text">Histórico</span>
                         </a>
                     </div>
-                    <div class="nav-item" style="display: none;">
+                    <div class="nav-item is-hidden">
                         <a class="nav-link" data-page="justificativas">
                             <span class="nav-icon"><img src="assets/justificar.png" alt="Dashboard"
                                     class="nav-icon-img"></span>
                             <span class="nav-text">Justificativas</span>
                         </a>
                     </div>
-                    <div class="nav-item" style="display: none;">
+                    <div class="nav-item is-hidden">
                         <a class="nav-link" data-page="historico-justificativa">
                             <span class="nav-icon"><img src="assets/historico-presenca.png" alt="Dashboard"
                                     class="nav-icon-img"></span>
                             <span class="nav-text">Histórico de justificativas</span>
                         </a>
                     </div>
-                    <div class="nav-item" style="display: none;">
+                    <div class="nav-item is-hidden">
                         <a class="nav-link" data-page="falta-justificada">
                             <span class="nav-icon"><img src="assets/falta.png" alt="Dashboard"
                                     class="nav-icon-img"></span>
                             <span class="nav-text">Espelho de falta</span>
                         </a>
                     </div>
-                    <div class="nav-item" style="display: none;">
+                    <div class="nav-item is-hidden">
                         <a class="nav-link" data-page="ferias">
                             <span class="nav-icon"><img src="assets/ferias.png" alt="Dashboard"
                                     class="nav-icon-img"></span>
                             <span class="nav-text">Solicitação de férias</span>
                         </a>
                     </div>
-                    <div class="nav-item" style="display: none;">
+                    <div class="nav-item is-hidden">
                         <a class="nav-link" data-page="justificar-falta">
                             <span class="nav-icon"><img src="assets/justificar.png" alt="Justificar Falta"
                                     class="nav-icon-img"></span>
@@ -206,7 +206,7 @@
                         <!-- 🚩 FEATURE FLAG: conformidadeFormatoSimplificado -->
                         <!-- Conformidade X/5 com barra de progresso -->
                         <div class="conformidade-section">
-                            <div class="conformidade-title">Dias Presenciais <span style="font-size: 0.85rem; color: #666;">(Regra: 3x2)</span></div>
+                            <div class="conformidade-title">Dias Presenciais <span id="regraConformidade" class="conformidade-rule">(Regra: 3x2)</span></div>
                             <div class="conformidade-bars">
                                 <div class="conformidade-item">
                                     <div class="conformidade-label">
@@ -215,8 +215,7 @@
                                     </div>
                                     <div class="conformidade-progress">
                                         <div class="progress-bar">
-                                            <div class="progress-fill presenciais-fill" id="progressFill"
-                                                style="width: 60%;"></div>
+                                            <div class="progress-fill presenciais-fill progress-fill-default" id="progressFill"></div>
                                         </div>
                                         <span class="conformidade-counter" id="presenciaisCount">3/5</span>
                                     </div>
@@ -237,7 +236,7 @@
                     </div>
 
                     <!-- Minhas Justificativas Recentes -->
-                    <div class="adherence-card" style="margin-top: 24px;">
+                    <div class="adherence-card spaced-top">
                         <div class="section-title">Minhas Justificativas Recentes</div>
                         <p class="subtitle">Histórico de justificativas de ausência e seus respectivos status</p>
 
@@ -270,7 +269,7 @@
                                 <option value="ana">Ana Souza</option>
                             </select>
                         </div>
-                        <div id="historico-content" style="display:none ;">
+                        <div id="historico-content" class="is-hidden">
 
                             <div class="resumo" id="resumo">
                                 Selecione um colaborador
@@ -292,7 +291,7 @@
 
                     <div class="adherence-card">
                         <div class="section-title">Aderência à Jornada 3×2</div>
-                        <p class="subtitle">
+                        <p class="subtitle" id="periodoAderenciaPainel">
                             Outubro/2025 a Janeiro/2026
                         </p>
 
@@ -389,7 +388,7 @@
 
                     <div class="adherence-card">
                         <div class="section-title">Relatório de Aderência por Diretoria</div>
-                        <p class="subtitle">
+                        <p class="subtitle" id="periodoRelatorioAderencia">
                             Período Atual - Outubro/2025 a Janeiro/2026
                         </p>
 
@@ -518,7 +517,7 @@
                                         <!-- 🚩 FEATURE FLAG: conformidadeFormatoSimplificado -->
                                         <!-- Conformidade X/5 com barra de progresso GESTOR -->
                                         <div class="conformidade-section">
-                                            <div class="conformidade-title">Dias Presenciais <span style="font-size: 0.85rem; color: #666;">(Regra: 3x2)</span></div>
+                                            <div class="conformidade-title">Dias Presenciais <span id="regraConformidadeGestor" class="conformidade-rule">(Regra: 3x2)</span></div>
                                             <div class="conformidade-bars">
                                                 <div class="conformidade-item">
                                                     <div class="conformidade-label">
@@ -528,8 +527,8 @@
                                                     </div>
                                                     <div class="conformidade-progress">
                                                         <div class="progress-bar">
-                                                            <div class="progress-fill presenciais-fill"
-                                                                id="progressFillGestor" style="width: 60%;"></div>
+                                                            <div class="progress-fill presenciais-fill progress-fill-default"
+                                                                id="progressFillGestor"></div>
                                                         </div>
                                                         <span class="conformidade-counter"
                                                             id="presenciaisCountGestor">3/5</span>
@@ -615,7 +614,7 @@
                                         <!-- 🚩 FEATURE FLAG: conformidadeFormatoSimplificado -->
                                         <!-- Conformidade X/5 com barra de progresso RH -->
                                         <div class="conformidade-section">
-                                            <div class="conformidade-title">Dias Presenciais <span style="font-size: 0.85rem; color: #666;">(Regra: 3x2)</span></div>
+                                            <div class="conformidade-title">Dias Presenciais <span id="regraConformidadeRh" class="conformidade-rule">(Regra: 3x2)</span></div>
                                             <div class="conformidade-bars">
                                                 <div class="conformidade-item">
                                                     <div class="conformidade-label">
@@ -624,8 +623,8 @@
                                                     </div>
                                                     <div class="conformidade-progress">
                                                         <div class="progress-bar">
-                                                            <div class="progress-fill presenciais-fill"
-                                                                id="progressFillRh" style="width: 60%;"></div>
+                                                            <div class="progress-fill presenciais-fill progress-fill-default"
+                                                                id="progressFillRh"></div>
                                                         </div>
                                                         <span class="conformidade-counter"
                                                             id="presenciaisCountRh">3/5</span>
@@ -759,29 +758,25 @@
                                 <!-- Estatísticas da Equipe -->
                                 <div class="adherence-card">
                                     <div class="section-title">Resumo Estatístico da Equipe</div>
-                                    <div
-                                        style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px;">
-                                        <div style="padding: 20px; border-radius: 8px; background: #f5f5f5;">
-                                            <div style="font-size: 14px; color: #605e5c; font-weight: 500;">Aderência
-                                                Média</div>
-                                            <div style="font-size: 32px; font-weight: 700; color: #0597F2; margin-top: 8px;"
+                                    <div class="stats-grid">
+                                        <div class="stats-card">
+                                            <div class="stats-label">Aderência Média</div>
+                                            <div class="stats-value stats-value-large stats-value-blue"
                                                 id="mediaAdereciaEquipe">--%</div>
                                         </div>
-                                        <div style="padding: 20px; border-radius: 8px; background: #f5f5f5;">
-                                            <div style="font-size: 14px; color: #605e5c; font-weight: 500;">Melhor
-                                                Performer</div>
-                                            <div style="font-size: 18px; font-weight: 700; color: #107c10; margin-top: 8px;"
+                                        <div class="stats-card">
+                                            <div class="stats-label">Melhor Performer</div>
+                                            <div class="stats-value stats-value-medium stats-value-green"
                                                 id="melhorPerformer">-</div>
                                         </div>
-                                        <div style="padding: 20px; border-radius: 8px; background: #f5f5f5;">
-                                            <div style="font-size: 14px; color: #605e5c; font-weight: 500;">Necessita Atenção</div>
-                                            <div style="font-size: 18px; font-weight: 700; color: #d13438; margin-top: 8px;"
+                                        <div class="stats-card">
+                                            <div class="stats-label">Necessita Atenção</div>
+                                            <div class="stats-value stats-value-medium stats-value-red"
                                                 id="necesitaAtencao">-</div>
                                         </div>
-                                        <div style="padding: 20px; border-radius: 8px; background: #f5f5f5;">
-                                            <div style="font-size: 14px; color: #605e5c; font-weight: 500;">Total de
-                                                Colaboradores</div>
-                                            <div style="font-size: 32px; font-weight: 700; color: #323130; margin-top: 8px;"
+                                        <div class="stats-card">
+                                            <div class="stats-label">Total de Colaboradores</div>
+                                            <div class="stats-value stats-value-large stats-value-dark"
                                                 id="totalColaboradores">-</div>
                                         </div>
                                     </div>
@@ -791,7 +786,7 @@
                                 <div class="adherence-card">
                                     <div class="section-title">Evolução da Aderência ao Longo dos Meses</div>
                                     <p class="subtitle">Acompanhamento mensal da equipe</p>
-                                    <div style="position: relative; height: 350px;">
+                                    <div class="chart-canvas-fixed">
                                         <canvas id="evolucaoChart"></canvas>
                                     </div>
                                 </div>
@@ -800,10 +795,10 @@
                                 <div class="adherence-card">
                                     <div class="section-title">Comparação de Aderência por Colaborador</div>
                                     <p class="subtitle">Performance dos membros da equipe</p>
-                                    <div style="position: relative; height: 350px;">
+                                    <div class="chart-canvas-fixed">
                                         <canvas id="comparativoChart"></canvas>
                                     </div>
-                                    <div class="legend" id="comparativoLegenda" style="margin-top: 20px;"></div>
+                                    <div class="legend" id="comparativoLegenda"></div>
                                 </div>
                             </div>
 
@@ -822,7 +817,7 @@
                                         <div class="justification-grid" id="justificationGrid"></div>
                                     </div>
 
-                                    <hr style="margin: 24px 0; border: none; border-top: 1px solid #e0e0e0;">
+                                    <hr class="section-divider">
 
                                     <!-- Formulário de Justificativa -->
                                     <div class="justification-form">
@@ -872,7 +867,7 @@
                                         <div class="absence-reasons" id="absenceReasons"></div>
                                     </div>
 
-                                    <hr style="margin: 24px 0; border: none; border-top: 1px solid #e0e0e0;">
+                                    <hr class="section-divider">
 
                                     <!-- Formulário de Falta -->
                                     <div class="absence-form">
@@ -966,7 +961,7 @@
                                         </div>
 
                                         <div class="form-group">
-                                            <label for="justificarTipo">Tipo de Justificativa <span style="color: red;">*</span></label>
+                                            <label for="justificarTipo">Tipo de Justificativa <span class="required-asterisk">*</span></label>
                                             <select class="form-control" id="justificarTipo" required>
                                                 <option value="" disabled selected>Selecione...</option>
                                                 <option value="trabalho-externo">Trabalho Externo</option>
@@ -975,8 +970,8 @@
                                             </select>
                                         </div>
 
-                                        <div class="form-group" id="justificarExplicacaoGroup" style="display: none;">
-                                            <label for="justificarExplicacao" id="justificarExplicacaoLabel">Explique o motivo <span style="color: red;">*</span></label>
+                                        <div class="form-group is-hidden" id="justificarExplicacaoGroup">
+                                            <label for="justificarExplicacao" id="justificarExplicacaoLabel">Explique o motivo <span class="required-asterisk">*</span></label>
                                             <textarea class="form-control textarea" id="justificarExplicacao" rows="4" 
                                                 placeholder="Descreva os detalhes da sua justificativa..."></textarea>
                                             <p class="form-hint" id="justificarExplicacaoHint"></p>
